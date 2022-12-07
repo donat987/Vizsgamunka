@@ -77,10 +77,10 @@
                                         @auth
                                             <span class="text-muted">Üdvözlünk {{ Auth::user()->firstname }}!</span>
                                             <div>
-                                                @if (Auth::user()->admin == 0)
-                                                    <a href="{{ url('/dashboard') }}">Profil</a>
+                                                @if ((Auth::user()->admin) == 0)
+                                                    <a href="{{ url('/profil') }}">Profil</a>
                                                 @else
-                                                    <a href="{{ url('/dashboard') }}">Adminisztáció</a>
+                                                    <a href="{{ url('/admin') }}">Adminisztáció</a>
                                                 @endif
                                                 <a href="{{ url('/logout') }}">Kijelentkezés</a>
                                             </div>
