@@ -3,6 +3,7 @@
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get("/admin/ujtermek", [PageController::class, 'create']);
+    Route::post("/admin/ujtermek/mentes", [ProductController::class,'store'])->name("productsave");
     Route::post("/admin/ujtermek/kategoriamentes", [CategoryController::class, 'store'])->name("categorysave");
     Route::post("/admin/ujtermek/markamentes", [BrandController::class, 'store'])->name("brandsave");
     Route::post("/admin/ujtermek/categlekeres", [PageController::class, 'categ1'])->name("category1");

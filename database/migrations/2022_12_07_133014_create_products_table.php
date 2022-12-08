@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string("name");
             $table->unsignedBigInteger('categoryid');
             $table->unsignedBigInteger('vat');
             $table->unsignedBigInteger('brandid');
@@ -23,12 +24,11 @@ return new class extends Migration
             $table->integer("price");
             $table->integer("actionprice");
             $table->integer("quantity");
-            $table->string("picture");
-            $table->string("unit");
+            $table->string("other");
             $table->string("tags");
             $table->string('picturename');
             $table->string('file_path');
-            $table->string('active');
+            $table->boolean('active');
             $table->timestamps();
             $table->foreign('categoryid')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('brandid')->references('id')->on('brands')->onDelete('cascade')->onUpdate('cascade');
