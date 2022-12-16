@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
+    public function adminpage()
+    {
+        return view("admin.desboard");
+    }
     /*public function index()
     {
         $sql = "round(products.price + ((products.price / 100) * vats.vat)) AS price, ";

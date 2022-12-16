@@ -135,7 +135,7 @@
                                         <div class="form-check">
                                             <label class="custom-control-label" for="customCheck1">Elérhető:</label>
                                             <input class="form-check-input" name="active" type="checkbox"
-                                                 id="fcustomCheck1" checked="">
+                                                id="fcustomCheck1" checked="">
                                         </div>
                                     </div>
                                 </div>
@@ -152,7 +152,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <button type="submit" class="btn btn-primary btn-lg w-100"
-                                            data-bs-toggle="modal" >
+                                            data-bs-toggle="modal">
                                             Termék felvétele
                                         </button>
                                     </div>
@@ -177,20 +177,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            @if ($message = Session::get('success'))
-                                <div class="alert alert-success">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            @endif
-                            @if (count($errors) > 0)
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+
                             <div class="input-group input-group-static mb-4">
                                 <label class="form-label">Márka neve</label>
                                 <input type="text" id="name" name="name" class="form-control">
@@ -440,7 +427,41 @@
                 });
             });
         </script>
-
+        <button class="btn bg-gradient-success w-100 mb-0 toast-btn" type="button"
+        data-target="successToast">Success</button>
+        <div class="position-fixed bottom-1 end-1 z-index-2">
+            <div class="toast fade hide p-2 bg-white" role="alert" aria-live="assertive" id="successToast"
+              aria-atomic="true">
+              <div class="toast-header border-0">
+                <i class="material-icons text-success me-2">
+                  check
+                </i>
+                <span class="me-auto font-weight-bold">Material Dashboard </span>
+                <small class="text-body">11 mins ago</small>
+                <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+              </div>
+              <hr class="horizontal dark m-0">
+              <div class="toast-body">
+                Hello, world! This is a notification message.
+              </div>
+            </div>
+    </div>
+        @if ($message = Session::get('success'))
+        <div class="position-fixed bottom-1 end-1 z-index-2">
+            <div class="toast fade hide p-2 bg-white" role="alert" aria-live="assertive" id="successToast"
+              aria-atomic="true">
+              <div class="toast-header border-0">
+                <i class="material-icons text-success me-2">
+                  check
+                </i>
+                        <span class="me-auto font-weight-bold">{{$message}} </span>
+                        <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast"
+                            aria-label="Close"></i>
+                    </div>
+                    <hr class="horizontal dark m-0">
+                </div>
+            </div>
+        @endif
         <footer class="footer py-4  ">
             <div class="container-fluid">
                 <div class="row align-items-center justify-content-lg-between">

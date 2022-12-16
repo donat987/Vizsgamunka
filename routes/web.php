@@ -23,6 +23,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get("/admin", [PageController::class, 'adminpage']);
     Route::get("/admin/ujtermek", [PageController::class, 'create']);
     Route::post("/admin/ujtermek/mentes", [ProductController::class,'store'])->name("productsave");
     Route::post("/admin/ujtermek/kategoriamentes", [CategoryController::class, 'store'])->name("categorysave");
