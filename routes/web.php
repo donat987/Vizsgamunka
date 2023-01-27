@@ -18,10 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get("/", [PageController::class, 'index']);
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get("/admin", [PageController::class, 'adminpage']);
     Route::get("/admin/ujtermek", [PageController::class, 'create']);

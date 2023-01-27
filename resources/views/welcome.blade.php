@@ -55,11 +55,11 @@
             <header class="section-heading">
                 <h3 class="section-title">Random termékek</h3>
             </header><!-- sect-heading -->
-            {{-- <div class="row">
+            <div class="row">
                 @foreach ($negyrandom as $sor)
                 <div class="col-md-3">
                     <div href="#" class="card card-product-grid">
-                        <a href="#" class="img-wrap"> <img src="images/termekkepek/{{$sor->picturename}}"> </a>
+                        <a href="#" class="img-wrap"> <img src="{{$sor->file}}"> </a>
                         <figcaption class="info-wrap">
                             <a href="#" class="title">{{$sor->name}}</a>
 

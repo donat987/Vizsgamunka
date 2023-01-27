@@ -11,28 +11,27 @@ class PageController extends Controller
     {
         return view("admin.desboard");
     }
-    /*public function index()
+    public function index()
     {
-        $sql = "round(products.price + ((products.price / 100) * vats.vat)) AS price, ";
-        $sql .= "round(products.actionprice + ((products.actionprice / 100) * vats.vat)) AS actionprice, ";
-        $sql .= "round(AVG(point)) AS pont";
-        $negyrandom = DB::table('ratings')
-            ->select('products.id as id', 'products.name as name', 'products.picturename AS picturename')
-            ->join('products', 'products.id', '=', 'ratings.productID')
-            ->join('vats', 'vats.id', '=', 'products.vatID')
+        $sql = "round(price + ((price / 100) * vat)) as price";
+        //$sql .= "round(AVG(point)) AS pont";
+        $negyrandom = DB::table('products')
+            ->select('products.id as id', 'name', 'file')
             ->selectraw($sql)
-            ->where('products.quantity','>',0)
+            ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->where('quantity', '>', 0)
+            ->where('active', '=', 1)
             ->groupBy('products.id')
             ->orderByRaw("RAND()")
             ->take(4)
             ->get();
         return view('welcome', compact('negyrandom'));
-    }*/
-
-    public function index()
-    {
-        return view("welcome");
     }
+
+    /* public function index()
+     {
+     return view("welcome");
+     }*/
 
     public function addcateg1(Request $request)
     {
@@ -69,7 +68,7 @@ class PageController extends Controller
             ->groupBy('subcategory3')
             ->get();
         foreach ($cat as $li) {
-            echo "<option value='". $li->subcategory3. "'>" ;
+            echo "<option value='" . $li->subcategory3 . "'>";
         }
     }
 
@@ -83,7 +82,7 @@ class PageController extends Controller
             ->where('subcategory3', '=', $request->select4)
             ->get();
         foreach ($cat as $li) {
-            echo "<option value='". $li->subcategory4 . "'>" ;
+            echo "<option value='" . $li->subcategory4 . "'>";
         }
     }
 
@@ -111,7 +110,7 @@ class PageController extends Controller
             ->get();
         echo "<option value=''>Válassz</option>";
         foreach ($cat as $li) {
-            echo "<option value='". $li->subcategory2. "'>" . $li->subcategory2 . "</option>";
+            echo "<option value='" . $li->subcategory2 . "'>" . $li->subcategory2 . "</option>";
         }
     }
 
@@ -126,7 +125,7 @@ class PageController extends Controller
             ->get();
         echo "<option value=''>Válassz</option>";
         foreach ($cat as $li) {
-            echo "<option value='". $li->subcategory3. "'>" . $li->subcategory3 . "</option>";
+            echo "<option value='" . $li->subcategory3 . "'>" . $li->subcategory3 . "</option>";
         }
     }
 
@@ -141,7 +140,7 @@ class PageController extends Controller
             ->get();
         echo "<option value=''>Válassz</option>";
         foreach ($cat as $li) {
-            echo "<option value='". $li->subcategory4 . "'>" . $li->subcategory4 . "</option>";
+            echo "<option value='" . $li->subcategory4 . "'>" . $li->subcategory4 . "</option>";
         }
     }
 
@@ -154,6 +153,6 @@ class PageController extends Controller
         $brand = DB::table('brands')
             ->select('*')
             ->get();
-        return view('admin.create', compact('category'),compact('brand'));
+        return view('admin.create', compact('category'), compact('brand'));
     }
 }

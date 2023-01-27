@@ -49,7 +49,7 @@ class ProductController extends Controller
             }
 
             $save->picturename = $renames;
-            $save->file_path = '/' . $picture;
+            $save->file = '/storage/' . $picture;
             $save->description = request("description");
             $save->save();
             return back()

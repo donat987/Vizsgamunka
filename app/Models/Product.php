@@ -21,7 +21,7 @@ class Product extends Model
         'other',
         'tags',
         'picturename',
-        'file_path',
+        'file',
         'active'
     ];
 }

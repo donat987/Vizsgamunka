@@ -11,6 +11,6 @@ class Brand extends Model
     protected $fillable = [
         'name',
         'picturename',
-        'file_path'
+        'file'
     ];
 }

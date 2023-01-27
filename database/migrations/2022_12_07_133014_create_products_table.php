@@ -27,7 +27,8 @@ return new class extends Migration
             $table->string("other");
             $table->string("tags");
             $table->string('picturename');
-            $table->string('file_path');
+            $table->string('file');
+            $table->string('capacity');
             $table->boolean('active');
             $table->timestamps();
             $table->foreign('categoryid')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');

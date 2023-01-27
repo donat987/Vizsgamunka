@@ -18,7 +18,7 @@ class BrandController extends Controller
             $picture = $request->file('file')->storeAs('brand', $renames, 'public');
             $save->name = request("name");
             $save->picturename = $renames;
-            $save->file_path = '/' . $picture;
+            $save->file = "/storage/" . $picture;
             $save->save();
             return back()
                 ->with('success', 'Sikeres mentés')
