@@ -46,8 +46,9 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-2 col-6">
-                        <a href="#" class="brand-wrap">
-                            Company Name
+
+                        <a href="/" class="brand-wrap">
+                            <img src="assets/images/logo.png" class="logo" alt="">
                         </a> <!-- brand-wrap.// -->
                     </div>
                     <div class="col-lg-6 col-12 col-sm-12">

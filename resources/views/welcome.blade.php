@@ -18,9 +18,8 @@
                         <figure class="item-feature">
                             <span class="text-primary"><i class="fa fa-2x fa-truck"></i></span>
                             <figcaption class="pt-3">
-                                <h5 class="title">Fast delivery</h5>
-                                <p>Dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore </p>
+                                <h5 class="title">Gyors szállítás</h5>
+                                <p>Ha 12:00-ig leadja a rendelését, akkor másnap megérkezik az othonához!</p>
                             </figcaption>
                         </figure> <!-- iconbox // -->
                     </div><!-- col // -->
@@ -53,7 +52,7 @@
     <section class="section-content">
         <div class="container">
             <header class="section-heading">
-                <h3 class="section-title">Random termékek</h3>
+                <h3 class="section-title">Pálinka különlegességek</h3>
             </header><!-- sect-heading -->
             <div class="row">
                 @foreach ($negyrandom as $sor)
@@ -84,7 +83,7 @@
                 </div> <!-- col.// -->
                 @endforeach
 
-            </div> <!-- row.// --> --}}
+            </div> <!-- row.// -->
         </div> <!-- container .//  -->
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
