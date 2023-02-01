@@ -123,10 +123,10 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Fashion</a>
+                            <a class="nav-link" href="/akcios-termekek">Akciós termékek</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Supermarket</a>
+                            <a class="nav-link" href="/osszes-termekek">Összes termék</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Electronics</a>

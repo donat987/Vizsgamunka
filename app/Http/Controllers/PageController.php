@@ -11,6 +11,7 @@ class PageController extends Controller
     {
         return view("admin.desboard");
     }
+
     public function index()
     {
         $sql = "round(price + ((price / 100) * vat)) as price";
@@ -25,7 +26,7 @@ class PageController extends Controller
             ->orderByRaw("RAND()")
             ->take(4)
             ->get();
-        return view('welcome', compact('negyrandom'));
+        return view('user.welcome', compact('negyrandom'));
     }
 
     /* public function index()

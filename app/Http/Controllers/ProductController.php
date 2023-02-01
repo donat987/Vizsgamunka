@@ -8,6 +8,39 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+
+    public function all()
+    {
+        $sql = "round(price + ((price / 100) * vat)) as price,";
+        $sql .= "round(actionprice + ((actionprice / 100) * vat)) as actionprice";
+        //$sql .= "round(AVG(point)) AS pont";
+        $all = DB::table('products')
+            ->select('products.id as id', 'name', 'file')
+            ->selectraw($sql)
+            ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->where('quantity', '>', 0)
+            ->where('active', '=', 1)
+            ->groupBy('products.id')
+            ->paginate(16);
+            return view('user.all', compact('all'));
+    }
+
+    public function action()
+    {
+        $sql = "round(price + ((price / 100) * vat)) as price,";
+        $sql .= "round(actionprice + ((actionprice / 100) * vat)) as actionprice";
+        //$sql .= "round(AVG(point)) AS pont";
+        $ac = DB::table('products')
+            ->select('products.id as id', 'name', 'file')
+            ->selectraw($sql)
+            ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->where('quantity', '>', 0)
+            ->where('active', '=', 1)
+            ->where('actionprice', '>', 0)
+            ->groupBy('products.id')
+            ->get();
+            return view('user.action', compact('ac'));
+    }
     public function store(Request $request)
     {
         $request->validate([

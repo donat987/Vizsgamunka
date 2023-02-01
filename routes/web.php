@@ -41,7 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
+Route::get('/akcios-termekek', [ProductController::class, 'action']);
+Route::get('/osszes-termekek', [ProductController::class, 'all']);
 
 
 require __DIR__ . '/auth.php';

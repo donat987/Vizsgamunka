@@ -1067,6 +1067,7 @@ a[class*=card]:hover .title {
   color: #969696;
   margin-left: 3px;
   font-size: 85%;
+  text-decoration: line-through;
 }
 
 .icon-control {
