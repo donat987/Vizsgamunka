@@ -48,7 +48,7 @@
                     <div class="col-lg-2 col-6">
 
                         <a href="/" class="brand-wrap">
-                            <img src="assets/images/logo.png" class="logo" alt="">
+                            <img src="{{asset('assets/images/logo.png')}}" class="logo" alt="">
                         </a> <!-- brand-wrap.// -->
                     </div>
                     <div class="col-lg-6 col-12 col-sm-12">
@@ -187,10 +187,10 @@
                         </ul>
                     </aside>
                     <aside class="col-md col-6">
-                        <h6 class="title">Account</h6>
+                        <h6 class="title">Felhasználó</h6>
                         <ul class="list-unstyled">
-                            <li> <a href="#"> User Login </a></li>
-                            <li> <a href="#"> User register </a></li>
+                            <li> <a href="/bejelentkezes"> Bejelentkezés </a></li>
+                            <li> <a href="/regisztacio"> Regisztráció </a></li>
                             <li> <a href="#"> Account Setting </a></li>
                             <li> <a href="#"> My Orders </a></li>
                         </ul>
