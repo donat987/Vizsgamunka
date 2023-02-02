@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('picturename');
             $table->string('file');
             $table->string('capacity');
+            $table->string('link');
             $table->boolean('active');
             $table->timestamps();
             $table->foreign('categoryid')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');

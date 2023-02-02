@@ -9,19 +9,29 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
 
+    public function productshow($link)
+    {
+        $pro = DB::table('products')
+        ->select('*')
+        ->where('link' , '=' , $link)
+        ->get();
+        return view('user.product', compact('pro'));
+    }
+
     public function all()
     {
         $sql = "round(price + ((price / 100) * vat)) as price,";
         $sql .= "round(actionprice + ((actionprice / 100) * vat)) as actionprice";
         //$sql .= "round(AVG(point)) AS pont";
         $all = DB::table('products')
-            ->select('products.id as id', 'name', 'file')
+            ->select('products.id as id', 'name', 'file', 'link')
             ->selectraw($sql)
             ->join('categories', 'categories.id', '=', 'products.categoryid')
             ->where('quantity', '>', 0)
             ->where('active', '=', 1)
             ->groupBy('products.id')
-            ->paginate(16);
+            ->paginate(16, ['*'], 'oldal');
+
             return view('user.all', compact('all'));
     }
 
@@ -38,7 +48,7 @@ class ProductController extends Controller
             ->where('active', '=', 1)
             ->where('actionprice', '>', 0)
             ->groupBy('products.id')
-            ->get();
+            ->paginate(16, ['*'], 'oldal');
             return view('user.action', compact('ac'));
     }
     public function store(Request $request)

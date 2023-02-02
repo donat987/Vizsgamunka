@@ -36,6 +36,31 @@
             @endforeach
 
         </div> <!-- row.// -->
+        @if ($ac->hasPages())
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $ac->url(1) }}">
+                            <<</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $ac->previousPageUrl() }}">
+                            <
+                        </a>
+                    </li>
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">{{ $ac->currentPage() }} <span class="sr-only"></span></a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $ac->nextPageUrl() }}">></a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $ac->url($ac->lastPage()) }}">>></a>
+                    </li>
+                </ul>
+            </nav>
+            @endif
     </div> <!-- container .//  -->
 </section>
 

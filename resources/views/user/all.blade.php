@@ -8,10 +8,10 @@
             <div class="row">
                 @foreach ($all as $sor)
                     <div class="col-md-3">
-                        <div href="#" class="card card-product-grid">
-                            <a href="#" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
+                        <div href="/termek/{{ $sor->link }}" class="card card-product-grid">
+                            <a href="/termek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
                             <figcaption class="info-wrap">
-                                <a href="#" class="title">{{ $sor->name }}</a>
+                                <a href="/termek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
 
                                 <div class="rating-wrap">
                                     <ul class="rating-stars">
@@ -38,23 +38,32 @@
                 @endforeach
 
             </div>
+            @if ($all->hasPages())
             <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                  <a class="page-link" href="{{ $all->previousPageUrl() }}">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active">
-                  <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="{{ $all->nextPageUrl() }}">Next</a>
-                </li>
-              </ul>
-        </nav>
-    </div>
-
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $all->url(1) }}">
+                            <<</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $all->previousPageUrl() }}">
+                            <
+                        </a>
+                    </li>
+                    @for ($x = 1; $x <= $all->lastPage(); $x++)
+                    <li class="page-item {{$x == $all->currentPage() ? 'active' : ''}}">
+                        <a class="page-link" href="{{ $all->url($x) }}">{{$x}} <span class="sr-only"></span></a>
+                    </li>
+                    @endfor
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $all->nextPageUrl() }}">></a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $all->url($all->lastPage()) }}">>></a>
+                    </li>
+                </ul>
+            </nav>
+            @endif
+        </div>
     </section>
-
 @endsection
