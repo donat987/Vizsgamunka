@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/akcios-termekek', [ProductController::class, 'action']);
 Route::get('/osszes-termekek', [ProductController::class, 'all']);
 Route::get('/termek/{termek}', [ProductController::class, 'productshow']);
+Route::get('/kereses/{keres}', [ProductController::class, 'search']);
+
+
 
 
 
