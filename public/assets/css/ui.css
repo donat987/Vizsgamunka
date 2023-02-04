@@ -1149,6 +1149,37 @@ a[class*=card]:hover .title {
   height: 20px;
   max-width: none;
 }
+.rating {
+    display: flex;
+    position: relative;
+
+    flex-direction: row-reverse;
+  justify-content: center;
+
+  }
+  .rating label {
+    top: 0;
+    cursor: pointer;
+    left: 0;
+    height: 100%;
+    width: 50px;
+    background-color: transparent;
+  }
+  .rating label:before {
+    content: "\f005";
+    font-family: "Font Awesome 5 Free";
+    font-size: 30px;
+    color: #ddd;
+    transition: color 0.3s ease;
+  }
+  .rating input[type="radio"] {
+    display: none;
+  }
+  .rating :hover label:before,
+  .rating :hover ~ label:before,
+  .rating input[type="radio"]:checked ~ label:before {
+    color: #ffc107;
+  }
 
 /* ================= TRACKING ============== */
 .tracking-wrap {

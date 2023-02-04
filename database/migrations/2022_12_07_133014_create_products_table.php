@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->unsignedBigInteger('categoryid');
+            $table->unsignedBigInteger('userid');
             $table->unsignedBigInteger('vat');
             $table->unsignedBigInteger('brandid');
             $table->string("barcode");
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->boolean('active');
             $table->timestamps();
             $table->foreign('categoryid')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('userid')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('brandid')->references('id')->on('brands')->onDelete('cascade')->onUpdate('cascade');
         });
     }
