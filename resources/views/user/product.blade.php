@@ -23,26 +23,26 @@
     </form>
     <div class="container my-5">
         <h1 class="text-center">Értékeld a terméket!</h1>
-        <form>
+        <form action="{{ route('starsave') }}" id="starform" method="POST">
+        @csrf
                 <label>Pontozás 1-től 5-ig</label>
                 <div class="rating" style="white-space: nowrap;">
-                    <input type="radio" id="star1" name="rating" value="1" />
+                    <input type="radio" id="star1" name="rating" value="5" />
                     <label for="star1"></label>
-                    <input type="radio" id="star2" name="rating" value="2" />
+                    <input type="radio" id="star2" name="rating" value="4" />
                     <label for="star2"></label>
                     <input type="radio" id="star3" name="rating" value="3" />
                     <label for="star3"></label>
-                    <input type="radio" id="star4" name="rating" value="4" />
+                    <input type="radio" id="star4" name="rating" value="2" />
                     <label for="star4"></label>
-                    <input type="radio" id="star5" name="rating" value="5" />
+                    <input type="radio" id="star5" name="rating" value="1" />
                     <label for="star5"></label>
-
             </div>
             <div class="form-group">
                 <label for="review">Vélemény:</label>
-                <textarea class="form-control" id="review" rows="3" required></textarea>
+                <textarea class="form-control" name="review" id="review" rows="3" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Beküldés</button>
         </form>
-    </div>
+        </div>
 @endsection

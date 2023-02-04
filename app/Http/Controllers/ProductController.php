@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+    public function star(Request $request)
+    {
+        $message =  $request->review;
+        $message =  $request->rating;
+        echo "<script type='text/javascript'>alert('$message');</script>";
+    }
 
     public function search(Request $request)
     {
