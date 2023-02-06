@@ -2,17 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Evaluation;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     public function star(Request $request)
     {
-        $message =  $request->review;
-        $message =  $request->rating;
-        echo "<script type='text/javascript'>alert('$message');</script>";
+       // $message =  $request->rating;
+        //echo "<script type='text/javascript'>alert('$message');</script>";
+        if(isset(Auth::user()->username)){
+            $evolutionsave = new Evaluation();
+            $evolutionsave->userid = Auth::user()->id;
+            $evolutionsave->point = $request->point;
+            $evolutionsave->productid = $request->productid;
+            $evolutionsave->comment = $request->comment;
+            $evolutionsave->save();
+        }
+        else{
+            $message =  $request->rating;
+            echo "<script type='text/javascript'>alert('Előbb jelentkezz be!');</script>";
+        }
     }
 
     public function search(Request $request)
