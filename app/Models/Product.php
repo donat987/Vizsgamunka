@@ -11,6 +11,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'categoryid',
+        'userid',
         'vat',
         'brandid',
         'barcode',
@@ -22,6 +23,8 @@ class Product extends Model
         'tags',
         'picturename',
         'file',
+        'capacity',
+        'link',
         'active'
     ];
 }

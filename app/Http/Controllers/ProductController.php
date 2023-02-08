@@ -124,6 +124,7 @@ class ProductController extends Controller
             $picture = $request->file('file')->storeAs('product', $renames, 'public');
             $save->name = request("name");
             $save->brandid = request("brandselect");
+            //KELL 4 IF!!!!!!!!
             $catid = DB::table('categories')
                 ->select('id')
                 ->where('subcategory', 'like', $request->categoryselect1)
@@ -140,12 +141,51 @@ class ProductController extends Controller
             }else{
                 $save->actionprice = request("actionprice");
             }
+            $tagstemp = "";
+            $bandname = DB::table('bands')
+                ->select('*')
+                ->where('id', '=', request("brandselect"))
+                ->get();
+            foreach ($bandname as $i){
+                $t = explode(" ", $i->name);
+                foreach($t as $v){
+                    $tagstemp .= $v + ", ";
+                }
+            }
+            $darabol = explode(" ", request("name"));
+            foreach($darabol as $i){
+                $tagstemp .= $i + ", ";
+
+            }
+            $tagstemp .= $request->categoryselect1 + ", " + $request->categoryselect2 + ", " + $request->categoryselect3 + ", " + $request->categoryselect4;
+            $tagstemp = explode(", ", $tagstemp);
+            $tags = "";
+            $db = 0;
+            foreach($tagstemp as $i){
+                $p = explode(", ", $tags);
+                $vanbenne = 0;
+                foreach($p as $q){
+                    if($q == $i){
+                        $vanbenne = 1;
+                    }
+                }
+                if($vanbenne == 0){
+                    if($db == 0){
+                        $tags .= $i;
+                    }
+                    else{
+                        $tag .= ", " + $i;
+                    }
+                }
+            }
+            $save->tags = $tags;
             $save->price = request("price");
             $save->barcode = request("barcode");
             $save->quantity = request("quantity");
             $save->other = request("other");
-            $save->tags = request("tags");
+            $save->capacity = request("liter");
             $save->vat = request("vat");
+            dd($tags);
             if(request("active")=="on"){
                 $save->active = 1;
             }
@@ -157,6 +197,25 @@ class ProductController extends Controller
             $save->file = '/storage/' . $picture;
             $save->description = request("description");
             $save->save();
+
+            /*$productid = DB::table('products')
+            ->select('id')
+            ->orderBy('products.id','desc')
+            ->limit(1)
+            ->get();
+            $link = $productid[0]->id + "_";
+            $darabol = explode(" ", request("name"));
+            $db = 0;
+            foreach($darabol as $i){
+                if($db == 0){
+                    $db = 1;
+                    $link .= $i;
+                }
+                else{
+                    $link .= "_" + $i;
+                }
+            }
+            $ok = DB::update('update products set link = "'.$link.'" where id = "'.$productid[0]->id.'"');*/
             return back()
                 ->with('success', 'Sikeres mentés')
                 ->with('file', $picture);

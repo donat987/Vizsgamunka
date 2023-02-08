@@ -31,7 +31,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4" id="catselect1">
-                                            <label for="exampleFormControlSelect1" class="ms-0">Alkategória 1</label>
+                                            <label for="exampleFormControlSelect1" class="ms-0">Származási ország</label>
                                             <select class="form-control" name="categoryselect2" id="categoryselect2">
                                                 <option value="">Válassz</option>
                                             </select>
@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4" id="catselect2">
-                                            <label for="exampleFormControlSelect1" class="ms-0">Alkategória 2</label>
+                                            <label for="exampleFormControlSelect1" class="ms-0">Ízesítés</label>
                                             <select class="form-control" name="categoryselect3" id="categoryselect3">
                                                 <option value="">Válassz</option>
                                             </select>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4" id="catselect3">
-                                            <label for="exampleFormControlSelect1" class="ms-0">Alkategória 3</label>
+                                            <label for="exampleFormControlSelect1" class="ms-0">Formátum</label>
                                             <select class="form-control" name="categoryselect4" id="categoryselect4">
                                                 <option value="">Válassz</option>
                                             </select>
@@ -115,8 +115,8 @@
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="input-group input-group-static mb-4">
-                                            <label class="form-label">Tagek</label>
-                                            <input type="text" name="tags" class="form-control">
+                                            <label class="form-label">Űrtartalom</label>
+                                            <input type="text" name="liter" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
