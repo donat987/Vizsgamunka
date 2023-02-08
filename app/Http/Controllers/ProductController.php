@@ -58,11 +58,26 @@ class ProductController extends Controller
 
     public function productshow($link)
     {
-        $pro = DB::table('products')
-        ->select('*')
-        ->where('link' , '=' , $link)
+        $point = DB::table('products')
+        ->select(DB::raw("round(AVG(evaluations.point)) as point"))
+        ->join('evaluations','evaluations.productid','=','products.id')
+        ->groupBy('evaluations.point')
+        ->where('products.link' , '=' , $link)
         ->get();
-        return view('user.product', compact('pro'));
+        $sql = 'DATE_FORMAT(evaluations.updated_at, "%Y %M %d") as date';
+        $data = DB::connection()->getPdo()->query("SET lc_time_names = 'hu_HU'");
+        $comment = DB::table('products')
+        ->select('evaluations.point as point', 'evaluations.comment as comment' , 'users.username as username')
+        ->selectRaw($sql)
+        ->join('evaluations','evaluations.productid','=','products.id')
+        ->join('users','users.id','=','evaluations.userid')
+        ->where('link' , '=' , $link)
+        ->paginate(16, ['*'], 'oldal');
+        $product = DB::table('products')
+            ->select('*')
+            ->where('link', '=', $link)
+            ->get();
+        return view('user.product', compact('comment', 'point','product'));
     }
 
     public function all()
