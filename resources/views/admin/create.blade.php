@@ -22,7 +22,7 @@
                                         <div class="input-group input-group-static mb-4">
                                             <label for="exampleFormControlSelect1" class="ms-0">Fő kategoria</label>
                                             <select class="form-control" name="categoryselect1" id="categoryselect1">
-                                                <option>Válassz</option>
+                                                <option value="">Válassz</option>
                                                 @foreach ($category as $i)
                                                     <option value="{{ $i->subcategory }}">{{ $i->subcategory }}</option>
                                                 @endforeach
@@ -74,7 +74,7 @@
                                         <div class="input-group input-group-static mb-4">
                                             <label for="exampleFormControlSelect1" class="ms-0">Márka</label>
                                             <select class="form-control" name="brandselect" id="brandselect">
-                                                <option>Válassz</option>
+                                                <option value="">Válassz</option>
                                                 @foreach ($brand as $i)
                                                     <option value="{{ $i->id }}">{{ $i->name }}</option>
                                                 @endforeach

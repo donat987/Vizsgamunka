@@ -112,15 +112,43 @@
                 <div class="collapse navbar-collapse" id="main_nav">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong> <i
-                                        class="fa fa-bars"></i> All category</strong></a>
+                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong></i> Ital fajták</strong></a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Foods and Drink</a>
-                                <a class="dropdown-item" href="#">Home interior</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Category 1</a>
-                                <a class="dropdown-item" href="#">Category 2</a>
-                                <a class="dropdown-item" href="#">Category 3</a>
+                                @foreach ($category as $cat)
+                                <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
+                                @endforeach
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong></i>Országok</strong></a>
+                            <div class="dropdown-menu">
+                                @foreach ($country as $con)
+                                <a class="dropdown-item" href="#">{{$con->subcategory1}}</a>
+                                @endforeach
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong>Borok</strong></a>
+                            <div class="dropdown-menu">
+                                @foreach ($category as $cat)
+                                <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
+                                @endforeach
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong> Sörök</strong></a>
+                            <div class="dropdown-menu">
+                                @foreach ($category as $cat)
+                                <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
+                                @endforeach
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong>Pálinkák</strong></a>
+                            <div class="dropdown-menu">
+                                @foreach ($category as $cat)
+                                <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
+                                @endforeach
                             </div>
                         </li>
                         <li class="nav-item">
@@ -129,9 +157,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/osszes-termekek">Összes termék</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Electronics</a>
-                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="#">Baby &amp Toys</a>
                         </li>

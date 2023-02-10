@@ -26,7 +26,17 @@ class PageController extends Controller
             ->orderByRaw("RAND()")
             ->take(4)
             ->get();
-        return view('user.welcome', compact('negyrandom'));
+        $category = DB::table('categories')
+            ->select('subcategory2')
+            ->groupBy('subcategory2')
+            ->where('subcategory', '=', 'Ital')
+            ->get();
+        $country = DB::table('categories')
+            ->select('subcategory1')
+            ->groupBy('subcategory1')
+            ->where('subcategory', '=', 'Ital')
+            ->get();
+        return view('user.welcome', compact('negyrandom', 'category' , 'country'));
     }
 
     /* public function index()
