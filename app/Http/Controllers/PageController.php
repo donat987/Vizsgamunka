@@ -17,7 +17,7 @@ class PageController extends Controller
 
         $sql = "round(price + ((price / 100) * vat)) as price";
         $negyrandom = DB::table('products')
-            ->select('products.id as id', 'name', 'file')
+            ->select('products.id as id', 'name', 'file', 'link')
             ->selectRaw($sql)
             ->join('categories', 'categories.id', '=', 'products.categoryid')
             ->where('quantity', '>', 0)

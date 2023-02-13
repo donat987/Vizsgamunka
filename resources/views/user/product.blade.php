@@ -1,6 +1,9 @@
 @extends('layouts.user')
 @section('content')
-    <form method='post' action='cart.php?action=add&id=3&quantity=1'>
+    <form action="/kosarhozadas" method="post">
+        @csrf
+        <input type="hidden" name="product_id" value="{{ $product[0]->id }}">
+        <input type="hidden" name="product_name" value="{{ $product[0]->name }}">
         <div class='site-section mt-5'>
             <div class='container'>
                 <div class='row'>
@@ -13,7 +16,8 @@
                         <p>Gyümölcs: Birs</p>
                         <p>Mennyiség: 0.5 l.</p>
                         <p>{{ $product[0]->description }}</p>
-                        <p><input name='quantity' type='submit' value='Kosárba'
+                        <input type="number" name="quantity" value="1">
+                        <p><input type='submit' value='Kosárba'
                                 class='btn btn-outline-dark  btn-lg btn-block' /></p>
 
                     </div>
@@ -24,27 +28,27 @@
     <div class="container my-5">
         <h1 class="text-center">Eddigi értékelések:</h1>
         @foreach ($comment as $s)
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <img src="https://via.placeholder.com/50x50" class="rounded-circle mr-3">
-                    <div>
-                        <h5 class="mb-0">{{$s->username}}</h5>
-                        <small class="text-muted">Dátum: {{$s->date}}.</small>
-                    </div>
-                    <div class="ml-auto">
-                        <span>
-                            @for ($i = 0; $i < $s->point; $i++)
-                            <i class="fas fa-star"></i>
-                            @endfor
-                        </span>
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <img src="https://via.placeholder.com/50x50" class="rounded-circle mr-3">
+                        <div>
+                            <h5 class="mb-0">{{ $s->username }}</h5>
+                            <small class="text-muted">Dátum: {{ $s->date }}.</small>
+                        </div>
+                        <div class="ml-auto">
+                            <span>
+                                @for ($i = 0; $i < $s->point; $i++)
+                                    <i class="fas fa-star"></i>
+                                @endfor
+                            </span>
+                        </div>
                     </div>
                 </div>
+                <div class="card-body">
+                    <p class="card-text">{{ $s->comment }}</p>
+                </div>
             </div>
-            <div class="card-body">
-                <p class="card-text">{{$s->comment}}</p>
-            </div>
-        </div>
         @endforeach
     </div>
 

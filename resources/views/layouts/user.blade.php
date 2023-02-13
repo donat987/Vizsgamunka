@@ -67,7 +67,7 @@
                     <div class="col-lg-4 col-sm-6 col-12">
                         <div class="widgets-wrap float-md-right">
                             <div class="widget-header  mr-3">
-                                <a href="#" class="icon icon-sm rounded-circle border"><i
+                                <a href="#"  data-toggle="modal" data-target="#cartModal" class="icon icon-sm rounded-circle border"><i
                                         class="fa fa-shopping-cart"></i></a>
                                 <span class="badge badge-pill badge-danger notify">0</span>
                             </div>
@@ -103,6 +103,48 @@
                 </div> <!-- row.// -->
             </div> <!-- container.// -->
         </section> <!-- header-main .// -->
+        <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="cartModalLabel">Kosár tartalma</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    @if(null !== Cookie::get('cart'))
+                    @if (count(json_decode(Cookie::get('cart'))))
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Termék név</th>
+                            <th>Mennyiség</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach (json_decode(Cookie::get('cart')) as $item)
+                            <tr>
+                              <td>{{ $item->product_name }}</td>
+                              <td>{{ $item->quantity }}</td>
+                            </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+                      @else
+                      <p>A kosár jelenleg üres.</p>
+                    @endif
+                    @else
+                    <p>A kosár jelenleg üres.</p>
+                    @endif
+                  </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Bezárás</button>
+                  <a href="/kosar" class="btn btn-primary">Kosár oldal</a>
+                </div>
+              </div>
+            </div>
+          </div>
         <nav class="navbar navbar-main navbar-expand-lg navbar-light border-bottom">
             <div class="container">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav"

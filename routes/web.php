@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,6 +47,9 @@ Route::get('/osszes-termekek', [ProductController::class, 'all']);
 Route::get('/termek/{termek}', [ProductController::class, 'productshow']);
 Route::get('/kereses/{keres}', [ProductController::class, 'search']);
 Route::post("/termek/ertekeles", [ProductController::class,'star'])->name("starsave");
+Route::post("/kosarhozadas", [CartController::class, "addToCart"]);
+Route::get('/kosar', [CartController::class, 'show']);
+Route::get('/veglegesites', [CartController::class, 'checkout']);
 
 
 
