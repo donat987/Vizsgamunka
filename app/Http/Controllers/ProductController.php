@@ -53,7 +53,8 @@ class ProductController extends Controller
             ->where('active', '=', 1)
             ->groupBy('products.id')
             ->paginate(16, ['*'], 'oldal');
-            return view('user.search', compact('se'));
+        $layout = Product::layout();
+        return view('user.search', compact('layout', 'se'));
 
     }
 
@@ -78,7 +79,8 @@ class ProductController extends Controller
             ->select('*')
             ->where('link', '=', $link)
             ->get();
-        return view('user.product', compact('comment', 'point','product'));
+        $layout = Product::layout();
+        return view('user.product', compact('layout' ,'comment', 'point','product'));
     }
 
     public function all()
@@ -94,8 +96,8 @@ class ProductController extends Controller
             ->where('active', '=', 1)
             ->groupBy('products.id')
             ->paginate(16, ['*'], 'oldal');
-
-            return view('user.all', compact('all'));
+            $layout = Product::layout();
+            return view('user.all', compact('layout', 'all'));
     }
 
     public function action()
@@ -112,7 +114,8 @@ class ProductController extends Controller
             ->where('actionprice', '>', 0)
             ->groupBy('products.id')
             ->paginate(16, ['*'], 'oldal');
-            return view('user.action', compact('ac'));
+            $layout = Product::layout();
+            return view('user.action', compact('layout', 'ac'));
     }
     public function store(Request $request)
     {

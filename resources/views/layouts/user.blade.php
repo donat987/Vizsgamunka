@@ -114,7 +114,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong></i> Ital fajták</strong></a>
                             <div class="dropdown-menu">
-                                @foreach ($category as $cat)
+                                @foreach ($layout['category'] as $cat)
                                 <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
                                 @endforeach
                             </div>
@@ -122,7 +122,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong></i>Országok</strong></a>
                             <div class="dropdown-menu">
-                                @foreach ($country as $con)
+                                @foreach ($layout['country'] as $con)
                                 <a class="dropdown-item" href="#">{{$con->subcategory1}}</a>
                                 @endforeach
                             </div>
@@ -130,7 +130,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong>Borok</strong></a>
                             <div class="dropdown-menu">
-                                @foreach ($category as $cat)
+                                @foreach ($layout['category'] as $cat)
                                 <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
                                 @endforeach
                             </div>
@@ -138,7 +138,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong> Sörök</strong></a>
                             <div class="dropdown-menu">
-                                @foreach ($category as $cat)
+                                @foreach ($layout['category'] as $cat)
                                 <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
                                 @endforeach
                             </div>
@@ -146,7 +146,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong>Pálinkák</strong></a>
                             <div class="dropdown-menu">
-                                @foreach ($category as $cat)
+                                @foreach ($layout['category'] as $cat)
                                 <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
                                 @endforeach
                             </div>

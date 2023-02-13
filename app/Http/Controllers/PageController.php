@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,11 +14,11 @@ class PageController extends Controller
 
     public function index()
     {
+
         $sql = "round(price + ((price / 100) * vat)) as price";
-        //$sql .= "round(AVG(point)) AS pont";
         $negyrandom = DB::table('products')
             ->select('products.id as id', 'name', 'file')
-            ->selectraw($sql)
+            ->selectRaw($sql)
             ->join('categories', 'categories.id', '=', 'products.categoryid')
             ->where('quantity', '>', 0)
             ->where('active', '=', 1)
@@ -26,17 +26,8 @@ class PageController extends Controller
             ->orderByRaw("RAND()")
             ->take(4)
             ->get();
-        $category = DB::table('categories')
-            ->select('subcategory2')
-            ->groupBy('subcategory2')
-            ->where('subcategory', '=', 'Ital')
-            ->get();
-        $country = DB::table('categories')
-            ->select('subcategory1')
-            ->groupBy('subcategory1')
-            ->where('subcategory', '=', 'Ital')
-            ->get();
-        return view('user.welcome', compact('negyrandom', 'category' , 'country'));
+        $layout = Product::layout();
+        return view('user.welcome', compact('layout', 'negyrandom'));
     }
 
     /* public function index()

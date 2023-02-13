@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -27,4 +28,19 @@ class Product extends Model
         'link',
         'active'
     ];
+    public static function layout()
+    {
+        $category = DB::table('categories')
+            ->select('subcategory2')
+            ->groupBy('subcategory2')
+            ->where('subcategory', '=', 'Ital')
+            ->get();
+        $country = DB::table('categories')
+            ->select('subcategory1')
+            ->groupBy('subcategory1')
+            ->where('subcategory', '=', 'Ital')
+            ->get();
+
+        return compact('category', 'country');
+    }
 }
