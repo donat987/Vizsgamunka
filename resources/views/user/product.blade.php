@@ -31,7 +31,7 @@
             <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center">
-                        <img src="https://via.placeholder.com/50x50" class="rounded-circle mr-3">
+                        <img width="50px" src="{{ $s->file }}" class="rounded-circle mr-3">
                         <div>
                             <h5 class="mb-0">{{ $s->username }}</h5>
                             <small class="text-muted">Dátum: {{ $s->date }}.</small>

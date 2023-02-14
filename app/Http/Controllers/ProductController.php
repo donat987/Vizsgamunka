@@ -69,7 +69,7 @@ class ProductController extends Controller
         $sql = 'DATE_FORMAT(evaluations.updated_at, "%Y %M %d") as date';
         $data = DB::connection()->getPdo()->query("SET lc_time_names = 'hu_HU'");
         $comment = DB::table('products')
-        ->select('evaluations.point as point', 'evaluations.comment as comment' , 'users.username as username')
+        ->select('evaluations.point as point', 'evaluations.comment as comment' , 'users.username as username' , 'users.file as file')
         ->selectRaw($sql)
         ->join('evaluations','evaluations.productid','=','products.id')
         ->join('users','users.id','=','evaluations.userid')
