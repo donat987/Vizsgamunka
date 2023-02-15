@@ -5,18 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel</title>
-    <link rel="icon" href="{{asset('assets/images/items/1.jpg')}}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('assets/images/items/1.jpg') }}" type="image/x-icon" />
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="{{asset('assets/css/bootstrap.css')}}" rel="stylesheet">
-    <link href="{{asset('assets/css/ui.css')}}" rel="stylesheet">
-    <link href="{{asset('assets/css/responsive.css')}}" rel="stylesheet">
+    <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/ui.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet">
 
-    <link href="{{asset('assets/css/all.min.css')}}" rel="stylesheet">
-    <script src="{{asset('assets/js/jquery.min.js')}}" type="text/javascript"></script>
-    <script src="{{asset('assets/js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('assets/js/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
 
 </head>
 
@@ -49,7 +49,7 @@
                     <div class="col-lg-2 col-6">
 
                         <a href="/" class="brand-wrap">
-                            <img src="{{asset('assets/images/logo.png')}}" class="logo" alt="">
+                            <img src="{{ asset('assets/images/logo.png') }}" class="logo" alt="">
                         </a> <!-- brand-wrap.// -->
                     </div>
                     <div class="col-lg-6 col-12 col-sm-12">
@@ -67,9 +67,20 @@
                     <div class="col-lg-4 col-sm-6 col-12">
                         <div class="widgets-wrap float-md-right">
                             <div class="widget-header  mr-3">
-                                <a href="#"  data-toggle="modal" data-target="#cartModal" class="icon icon-sm rounded-circle border"><i
-                                        class="fa fa-shopping-cart"></i></a>
-                                <span class="badge badge-pill badge-danger notify">0</span>
+                                <a href="#" data-toggle="modal" data-target="#cartModal"
+                                    class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></a>
+                                <span class="badge badge-pill badge-danger notify">
+                                    @php
+                                        $cart = json_decode(Cookie::get('cart'), true);
+                                        $totalQuantity = 0;
+                                        if ($cart) {
+                                            foreach ($cart as $item) {
+                                                $totalQuantity += $item['quantity'];
+                                            }
+                                        }
+                                    @endphp
+                                    <p> {{ $totalQuantity }}</p>
+                                </span>
                             </div>
                             <div class="widget-header icontext">
                                 <a href="#" class="icon icon-sm rounded-circle border"><i
@@ -79,7 +90,7 @@
                                         @auth
                                             <span class="text-muted">Üdvözlünk {{ Auth::user()->firstname }}!</span>
                                             <div>
-                                                @if ((Auth::user()->admin) == 0)
+                                                @if (Auth::user()->admin == 0)
                                                     <a href="{{ url('/profil') }}">Profil</a>
                                                 @else
                                                     <a href="{{ url('/admin') }}">Adminisztáció</a>
@@ -103,48 +114,49 @@
                 </div> <!-- row.// -->
             </div> <!-- container.// -->
         </section> <!-- header-main .// -->
-        <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="cartModalLabel">Kosár tartalma</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cartModalLabel">Kosár tartalma</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @if (null !== Cookie::get('cart'))
+                            @if (count(json_decode(Cookie::get('cart'))))
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Termék név</th>
+                                            <th>Mennyiség</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (json_decode(Cookie::get('cart')) as $item)
+                                            <tr>
+                                                <td>{{ $item->product_name }}</td>
+                                                <td>{{ $item->quantity }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <p>A kosár jelenleg üres.</p>
+                            @endif
+                        @else
+                            <p>A kosár jelenleg üres.</p>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <a href="/kosartorles" class="btn btn-secondary">Kosár ürítése</a>
+                        <a href="/kosar" class="btn btn-primary">Ugrás a kosár oldal</a>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    @if(null !== Cookie::get('cart'))
-                    @if (count(json_decode(Cookie::get('cart'))))
-                      <table class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>Termék név</th>
-                            <th>Mennyiség</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @foreach (json_decode(Cookie::get('cart')) as $item)
-                            <tr>
-                              <td>{{ $item->product_name }}</td>
-                              <td>{{ $item->quantity }}</td>
-                            </tr>
-                          @endforeach
-                        </tbody>
-                      </table>
-                      @else
-                      <p>A kosár jelenleg üres.</p>
-                    @endif
-                    @else
-                    <p>A kosár jelenleg üres.</p>
-                    @endif
-                  </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Bezárás</button>
-                  <a href="/kosar" class="btn btn-primary">Kosár oldal</a>
-                </div>
-              </div>
             </div>
-          </div>
+        </div>
         <nav class="navbar navbar-main navbar-expand-lg navbar-light border-bottom">
             <div class="container">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav"
@@ -154,18 +166,20 @@
                 <div class="collapse navbar-collapse" id="main_nav">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong></i> Ital fajták</strong></a>
+                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong></i> Ital
+                                    fajták</strong></a>
                             <div class="dropdown-menu">
                                 @foreach ($layout['category'] as $cat)
-                                <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
+                                    <a class="dropdown-item" href="#">{{ $cat->subcategory2 }}</a>
                                 @endforeach
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong></i>Országok</strong></a>
+                            <a class="nav-link pl-0" data-toggle="dropdown"
+                                href="#"><strong></i>Országok</strong></a>
                             <div class="dropdown-menu">
                                 @foreach ($layout['country'] as $con)
-                                <a class="dropdown-item" href="#">{{$con->subcategory1}}</a>
+                                    <a class="dropdown-item" href="#">{{ $con->subcategory1 }}</a>
                                 @endforeach
                             </div>
                         </li>
@@ -173,23 +187,25 @@
                             <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong>Borok</strong></a>
                             <div class="dropdown-menu">
                                 @foreach ($layout['category'] as $cat)
-                                <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
+                                    <a class="dropdown-item" href="#">{{ $cat->subcategory2 }}</a>
                                 @endforeach
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong> Sörök</strong></a>
+                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong>
+                                    Sörök</strong></a>
                             <div class="dropdown-menu">
                                 @foreach ($layout['category'] as $cat)
-                                <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
+                                    <a class="dropdown-item" href="#">{{ $cat->subcategory2 }}</a>
                                 @endforeach
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong>Pálinkák</strong></a>
+                            <a class="nav-link pl-0" data-toggle="dropdown"
+                                href="#"><strong>Pálinkák</strong></a>
                             <div class="dropdown-menu">
                                 @foreach ($layout['category'] as $cat)
-                                <a class="dropdown-item" href="#">{{$cat->subcategory2}}</a>
+                                    <a class="dropdown-item" href="#">{{ $cat->subcategory2 }}</a>
                                 @endforeach
                             </div>
                         </li>

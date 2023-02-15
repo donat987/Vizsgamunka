@@ -15,17 +15,20 @@
 
                                 <div class="rating-wrap">
                                     <ul class="rating-stars">
-                                        <li style="width:80%" class="stars-active">
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        <li style="width:{{$sor->point}}%" class="stars-active">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
                                         </li>
                                         <li>
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
                                         </li>
                                     </ul>
-                                    <span class="label-rating text-muted"> 34 reviws</span>
+                                    <span class="label-rating text-muted"> {{$sor->db}}db értékelés</span>
                                 </div>
+                                
                                 @if ($sor->actionprice != 0)
                                     <div class="price-old mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
                                     <div class="price mt-1 ">{{ $sor->actionprice }} ft</div> <!-- price-wrap.// -->

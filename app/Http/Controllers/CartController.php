@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Cookie;
 
 class CartController extends Controller
 {
+    public function delet()
+    {
+        Cookie::queue(Cookie::forget('cart'));
+        return redirect()->back();
+    }
     public function checkout()
     {
         $layout = Product::layout();
@@ -47,6 +52,12 @@ class CartController extends Controller
                     $cartupdate[] = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity];
                 }
             }
+            else{
+                $cartupdate[] = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity];
+            }
+        }
+        else{
+            $cartupdate[] = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity];
         }
         Cookie::forget('cart');
         Cookie::queue('cart', json_encode($cartupdate), 60 * 24 * 365);

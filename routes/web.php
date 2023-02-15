@@ -49,6 +49,7 @@ Route::get('/kereses/{keres}', [ProductController::class, 'search']);
 Route::post("/termek/ertekeles", [ProductController::class,'star'])->name("starsave");
 Route::post("/kosarhozadas", [CartController::class, "addToCart"]);
 Route::get('/kosar', [CartController::class, 'show']);
+Route::get('/kosartorles', [CartController::class, 'delet']);
 Route::get('/veglegesites', [CartController::class, 'checkout']);
 
 

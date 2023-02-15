@@ -30,8 +30,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $sql = "round(price + ((price / 100) * vat)) as price,";
-        $sql .= "round(actionprice + ((actionprice / 100) * vat)) as actionprice";
+        $sql = "round(price + ((price / 100) * vat)) as price, round(actionprice + ((actionprice / 100) * vat)) as actionprice , COUNT(1) as db, round(AVG(evaluations.point)*20) as point";
         $tep = explode(" ", $request->input('keres'));
         $keres = "";
         $temp = 0;
@@ -48,6 +47,7 @@ class ProductController extends Controller
             ->select('products.id as id', 'name', 'file', 'link')
             ->selectraw($sql)
             ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->join('evaluations', 'evaluations.productid', '=', 'products.id')
             ->where('quantity', '>', 0)
             ->whereraw($keres)
             ->where('active', '=', 1)
@@ -86,12 +86,13 @@ class ProductController extends Controller
     public function all()
     {
         $sql = "round(price + ((price / 100) * vat)) as price,";
-        $sql .= "round(actionprice + ((actionprice / 100) * vat)) as actionprice";
+        $sql .= "round(actionprice + ((actionprice / 100) * vat)) as actionprice,  COUNT(1) as db, round(AVG(evaluations.point)*20) as point";
         //$sql .= "round(AVG(point)) AS pont";
         $all = DB::table('products')
             ->select('products.id as id', 'name', 'file', 'link')
             ->selectraw($sql)
             ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->join('evaluations', 'evaluations.productid', '=', 'products.id')
             ->where('quantity', '>', 0)
             ->where('active', '=', 1)
             ->groupBy('products.id')
@@ -103,12 +104,13 @@ class ProductController extends Controller
     public function action()
     {
         $sql = "round(price + ((price / 100) * vat)) as price,";
-        $sql .= "round(actionprice + ((actionprice / 100) * vat)) as actionprice";
+        $sql .= "round(actionprice + ((actionprice / 100) * vat)) as actionprice  , COUNT(1) as db, round(AVG(evaluations.point)*20) as point";
         //$sql .= "round(AVG(point)) AS pont";
         $ac = DB::table('products')
-            ->select('products.id as id', 'name', 'file')
+            ->select('products.id as id', 'name', 'file', 'link')
             ->selectraw($sql)
             ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->join('evaluations', 'evaluations.productid', '=', 'products.id')
             ->where('quantity', '>', 0)
             ->where('active', '=', 1)
             ->where('actionprice', '>', 0)

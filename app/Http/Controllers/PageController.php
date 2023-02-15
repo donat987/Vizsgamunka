@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,13 +16,15 @@ class PageController extends Controller
     public function index()
     {
 
-        $sql = "round(price + ((price / 100) * vat)) as price";
+        $sql = "round(products.price + ((products.price / 100) * vat)) as price, COUNT(1) as db,round(actionprice + ((actionprice / 100) * vat)) as actionprice, round(AVG(evaluations.point)*20) as point";
         $negyrandom = DB::table('products')
             ->select('products.id as id', 'name', 'file', 'link')
             ->selectRaw($sql)
+            ->join('evaluations', 'evaluations.productid', '=', 'products.id')
             ->join('categories', 'categories.id', '=', 'products.categoryid')
-            ->where('quantity', '>', 0)
-            ->where('active', '=', 1)
+            ->where('products.quantity', '>', 0)
+            ->where('products.active', '=', 1)
+            ->where('categories.subcategory2', '=', 'Pálinka')
             ->groupBy('products.id')
             ->orderByRaw("RAND()")
             ->take(4)
@@ -31,9 +34,9 @@ class PageController extends Controller
     }
 
     /* public function index()
-     {
-     return view("welcome");
-     }*/
+    {
+    return view("welcome");
+    }*/
 
     public function addcateg1(Request $request)
     {

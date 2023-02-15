@@ -19,7 +19,7 @@
                             <span class="text-primary"><i class="fa fa-2x fa-truck"></i></span>
                             <figcaption class="pt-3">
                                 <h5 class="title">Gyors szállítás</h5>
-                                <p>Ha 12:00-ig leadja a rendelését, akkor másnap megérkezik az othonához!</p>
+                                <p>Ha 12:00-ig leadja a rendelését, akkor másnap megérkezik az othonához! as</p>
                             </figcaption>
                         </figure> <!-- iconbox // -->
                     </div><!-- col // -->
@@ -56,31 +56,34 @@
             </header><!-- sect-heading -->
             <div class="row">
                 @foreach ($negyrandom as $sor)
-                <div class="col-md-3">
-                    <div href="/termek/{{ $sor->link }}" class="card card-product-grid">
-                        <a href="/termek/{{ $sor->link }}" class="img-wrap"> <img src="{{$sor->file}}"> </a>
-                        <figcaption class="info-wrap">
-                            <a href="/termek/{{ $sor->link }}" class="title">{{$sor->name}}</a>
+                    <div class="col-md-3">
+                        <div href="/termek/{{ $sor->link }}" class="card card-product-grid">
+                            <a href="/termek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
+                            <figcaption class="info-wrap">
+                                <a href="/termek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
 
-                            <div class="rating-wrap">
-                                <ul class="rating-stars">
-                                    <li style="width:80%" class="stars-active">
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
-                                    </li>
-                                </ul>
-                                <span class="label-rating text-muted"> 34 reviws</span>
-                            </div>
-                            <div class="price mt-1">{{$sor->price}} ft</div> <!-- price-wrap.// -->
-                        </figcaption>
-                    </div>
-                </div> <!-- col.// -->
+                                <div class="rating-wrap">
+                                    <ul class="rating-stars">
+                                        <li style="width:{{ $sor->point }}%" class="stars-active">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <span class="label-rating text-muted"> {{ $sor->db }}db értékelés</span>
+                                </div>
+                                @if ($sor->actionprice != 0)
+                                    <div class="price-old mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
+                                    <div class="price mt-1 ">{{ $sor->actionprice }} ft</div> <!-- price-wrap.// -->
+                                @else
+                                    <div class="price mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
+                                @endif
+                            </figcaption>
+                        </div>
+                    </div> <!-- col.// -->
                 @endforeach
 
             </div> <!-- row.// -->
@@ -103,14 +106,12 @@
                             <div class="rating-wrap">
                                 <ul class="rating-stars">
                                     <li style="width:80%" class="stars-active">
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                            class="fa fa-star"></i><i class="fa fa-star"></i>
                                     </li>
                                     <li>
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                            class="fa fa-star"></i><i class="fa fa-star"></i>
                                     </li>
                                 </ul>
                                 <span class="label-rating text-muted"> 34 reviws</span>
@@ -128,14 +129,12 @@
                             <div class="rating-wrap">
                                 <ul class="rating-stars">
                                     <li style="width:80%" class="stars-active">
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                            class="fa fa-star"></i><i class="fa fa-star"></i>
                                     </li>
                                     <li>
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                            class="fa fa-star"></i><i class="fa fa-star"></i>
                                     </li>
                                 </ul>
                                 <span class="label-rating text-muted"> 34 reviws</span>
@@ -153,14 +152,12 @@
                             <div class="rating-wrap">
                                 <ul class="rating-stars">
                                     <li style="width:80%" class="stars-active">
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                            class="fa fa-star"></i><i class="fa fa-star"></i>
                                     </li>
                                     <li>
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                            class="fa fa-star"></i><i class="fa fa-star"></i>
                                     </li>
                                 </ul>
                                 <span class="label-rating text-muted"> 34 reviws</span>
@@ -178,14 +175,12 @@
                             <div class="rating-wrap">
                                 <ul class="rating-stars">
                                     <li style="width:80%" class="stars-active">
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                            class="fa fa-star"></i><i class="fa fa-star"></i>
                                     </li>
                                     <li>
-                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                            class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                            class="fa fa-star"></i><i class="fa fa-star"></i>
                                     </li>
                                 </ul>
                                 <span class="label-rating text-muted"> 34 reviws</span>
@@ -293,4 +288,4 @@
         </div><!-- container // -->
     </section>
     <!-- ========================= FOOTER ========================= -->
-    @endsection
+@endsection
