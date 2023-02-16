@@ -4,6 +4,8 @@
         @csrf
         <input type="hidden" name="product_id" value="{{ $product[0]->id }}">
         <input type="hidden" name="product_name" value="{{ $product[0]->name }}">
+        <input type="hidden" name="product_price" value="{{ $product[0]->price }}">
+        <input type="hidden" name="product_file" value="{{ $product[0]->file }}">
         <div class='site-section mt-5'>
             <div class='container'>
                 <div class='row'>

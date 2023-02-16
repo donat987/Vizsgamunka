@@ -130,15 +130,19 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>Termék név</th>
                                             <th>Mennyiség</th>
+                                            <th>Összesen</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (json_decode(Cookie::get('cart')) as $item)
                                             <tr>
+                                                <td><img width="50px" src="{{ $item->file }}" class="rounded-circle mr-3"></td>
                                                 <td>{{ $item->product_name }}</td>
-                                                <td>{{ $item->quantity }}</td>
+                                                <td>{{ $item->quantity }}db</td>
+                                                <td>{{ $item->price }}ft</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

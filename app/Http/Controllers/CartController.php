@@ -30,9 +30,10 @@ class CartController extends Controller
         $productId = $request->input('product_id');
         $productName = $request->input('product_name');
         $quantity = $request->input('quantity');
+        $price = $request->input('product_price');
+        $file = $request->input('product_file');
 
         $cart = json_decode(Cookie::get('cart'), true);
-        //$cartItem = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity];
         $cartupdate = array();
         //dd($cart);
         if (null !== Cookie::get('cart')){
@@ -40,24 +41,25 @@ class CartController extends Controller
                 $ok = 0;
                 foreach ($cart as $item) {
                     if ($item["id"] == $productId) {
-                        $cartupdate[] = ['id' => $item["id"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity];
+                        $pri = ($item["quantity"] + $quantity) * $item["price"];
+                        $cartupdate[] = ['id' => $item["id"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity, 'price' => $pri, 'file' => $item["file"] ];
                         $ok = 1;
 
                     }
                     else {
-                        $cartupdate[] = ['id' => $item["id"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"]];
+                        $cartupdate[] = ['id' => $item["id"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'price' => $item["price"], 'file' => $item["file"] ];
                     }
                 }
                 if($ok == 0){
-                    $cartupdate[] = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity];
+                    $cartupdate[] = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity, 'price' => $price, 'file' => $file];
                 }
             }
             else{
-                $cartupdate[] = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity];
+                $cartupdate[] = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity, 'price' => $price, 'file' => $file];
             }
         }
         else{
-            $cartupdate[] = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity];
+            $cartupdate[] = ['id' => $productId, 'product_name' => $productName, 'quantity' => $quantity, 'price' => $price, 'file' => $file];
         }
         Cookie::forget('cart');
         Cookie::queue('cart', json_encode($cartupdate), 60 * 24 * 365);
