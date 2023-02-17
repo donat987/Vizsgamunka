@@ -75,8 +75,10 @@ class ProductController extends Controller
         ->join('users','users.id','=','evaluations.userid')
         ->where('link' , '=' , $link)
         ->paginate(16, ['*'], 'oldal');
+        $sql = "round(price + ((price / 100) * vat)) as price, round(actionprice + ((actionprice / 100) * vat)) as actionprice";
         $product = DB::table('products')
-            ->select('*')
+            ->select('price as taxprice', 'id', 'name', 'file', 'description', 'link')
+            ->selectraw($sql)
             ->where('link', '=', $link)
             ->get();
         $layout = Product::layout();

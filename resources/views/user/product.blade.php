@@ -6,6 +6,8 @@
         <input type="hidden" name="product_name" value="{{ $product[0]->name }}">
         <input type="hidden" name="product_price" value="{{ $product[0]->price }}">
         <input type="hidden" name="product_file" value="{{ $product[0]->file }}">
+        <input type="hidden" name="product_tax" value="{{ $product[0]->taxprice }}">
+        <input type="hidden" name="product_link" value="{{ $product[0]->link }}">
         <div class='site-section mt-5'>
             <div class='container'>
                 <div class='row'>

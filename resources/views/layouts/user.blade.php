@@ -9,15 +9,15 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/ui.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/ui.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/responsive.css') }}" rel="stylesheet">
 
-    <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet">
-    <script src="{{ asset('assets/js/jquery.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
+    <link href="{{ asset('/css/all.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('/js/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
-
+    
 </head>
 
 <body>
