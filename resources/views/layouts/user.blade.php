@@ -142,7 +142,7 @@
                                                 <td><img width="50px" src="{{ $item->file }}" class="rounded-circle mr-3"></td>
                                                 <td>{{ $item->product_name }}</td>
                                                 <td>{{ $item->quantity }}db</td>
-                                                <td>{{ $item->price }}ft</td>
+                                                <td>{{ $item->oneprice*$item->quantity  }}ft</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
