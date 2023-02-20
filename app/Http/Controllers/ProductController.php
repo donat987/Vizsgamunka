@@ -77,7 +77,7 @@ class ProductController extends Controller
         ->paginate(16, ['*'], 'oldal');
         $sql = "round(price + ((price / 100) * vat)) as price, round(actionprice + ((actionprice / 100) * vat)) as actionprice";
         $product = DB::table('products')
-            ->select('price as taxprice', 'id', 'name', 'file', 'description', 'link')
+            ->select('price as taxprice', 'actionprice as actiontaxprice', 'vat', 'id', 'name', 'file', 'description', 'link')
             ->selectraw($sql)
             ->where('link', '=', $link)
             ->get();

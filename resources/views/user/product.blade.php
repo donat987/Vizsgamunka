@@ -5,9 +5,12 @@
         <input type="hidden" name="product_id" value="{{ $product[0]->id }}">
         <input type="hidden" name="product_name" value="{{ $product[0]->name }}">
         <input type="hidden" name="product_price" value="{{ $product[0]->price }}">
+        <input type="hidden" name="product_actionprice" value="{{ $product[0]->actionprice }}">
         <input type="hidden" name="product_file" value="{{ $product[0]->file }}">
         <input type="hidden" name="product_tax" value="{{ $product[0]->taxprice }}">
+        <input type="hidden" name="product_actiontax" value="{{ $product[0]->actiontaxprice }}">
         <input type="hidden" name="product_link" value="{{ $product[0]->link }}">
+        <input type="hidden" name="product_vat" value="{{ $product[0]->vat }}">
         <div class='site-section mt-5'>
             <div class='container'>
                 <div class='row'>
@@ -15,14 +18,18 @@
                     </div>
                     <div class='col-lg-5 ml-auto'>
                         <h2 class='text-primary'>{{ $product[0]->name }}</h2>
-                        <h2 class='text-primary'>{{ $product[0]->price }} ft</h2>
+                        @if ($product[0]->actionprice != 0)
+                            <h3 class="price-old danger text-primary ">{{ $product[0]->price }} ft</h3>
+                            <h2 class="text-primary ">{{ $product[0]->actionprice }} ft</h2> 
+                        @else
+                            <h2 class="text-primary ">{{ $product[0]->price }} ft</h2> 
+                        @endif
                         <p>Márka: Agárdi Pálinka</p>
                         <p>Gyümölcs: Birs</p>
                         <p>Mennyiség: 0.5 l.</p>
                         <p>{{ $product[0]->description }}</p>
                         <input type="number" name="quantity" value="1">
-                        <p><input type='submit' value='Kosárba'
-                                class='btn btn-outline-dark  btn-lg btn-block' /></p>
+                        <p><input type='submit' value='Kosárba' class='btn btn-outline-dark  btn-lg btn-block' /></p>
 
                     </div>
                 </div>
@@ -48,7 +55,7 @@
                             </span>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="card-body">
                     <p class="card-text">{{ $s->comment }}</p>

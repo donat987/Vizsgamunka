@@ -20,10 +20,11 @@
                             <div class="row mb-5">
                                 <div class="col-md-6">
                                     <button class="btn btn-outline-primary btn-md btn-block"
-                                        onclick="window.location.href = 'shop.php'">Vásárlás folytatása</button>
+                                        onclick="window.location.href = '\'">Vásárlás folytatása</button>
                                 </div>
                             </div>
-                            <form method="post" id="form1" title="" action="modul/kupon.php">
+                            <form method="post" id="cupon" action="{{ route('cupon') }}">
+                                @csrf
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label class="text-black h4" for="coupon">Kupon</label>
@@ -34,19 +35,21 @@
                                             placeholder="Kupon">
                                     </div>
                                     <div class="col-md-4">
-                                        <button class="btn btn-primary btn-md px-4" type="submit" form="form1"
+                                        <button class="btn btn-primary btn-md px-4" type="submit" form="cupon"
                                             value="Submit">Bevitel</button>
                                     </div>
-
+                                </form>
+                                    <div id="kuponn" class="col-md-12 mt-2">
+                                        
+                                    </div>
                                 </div>
-                            </form>
-                            <div id="kuponn"></div>
+                            
                         </div>
-                        <div id="kosarossz" class="col-md-6 pl-5">
+                        <div class="col-md-6 pl-5">
                             <section class="section-content">
                                 <div class="row justify-content-end">
                                     <div class="col-md-7" id="cartall">
-                                        
+
                                     </div>
                                 </div>
                         </div>
@@ -71,6 +74,24 @@
     <script>
         kosarbetolt();
         vegso();
+        $("#cupon").submit(function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: "{{ route('cupon') }}",
+                method: "POST",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "cupontext": $('#kupon').val()
+                },
+                success: function(data) {
+                    $('#kuponn').html(data);
+                    kosarbetolt();
+                    vegso();
+                }
+            });
+            
+        });
+
         function delet(clickid) {
             $.ajax({
                 url: "{{ route('addtocart') }}",
@@ -134,7 +155,8 @@
                 }
             });
         }
-        function vegso(){
+
+        function vegso() {
             $.ajax({
                 url: "{{ route('teljes') }}",
                 method: "get",

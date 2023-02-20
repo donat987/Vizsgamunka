@@ -17,7 +17,7 @@
     <script src="{{ asset('/js/jquery.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
-    
+
 </head>
 
 <body>
@@ -139,10 +139,15 @@
                                     <tbody>
                                         @foreach (json_decode(Cookie::get('cart')) as $item)
                                             <tr>
-                                                <td><img width="50px" src="{{ $item->file }}" class="rounded-circle mr-3"></td>
+                                                <td><img width="50px" src="{{ $item->file }}"
+                                                        class="rounded-circle mr-3"></td>
                                                 <td>{{ $item->product_name }}</td>
                                                 <td>{{ $item->quantity }}db</td>
-                                                <td>{{ $item->oneprice*$item->quantity  }}ft</td>
+                                                @if ($item->actionprice == 0)
+                                                    <td>{{ $item->oneprice * $item->quantity }}ft</td>
+                                                @else
+                                                    <td>{{ $item->actionprice * $item->quantity }}ft</td>
+                                                @endif
                                             </tr>
                                         @endforeach
                                     </tbody>
