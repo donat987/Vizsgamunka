@@ -38,22 +38,22 @@
                                         <button class="btn btn-primary btn-md px-4" type="submit" form="cupon"
                                             value="Submit">Bevitel</button>
                                     </div>
-                                </form>
-                                    <div id="kuponn" class="col-md-12 mt-2">
-                                        
-                                    </div>
-                                </div>
-                            
-                        </div>
-                        <div class="col-md-6 pl-5">
-                            <section class="section-content">
-                                <div class="row justify-content-end">
-                                    <div class="col-md-7" id="cartall">
+                            </form>
+                            <div id="kuponn" class="col-md-12 mt-2">
 
-                                    </div>
-                                </div>
+                            </div>
                         </div>
+
                     </div>
+                    <div class="col-md-6 pl-5">
+                        <section class="section-content">
+                            <div class="row justify-content-end">
+                                <div class="col-md-7" id="cartall">
+
+                                </div>
+                            </div>
+                    </div>
+                </div>
                 </div>
             </section>
         @else
@@ -70,8 +70,11 @@
             </div>
         </div>
     @endif
-
+    {{ Cookie::queue(Cookie::forget('kedvezmenykosar')) }}
+    {{ Cookie::queue(Cookie::forget('kedvezmeny')) }}
+    {{ Cookie::queue(Cookie::forget('kupon')) }}
     <script>
+        var kuponvolt = false;
         kosarbetolt();
         vegso();
         $("#cupon").submit(function(event) {
@@ -84,13 +87,29 @@
                     "cupontext": $('#kupon').val()
                 },
                 success: function(data) {
+                    kuponvolt = true;
                     $('#kuponn').html(data);
                     kosarbetolt();
                     vegso();
                 }
             });
-            
+
         });
+
+        function kupon() {
+            $.ajax({
+                url: "{{ route('cupon') }}",
+                method: "POST",
+                data: {
+                    "_token": "{{ csrf_token() }}"
+                },
+                success: function(data) {
+                    $('#kuponn').html(data);
+                    kosarbetolt();
+                    vegso();
+                }
+            });
+        }
 
         function delet(clickid) {
             $.ajax({
@@ -103,8 +122,12 @@
                     "del": "1"
                 },
                 success: function(data) {
-                    kosarbetolt();
-                    vegso();
+                    if (kuponvolt) {
+                        kupon();
+                    } else {
+                        kosarbetolt();
+                        vegso();
+                    }
                 }
             });
         }
@@ -120,8 +143,12 @@
                     "quantity": "-1"
                 },
                 success: function(data) {
-                    kosarbetolt();
-                    vegso();
+                    if (kuponvolt) {
+                        kupon();
+                    } else {
+                        kosarbetolt();
+                        vegso();
+                    };
                 }
             });
         }
@@ -137,8 +164,12 @@
                     "quantity": "1"
                 },
                 success: function(data) {
-                    kosarbetolt();
-                    vegso();
+                    if (kuponvolt) {
+                        kupon();
+                    } else {
+                        kosarbetolt();
+                        vegso();
+                    }
                 }
             });
         }
