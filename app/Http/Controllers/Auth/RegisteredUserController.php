@@ -42,19 +42,23 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+        $random = '';
+        for ($i = 0; $i < 60; $i++) {
+            $random .= $characters[rand(0, strlen($characters) - 1)];
+        }
         $user = User::create([
             'username' => $request->username,
             'lastname' => $request->lastname,
             'firstname' => $request->firstname,
+            'token' => $random,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'file' => "",
         ]);
-
+        
         event(new Registered($user));
-
         Auth::login($user);
-
         return redirect(RouteServiceProvider::HOME);
     }
 }
