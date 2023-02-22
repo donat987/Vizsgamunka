@@ -11,6 +11,8 @@
         <input type="hidden" name="product_actiontax" value="{{ $product[0]->actiontaxprice }}">
         <input type="hidden" name="product_link" value="{{ $product[0]->link }}">
         <input type="hidden" name="product_vat" value="{{ $product[0]->vat }}">
+        <input type="hidden" name="product_categid" value="{{ $product[0]->categoryid }}">
+        <input type="hidden" name="product_brandid" value="{{ $product[0]->brandid }}">
         <div class='site-section mt-5'>
             <div class='container'>
                 <div class='row'>

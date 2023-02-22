@@ -53,10 +53,10 @@ Route::post('/kosar/kupon', [CartController::class, "cupon"])->name("cupon");
 Route::get('/kosarvegleges', [CartController::class, 'cartall'])->name("teljes");
 Route::get('/kosar/betolt', [CartController::class, 'cart'])->name("cartt");
 Route::get('/kosartorles', [CartController::class, 'delet']);
-Route::get('/veglegesites', [CartController::class, 'checkout']);
+Route::get('/kosar/veglegesites', [CartController::class, 'checkout'])->name("checkout");
 
 
-
+Route::get('/email', [PageController::class, 'hiteles']);
 
 
 

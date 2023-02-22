@@ -14,7 +14,7 @@ class CartController extends Controller
         $kupon = $request->input("cupontext");
         Cookie::queue(Cookie::forget('kedvezmeny'));
         Cookie::queue(Cookie::forget('kedvezmenykosar'));
-        if($kupon == ""){
+        if ($kupon == "") {
             if (null != Cookie::get('kupon')) {
                 $kupon = Cookie::get('kupon');
                 Cookie::queue(Cookie::forget('kupon'));
@@ -27,12 +27,11 @@ class CartController extends Controller
             ->where('start', '<', date("Y-m-d H:i:s"))
             ->where('couponcode', '=', $kupon)
             ->get();
-        
         $kedvezmeny = [];
         $netto = 0;
         $brutto = 0;
         if (isset($sql[0])) {
-            Cookie::queue('kupon', $kupon , 60);
+            Cookie::queue('kupon', $kupon, 60);
             if ($sql[0]->speciesid == '1') {
                 if ($sql[0]->ft == 0) {
                     $szaz = $sql[0]->szazalek;
@@ -71,18 +70,175 @@ class CartController extends Controller
                     Cookie::queue('kedvezmeny', json_encode($kedvezmeny), 60);
                     echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
                 }
-            } elseif ($sql[0]->id == '2') {
+            } elseif ($sql[0]->speciesid == '2') {
+                $szaz = $sql[0]->szazalek;
+                $termek = [];
+                foreach (json_decode(Cookie::get('cart')) as $item) {
+                    $actionprice = 0;
+                    $actiontaxprice = 0;
+                    if ($item->actionprice != 0) {
+                        $actionprice = round($item->actionprice / (($szaz / 100) + 1));
+                        $actiontaxprice = round($item->actiontaxprice / (($szaz / 100) + 1));
+                        $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
+                        $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
+                    }
+                    $termek[] = ['id' => $item->id,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                }
+                $kedvezmeny[] = ['nettokedvezmeny' => round($netto), 'bruttokedvezmeny' => round($brutto)];
+                Cookie::queue('kedvezmenykosar', json_encode($termek), 60);
+                Cookie::queue('kedvezmeny', json_encode($kedvezmeny), 60);
+                echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
 
-            } elseif ($sql[0]->id == '3') {
+            } elseif ($sql[0]->speciesid == '3') {
+                $szaz = $sql[0]->szazalek;
+                $termek = [];
+                foreach (json_decode(Cookie::get('cart')) as $item) {
+                    $actionprice = 0;
+                    $actiontaxprice = 0;
+                    if ($item->actionprice == 0) {
+                        $actionprice = round($item->oneprice / (($szaz / 100) + 1));
+                        $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
+                        $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
+                        $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
+                    }
+                    $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                }
+                $kedvezmeny[] = ['nettokedvezmeny' => round($netto), 'bruttokedvezmeny' => round($brutto)];
+                Cookie::queue('kedvezmenykosar', json_encode($termek), 60);
+                Cookie::queue('kedvezmeny', json_encode($kedvezmeny), 60);
+                echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
 
-            } elseif ($sql[0]->id == '4') {
+            } elseif ($sql[0]->speciesid == '4') {
+                $sq = DB::table('coupons')
+                ->select('brandid')
+                ->join('coupon_brand','coupon_brand.couponid','=','coupons.id')
+                ->where('active', '=', 1)
+                ->where('end', '>', date("Y-m-d H:i:s"))
+                ->where('start', '<', date("Y-m-d H:i:s"))
+                ->where('couponcode', '=', $kupon)
+                ->get();
+                $szaz = $sql[0]->szazalek;
+                $termek = [];
+                foreach (json_decode(Cookie::get('cart')) as $item) {
+                    $actionprice = 0;
+                    $actiontaxprice = 0;
+                    $vanbenne = false;
+                    foreach ($sq as $sor){
+                        if ($item->brandid == $sor->brandid) {
+                            $vanbenne = true;
+                            if ($item->actionprice == 0) {
+                                $actionprice = round($item->oneprice / (($szaz / 100) + 1));
+                                $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
+                                $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
+                            } else {
+                                $actionprice = round($item->actionprice / (($szaz / 100) + 1));
+                                $actiontaxprice = round($item->actiontaxprice / (($szaz / 100) + 1));
+                                $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
+                            }
+                        }
+                    }
+                    if($vanbenne == true){
+                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                    }else{
+                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $item->actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $item->actiontaxprice, 'link' => $item->link];
+                    }
 
-            } elseif ($sql[0]->id == '5') {
+                }
+                $kedvezmeny[] = ['nettokedvezmeny' => round($netto), 'bruttokedvezmeny' => round($brutto)];
+                Cookie::queue('kedvezmenykosar', json_encode($termek), 60);
+                Cookie::queue('kedvezmeny', json_encode($kedvezmeny), 60);
+                echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
+            } elseif ($sql[0]->speciesid == '5') {
+                $sq = DB::table('coupons')
+                ->select('productid')
+                ->join('coupon_products','coupon_products.couponid','=','coupons.id')
+                ->where('active', '=', 1)
+                ->where('end', '>', date("Y-m-d H:i:s"))
+                ->where('start', '<', date("Y-m-d H:i:s"))
+                ->where('couponcode', '=', $kupon)
+                ->get();
+                $szaz = $sql[0]->szazalek;
+                $termek = [];
+                foreach (json_decode(Cookie::get('cart')) as $item) {
+                    $actionprice = 0;
+                    $actiontaxprice = 0;
+                    $vanbenne = false;
+                    foreach ($sq as $sor){
+                        if ($item->id == $sor->productid) {
+                            $vanbenne = true;
+                            if ($item->actionprice == 0) {
+                                $actionprice = round($item->oneprice / (($szaz / 100) + 1));
+                                $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
+                                $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
+                            } else {
+                                $actionprice = round($item->actionprice / (($szaz / 100) + 1));
+                                $actiontaxprice = round($item->actiontaxprice / (($szaz / 100) + 1));
+                                $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
+                            }
+                        }
+                    }
+                    if($vanbenne == true){
+                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                    }else{
+                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $item->actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $item->actiontaxprice, 'link' => $item->link];
+                    }
 
-            } elseif ($sql[0]->id == '6') {
+                }
+                $kedvezmeny[] = ['nettokedvezmeny' => round($netto), 'bruttokedvezmeny' => round($brutto)];
+                Cookie::queue('kedvezmenykosar', json_encode($termek), 60);
+                Cookie::queue('kedvezmeny', json_encode($kedvezmeny), 60);
+                echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
 
-            } elseif ($sql[0]->id == '7') {
+            } elseif ($sql[0]->speciesid == '6') {
+                $sq = DB::table('coupons')
+                ->select('categoryid')
+                ->join('coupon_category','coupon_category.couponid','=','coupons.id')
+                ->where('active', '=', 1)
+                ->where('end', '>', date("Y-m-d H:i:s"))
+                ->where('start', '<', date("Y-m-d H:i:s"))
+                ->where('couponcode', '=', $kupon)
+                ->get();
+                $szaz = $sql[0]->szazalek;
+                $termek = [];
+                foreach (json_decode(Cookie::get('cart')) as $item) {
+                    $actionprice = 0;
+                    $actiontaxprice = 0;
+                    $vanbenne = false;
+                    foreach ($sq as $sor){
+                        if ($item->categoryid == $sor->categoryid) {
+                            $vanbenne = true;
+                            if ($item->actionprice == 0) {
+                                $actionprice = round($item->oneprice / (($szaz / 100) + 1));
+                                $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
+                                $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
+                            } else {
+                                $actionprice = round($item->actionprice / (($szaz / 100) + 1));
+                                $actiontaxprice = round($item->actiontaxprice / (($szaz / 100) + 1));
+                                $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
+                            }
+                        }
+                    }
+                    if($vanbenne == true){
+                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                    }else{
+                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $item->actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $item->actiontaxprice, 'link' => $item->link];
+                    }
 
+                }
+                $kedvezmeny[] = ['nettokedvezmeny' => round($netto), 'bruttokedvezmeny' => round($brutto)];
+                Cookie::queue('kedvezmenykosar', json_encode($termek), 60);
+                Cookie::queue('kedvezmeny', json_encode($kedvezmeny), 60);
+                echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
+
+            } 
+            else{
+                echo "<h5 class='text-danger'>Hiba lépett fel!</h5>";
             }
 
         } else {
@@ -152,10 +308,10 @@ class CartController extends Controller
         </div>
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-primary btn-lg btn-block" onclick="window.location = 'checkout.php'">Pénztár</button>
+                <button class="btn btn-primary btn-lg btn-block" onclick="window.location = '/kosar/veglegesites'">Pénztár</button>
             </div>
         </div>
-       
+
     <?php
 }
     public function cart()
@@ -285,6 +441,8 @@ class CartController extends Controller
         $link = $request->input('product_link');
         $actionprice = $request->input('product_actionprice');
         $vat = $request->input('product_vat');
+        $brandid = $request->input('product_brandid');
+        $categoryid = $request->input('product_categid');
         $cart = json_decode(Cookie::get('cart'), true);
         $cartcupon = json_decode(Cookie::get('kedvezmenykosar'), true);
         $cartupdate = [];
@@ -293,11 +451,10 @@ class CartController extends Controller
             foreach ($cartcupon as $item) {
                 if ($item["id"] == $productId) {
                     if (!$request->input('del')) {
-                        $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity, 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
-                    } 
-                }
-                else {
-                    $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                        $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"],'brandid' => $item["brandid"],'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity, 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                    }
+                } else {
+                    $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"],'brandid' => $item["brandid"],'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
                 }
             }
             Cookie::queue(Cookie::forget('kedvezmenykosar'));
@@ -309,22 +466,22 @@ class CartController extends Controller
                 foreach ($cart as $item) {
                     if ($item["id"] == $productId) {
                         if (!$request->input('del')) {
-                            $cartupdate[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity, 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                            $cartupdate[] = ['id' => $item["id"],'brandid' => $item["brandid"],'categoryid' => $item["categoryid"], 'actionprice' => $item["actionprice"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity, 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
                         }
                         $ok = 1;
 
                     } else {
-                        $cartupdate[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                        $cartupdate[] = ['id' => $item["id"],'brandid' => $item["brandid"],'categoryid' => $item["categoryid"], 'actionprice' => $item["actionprice"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
                     }
                 }
                 if ($ok == 0) {
-                    $cartupdate[] = ['id' => $productId, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
+                    $cartupdate[] = ['id' => $productId ,'brandid' => $brandid,'categoryid' => $categoryid, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
                 }
             } else {
-                $cartupdate[] = ['id' => $productId, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
+                $cartupdate[] = ['id' => $productId ,'brandid' => $brandid,'categoryid' => $categoryid, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
             }
         } else {
-            $cartupdate[] = ['id' => $productId, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
+            $cartupdate[] = ['id' => $productId ,'brandid' => $brandid,'categoryid' => $categoryid, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
         }
         Cookie::forget('cart');
         Cookie::queue('cart', json_encode($cartupdate), 60 * 24 * 10);

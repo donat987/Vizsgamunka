@@ -28,7 +28,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <label class="text-black h4" for="coupon">Kupon</label>
-                                        <p>Kérlek add meg a kuponkódot.</p>
+                                        <p>Kérlek add meg a kuponkódot. A kuponok nem összevonhatóak!</p>
                                     </div>
                                     <div class="col-md-8 mb-3 mb-md-0">
                                         <input type="text" class="form-control py-3" name="kupon" id="kupon"
