@@ -24,6 +24,7 @@ class User extends Authenticatable
         'admin',
         'file',
         'token',
+        'email_verified_at',
         'email',
         'password',
     ];

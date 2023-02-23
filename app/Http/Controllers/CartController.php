@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 
@@ -82,7 +84,7 @@ class CartController extends Controller
                         $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
                         $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
                     }
-                    $termek[] = ['id' => $item->id,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                    $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
                 }
                 $kedvezmeny[] = ['nettokedvezmeny' => round($netto), 'bruttokedvezmeny' => round($brutto)];
                 Cookie::queue('kedvezmenykosar', json_encode($termek), 60);
@@ -101,7 +103,7 @@ class CartController extends Controller
                         $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
                         $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
                     }
-                    $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                    $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
                 }
                 $kedvezmeny[] = ['nettokedvezmeny' => round($netto), 'bruttokedvezmeny' => round($brutto)];
                 Cookie::queue('kedvezmenykosar', json_encode($termek), 60);
@@ -110,20 +112,20 @@ class CartController extends Controller
 
             } elseif ($sql[0]->speciesid == '4') {
                 $sq = DB::table('coupons')
-                ->select('brandid')
-                ->join('coupon_brand','coupon_brand.couponid','=','coupons.id')
-                ->where('active', '=', 1)
-                ->where('end', '>', date("Y-m-d H:i:s"))
-                ->where('start', '<', date("Y-m-d H:i:s"))
-                ->where('couponcode', '=', $kupon)
-                ->get();
+                    ->select('brandid')
+                    ->join('coupon_brand', 'coupon_brand.couponid', '=', 'coupons.id')
+                    ->where('active', '=', 1)
+                    ->where('end', '>', date("Y-m-d H:i:s"))
+                    ->where('start', '<', date("Y-m-d H:i:s"))
+                    ->where('couponcode', '=', $kupon)
+                    ->get();
                 $szaz = $sql[0]->szazalek;
                 $termek = [];
                 foreach (json_decode(Cookie::get('cart')) as $item) {
                     $actionprice = 0;
                     $actiontaxprice = 0;
                     $vanbenne = false;
-                    foreach ($sq as $sor){
+                    foreach ($sq as $sor) {
                         if ($item->brandid == $sor->brandid) {
                             $vanbenne = true;
                             if ($item->actionprice == 0) {
@@ -139,10 +141,10 @@ class CartController extends Controller
                             }
                         }
                     }
-                    if($vanbenne == true){
-                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
-                    }else{
-                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $item->actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $item->actiontaxprice, 'link' => $item->link];
+                    if ($vanbenne == true) {
+                        $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                    } else {
+                        $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $item->actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $item->actiontaxprice, 'link' => $item->link];
                     }
 
                 }
@@ -152,20 +154,20 @@ class CartController extends Controller
                 echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
             } elseif ($sql[0]->speciesid == '5') {
                 $sq = DB::table('coupons')
-                ->select('productid')
-                ->join('coupon_products','coupon_products.couponid','=','coupons.id')
-                ->where('active', '=', 1)
-                ->where('end', '>', date("Y-m-d H:i:s"))
-                ->where('start', '<', date("Y-m-d H:i:s"))
-                ->where('couponcode', '=', $kupon)
-                ->get();
+                    ->select('productid')
+                    ->join('coupon_products', 'coupon_products.couponid', '=', 'coupons.id')
+                    ->where('active', '=', 1)
+                    ->where('end', '>', date("Y-m-d H:i:s"))
+                    ->where('start', '<', date("Y-m-d H:i:s"))
+                    ->where('couponcode', '=', $kupon)
+                    ->get();
                 $szaz = $sql[0]->szazalek;
                 $termek = [];
                 foreach (json_decode(Cookie::get('cart')) as $item) {
                     $actionprice = 0;
                     $actiontaxprice = 0;
                     $vanbenne = false;
-                    foreach ($sq as $sor){
+                    foreach ($sq as $sor) {
                         if ($item->id == $sor->productid) {
                             $vanbenne = true;
                             if ($item->actionprice == 0) {
@@ -181,10 +183,10 @@ class CartController extends Controller
                             }
                         }
                     }
-                    if($vanbenne == true){
-                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
-                    }else{
-                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $item->actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $item->actiontaxprice, 'link' => $item->link];
+                    if ($vanbenne == true) {
+                        $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                    } else {
+                        $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $item->actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $item->actiontaxprice, 'link' => $item->link];
                     }
 
                 }
@@ -195,20 +197,20 @@ class CartController extends Controller
 
             } elseif ($sql[0]->speciesid == '6') {
                 $sq = DB::table('coupons')
-                ->select('categoryid')
-                ->join('coupon_category','coupon_category.couponid','=','coupons.id')
-                ->where('active', '=', 1)
-                ->where('end', '>', date("Y-m-d H:i:s"))
-                ->where('start', '<', date("Y-m-d H:i:s"))
-                ->where('couponcode', '=', $kupon)
-                ->get();
+                    ->select('categoryid')
+                    ->join('coupon_category', 'coupon_category.couponid', '=', 'coupons.id')
+                    ->where('active', '=', 1)
+                    ->where('end', '>', date("Y-m-d H:i:s"))
+                    ->where('start', '<', date("Y-m-d H:i:s"))
+                    ->where('couponcode', '=', $kupon)
+                    ->get();
                 $szaz = $sql[0]->szazalek;
                 $termek = [];
                 foreach (json_decode(Cookie::get('cart')) as $item) {
                     $actionprice = 0;
                     $actiontaxprice = 0;
                     $vanbenne = false;
-                    foreach ($sq as $sor){
+                    foreach ($sq as $sor) {
                         if ($item->categoryid == $sor->categoryid) {
                             $vanbenne = true;
                             if ($item->actionprice == 0) {
@@ -224,10 +226,10 @@ class CartController extends Controller
                             }
                         }
                     }
-                    if($vanbenne == true){
-                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
-                    }else{
-                        $termek[] = ['id' => $item->id ,'brandid' => $item->brandid,'categoryid' => $item->categoryid, 'actionprice' => $item->actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $item->actiontaxprice, 'link' => $item->link];
+                    if ($vanbenne == true) {
+                        $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                    } else {
+                        $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $item->actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $item->actiontaxprice, 'link' => $item->link];
                     }
 
                 }
@@ -236,8 +238,7 @@ class CartController extends Controller
                 Cookie::queue('kedvezmeny', json_encode($kedvezmeny), 60);
                 echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
 
-            } 
-            else{
+            } else {
                 echo "<h5 class='text-danger'>Hiba lépett fel!</h5>";
             }
 
@@ -451,10 +452,15 @@ class CartController extends Controller
             foreach ($cartcupon as $item) {
                 if ($item["id"] == $productId) {
                     if (!$request->input('del')) {
-                        $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"],'brandid' => $item["brandid"],'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity, 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                        if(($item["quantity"] + $quantity) >= 1){
+                            $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"]+ $quantity , 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                        }
+                        else{
+                            $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                        }
                     }
                 } else {
-                    $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"],'brandid' => $item["brandid"],'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                    $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
                 }
             }
             Cookie::queue(Cookie::forget('kedvezmenykosar'));
@@ -466,25 +472,51 @@ class CartController extends Controller
                 foreach ($cart as $item) {
                     if ($item["id"] == $productId) {
                         if (!$request->input('del')) {
-                            $cartupdate[] = ['id' => $item["id"],'brandid' => $item["brandid"],'categoryid' => $item["categoryid"], 'actionprice' => $item["actionprice"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity, 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                            $temp = $item["quantity"] + $quantity;
+                            if($temp >= 1){
+                                $cartupdate[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"]+ $quantity , 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                            }
+                            else{
+                                $cartupdate[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] , 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                            }                        
                         }
                         $ok = 1;
 
                     } else {
-                        $cartupdate[] = ['id' => $item["id"],'brandid' => $item["brandid"],'categoryid' => $item["categoryid"], 'actionprice' => $item["actionprice"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                        $cartupdate[] = ['id' => $item["id"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'actionprice' => $item["actionprice"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
                     }
                 }
                 if ($ok == 0) {
-                    $cartupdate[] = ['id' => $productId ,'brandid' => $brandid,'categoryid' => $categoryid, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
+                    $cartupdate[] = ['id' => $productId, 'brandid' => $brandid, 'categoryid' => $categoryid, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
                 }
             } else {
-                $cartupdate[] = ['id' => $productId ,'brandid' => $brandid,'categoryid' => $categoryid, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
+                $cartupdate[] = ['id' => $productId, 'brandid' => $brandid, 'categoryid' => $categoryid, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
             }
         } else {
-            $cartupdate[] = ['id' => $productId ,'brandid' => $brandid,'categoryid' => $categoryid, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
+            $cartupdate[] = ['id' => $productId, 'brandid' => $brandid, 'categoryid' => $categoryid, 'actionprice' => $actionprice, 'vat' => $vat, 'oneprice' => $price, 'product_name' => $productName, 'quantity' => $quantity, 'file' => $file, 'taxprice' => $taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $link];
         }
         Cookie::forget('cart');
         Cookie::queue('cart', json_encode($cartupdate), 60 * 24 * 10);
+        if (isset(Auth::user()->id)) {
+            $sq = DB::table('carts')
+                ->select('*')
+                ->where('userid', '=', Auth::user()->id)
+                ->where('productid', '=', $productId)
+                ->get();
+            if (count($sq) == 0) {
+                $save = new Cart();
+                $save->userid = Auth::user()->id;
+                $save->productid = $productId;
+                $save->quantity = $quantity;
+                $save->save();
+            }elseif($sq[0]->productid == $productId) {
+                if(($quantity + $sq[0]->quantity) >= 1){
+                    $update = Cart::find($sq[0]->id);
+                    $update->quantity = $quantity + $sq[0]->quantity;
+                    $update->update();
+                }
+            }
+        }
         if ($request->input('cart')) {
             return response()->json(['success' => true, 'message' => 'A termék hozzáadva a kosárhoz.']);
 

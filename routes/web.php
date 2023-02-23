@@ -6,6 +6,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,7 +57,7 @@ Route::get('/kosartorles', [CartController::class, 'delet']);
 Route::get('/kosar/veglegesites', [CartController::class, 'checkout'])->name("checkout");
 
 
-Route::get('/email', [PageController::class, 'hiteles']);
+Route::get('/email', [UserController::class, 'hiteles']);
 
 
 

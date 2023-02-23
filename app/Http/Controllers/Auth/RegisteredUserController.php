@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use App\Models\Product;
+use Mail;
+use App\Mail\RegMail;
 
 class RegisteredUserController extends Controller
 {
@@ -55,8 +57,13 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'file' => "",
+            'email_verified_at' => "",
         ]);
-        
+        $mailData = [
+            'activator' => $random,
+            'name' => $request->firstname
+        ];
+        Mail::to($request->email)->send(new RegMail($mailData));
         event(new Registered($user));
         Auth::login($user);
         return redirect(RouteServiceProvider::HOME);
