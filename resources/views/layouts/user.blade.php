@@ -18,6 +18,7 @@
     <script src="{{ asset('/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
 
+  
 </head>
 
 <body>

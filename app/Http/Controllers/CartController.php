@@ -452,10 +452,9 @@ class CartController extends Controller
             foreach ($cartcupon as $item) {
                 if ($item["id"] == $productId) {
                     if (!$request->input('del')) {
-                        if(($item["quantity"] + $quantity) >= 1){
-                            $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"]+ $quantity , 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
-                        }
-                        else{
+                        if (($item["quantity"] + $quantity) >= 1) {
+                            $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity, 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                        } else {
                             $cartupdatecuppon[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
                         }
                     }
@@ -473,12 +472,11 @@ class CartController extends Controller
                     if ($item["id"] == $productId) {
                         if (!$request->input('del')) {
                             $temp = $item["quantity"] + $quantity;
-                            if($temp >= 1){
-                                $cartupdate[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"]+ $quantity , 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                            if ($temp >= 1) {
+                                $cartupdate[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] + $quantity, 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
+                            } else {
+                                $cartupdate[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"], 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
                             }
-                            else{
-                                $cartupdate[] = ['id' => $item["id"], 'actionprice' => $item["actionprice"], 'brandid' => $item["brandid"], 'categoryid' => $item["categoryid"], 'vat' => $item["vat"], 'oneprice' => $item["oneprice"], 'product_name' => $item["product_name"], 'quantity' => $item["quantity"] , 'file' => $item["file"], 'taxprice' => $item["taxprice"], 'actiontaxprice' => $item["actiontaxprice"], 'link' => $item["link"]];
-                            }                        
                         }
                         $ok = 1;
 
@@ -509,11 +507,16 @@ class CartController extends Controller
                 $save->productid = $productId;
                 $save->quantity = $quantity;
                 $save->save();
-            }elseif($sq[0]->productid == $productId) {
-                if(($quantity + $sq[0]->quantity) >= 1){
-                    $update = Cart::find($sq[0]->id);
-                    $update->quantity = $quantity + $sq[0]->quantity;
-                    $update->update();
+            } elseif ($sq[0]->productid == $productId) {
+                if (($quantity + $sq[0]->quantity) >= 1) {
+                    if ($request->input('del')) {
+                        $del = Cart::find($sq[0]->id);
+                        $del->delete();
+                    } else {
+                        $update = Cart::find($sq[0]->id);
+                        $update->quantity = $quantity + $sq[0]->quantity;
+                        $update->update();
+                    }
                 }
             }
         }
