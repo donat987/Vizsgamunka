@@ -40,7 +40,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profil', [UserController::class, 'show']);
     Route::post('/profil', [UserController::class, 'data'])->name('profildata');
-    Route::post('/profil/módosítás', [UserController::class, 'profilupdate'])->name('profilupdate');
+    Route::post('/profil/modositas', [UserController::class, 'profilupdate'])->name('profilupdate');
+    Route::post('/profil/modositas/mentes', [UserController::class, 'profilupdatesave']);
     /*Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy')*/;
 });
