@@ -5,18 +5,40 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     public function profilupdatesave(Request $request)
     {
-       dd($request);
+        
+        $update = User::find(Auth::user()->id);
+        if ($request->file()) {
+            $request->validate([
+                'file' => 'required|mimes:img,png,jpg|max:2048',
+            ]);
+            $renames = time() . '_' . rand() . $request->file->getClientOriginalName();
+            $picture = $request->file('file')->storeAs('users', $renames, 'public');
+            $update->file = '/storage/' . $picture;
+
+        }
+        else{
+            $update->file = "";
+        }
+        $update->file = "";
+        $update->firstname = $request->firstname;
+        $update->lastname = $request->lastname;
+        $update->date_of_birth = $request->date_of_birth;
+        $update->username = $request->username;
+        $update->advertising = $request->advertising;
+        
+        $update->update();
+
     }
     public function profilupdate()
     {
-        
+
         ?>
         <form action="/profil/modositas/mentes" id="update" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="_token" id="csrf-token" value="<?php echo csrf_token() ?>" />
@@ -36,19 +58,19 @@ class UserController extends Controller
             <li class="list-group-item">
                 <div class="form-group">
                     <label for="date_of_birth">Születési dátum:</label>
-                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="<?php echo  Auth::user()->date_of_birth ?>">
+                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="<?php echo Auth::user()->date_of_birth ?>">
                 </div>
             </li>
             <li class="list-group-item">
                 <div class="form-group">
                     <label for="username">Felhasználó név:</label>
-                    <input type="text" class="form-control" id="username" name="username" value="<?php echo  Auth::user()->username ?>">
+                    <input type="text" class="form-control" id="username" name="username" value="<?php echo Auth::user()->username ?>">
                 </div>
             </li>
             <li class="list-group-item">
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" value="<?php echo  Auth::user()->email ?>">
+                    <input type="email" class="form-control" id="email" name="email" value="<?php echo Auth::user()->email ?>">
                 </div>
             </li>
             <li class="list-group-item">
@@ -62,41 +84,40 @@ class UserController extends Controller
             </li>
             <li class="list-group-item">
                 <div class="custom-file" lang="hu">
-                    <input type="file" class="custom-file-input" id="customFile"  >
+                    <input type="file" class="custom-file-input" name="file" id="file">
                     <label class="custom-file-label" for="customFile">Profilkép</label>
                 </div>
             </li>
             <li class="list-group-item">
                 <div class="d-flex justify-content-between align-items-center">
                     <div></div>
-                    <button class="btn btn-primary">Mentés</button>
+                    <button type="submit" value="Submit" class="btn btn-primary">Mentés</button>
                 </div>
             </li>
         </ul>
     </form>
         <?php
-    }
+}
     public function data()
     {
         ?>
         <h2>Saját adatok</h2>
             <ul class="list-group">
-                <li class="list-group-item">Vezetéknév: <?php echo Auth::user()->lastname?></li>
-                <li class="list-group-item">Keresztnév: <?php echo Auth::user()->firstname?></li>
-                <li class="list-group-item">Születési dátum: <?php echo Auth::user()->date_of_birth?></li>
-                <li class="list-group-item">Felhasználó név: <?php echo Auth::user()->username?></li>
-                <li class="list-group-item">Email: <?php echo Auth::user()->email?></li>
+                <li class="list-group-item">Vezetéknév: <?php echo Auth::user()->lastname ?></li>
+                <li class="list-group-item">Keresztnév: <?php echo Auth::user()->firstname ?></li>
+                <li class="list-group-item">Születési dátum: <?php echo Auth::user()->date_of_birth ?></li>
+                <li class="list-group-item">Felhasználó név: <?php echo Auth::user()->username ?></li>
+                <li class="list-group-item">Email: <?php echo Auth::user()->email ?></li>
                 <?php
-                if(Auth::user()->advertising == 1){
-                    echo '<li class="list-group-item">Hírdetésre feliratkozott? igen</li>';
-                }
-                else{
-                    echo '<li class="list-group-item">Hírdetésre feliratkozott? nem</li>';
-                }
-                ?>
+if (Auth::user()->advertising == 1) {
+            echo '<li class="list-group-item">Hírdetésre feliratkozott? igen</li>';
+        } else {
+            echo '<li class="list-group-item">Hírdetésre feliratkozott? nem</li>';
+        }
+        ?>
                 <li class="list-group-item">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div>Regisztált: <?php echo Auth::user()->created_at?></div>
+                        <div>Regisztált: <?php echo Auth::user()->created_at ?></div>
                         <button class="btn btn-primary" onclick="edit()">Módosítás</button>
                     </div>
                 </li>
