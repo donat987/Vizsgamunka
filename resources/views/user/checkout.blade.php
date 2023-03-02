@@ -82,14 +82,20 @@
                     <div class="p-3 p-lg-5 border">
 
                         <div class="border mb-3 p-3 rounded">
-
                             <h3 class="h6 mb-0"><a class="d-block collapsed" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">Utánvétes fizetés | 1500 forint</a></h3>
-
                             <div class="collapse" id="collapsebank" style="">
                                 <div class="py-2 pl-0">
-                                    <p class="mb-0">A futárszolgálat díja 1500 forintba kerül. Az áru átvételekor kérjük lehetőség szerint a pontos összeget szíveskedjék a futárnak fizetni! Bankkártyával való fizetés lehetséges. Az áru megrendelésétől számított 3 napon belül szállítunk. </p>
+                                  <p class="mb-0" id="para1">A futárszolgálat díja 1500 forintba kerül. Az áru átvételekor kérjük lehetőség szerint a pontos összeget szíveskedjék a futárnak fizetni! Bankkártyával való fizetés lehetséges. Az áru megrendelésétől számított 3 napon belül szállítunk.</p>
                                 </div>
-                            </div>
+                              </div>
+                        </div>
+                        <div class="border mb-3 p-3 ">
+                            <h3 class="h6 mb-0"><a class="d-block collapsed" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">Utánvétes fizetés | 1500 forint</a></h3>
+                            <div class="collapse" id="collapsebank" style="">
+                                <div class="py-2 pl-0">
+                                    <p class="mb-0" id="para1">A futárszolgálat díja 1500 forintba kerül. Az áru átvételekor kérjük lehetőség szerint a pontos összeget szíveskedjék a futárnak fizetni! Bankkártyával való fizetés lehetséges. Az áru megrendelésétől számított 3 napon belül szállítunk.</p>
+                                  </div>
+                              </div>
                         </div>
 
                     </div>
@@ -140,4 +146,17 @@
     </div></form>
 </div>
 </div>
+<script>
+    const para1 = document.getElementById("para1");
+const para2 = document.getElementById("para2");
+
+para1.addEventListener("click", function() {
+  para1.classList.toggle("selected");
+});
+
+para2.addEventListener("click", function() {
+  para2.classList.toggle("selected");
+});
+
+</script>
 @endsection
