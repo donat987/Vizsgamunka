@@ -10,9 +10,89 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+    public function addtitles()
+    {
+        ?>
+                <form>
+        <div class="form-group">
+            <label for="name">Név</label>
+            <input type="text" class="form-control" id="name" placeholder="Név">
+        </div>
+        <div class="form-group">
+            <label for="id">Irányító szám</label>
+            <input type="text" class="form-control" id="id" placeholder="Irányító szám">
+        </div>
+        <div class="form-group">
+            <label for="street">Utca</label>
+            <input type="text" class="form-control" id="street" placeholder="Utca">
+        </div>
+        <div class="form-group">
+            <label for="other">Egyéb</label>
+            <input type="text" class="form-control" id="other" placeholder="Egyéb">
+        </div>
+        <div class="form-group">
+            <label for="phone">Telefonszám</label>
+            <input type="text" class="form-control" id="phone" placeholder="Telefonszám">
+        </div>
+        <div class="form-group">
+            <label for="house">Házszám</label>
+            <input type="text" class="form-control" id="house" placeholder="Házszám">
+        </div>
+        <div class="form-group">
+            <label for="tax">Adószám</label>
+            <input type="text" class="form-control" id="tax" placeholder="Adószám">
+        </div>
+        <button type="submit" class="btn btn-primary">Küldés</button>
+        </form>
+        <?php
+}
+    public function profiltitles()
+    {
+        $sql = DB::table('user_adresses')
+            ->select('*')
+            ->where('userid', '=', Auth::user()->id)
+            ->get();
+        if (isset($sql[0])) {
+            ?>
+        <h2>Felvett címek</h2>
+        <div class="row">
+            <?php
+foreach ($sql as $i) {
+                ?>
+            <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                <p class="card-text">Név: <?php echo $i->name ?></p>
+                <p class="card-text">Cím: <?php echo $i->zipcode ?> <?php echo $i->city ?> <?php echo $i->street ?> <?php echo $i->house_number ?></p>
+                <p class="card-text">Egyéb: <?php echo $i->other ?></p>
+                <p class="card-text">Mobil: <?php echo $i->mobile_number ?></p>
+                <?php
+if ($i->tax_number != "") {
+                    ?>
+                        <p class="card-text">Adószám: <?php echo $i->tax_number ?></p>
+                        <?php
+}
+                ?>
+                <p class="card-text"><button>Módosítás</button></p>
+                </div>
+            </div>
+            </div>
+            <?php
+}
+            ?>
+        </div>
+        <?php
+} else {
+            ?>
+            <h2>Önnek még nincsen felvett címe</h2>
+            <button onclick="addtitles()">Cím felvétele</button>
+            <?php
+}
+    }
+
     public function profilupdatesave(Request $request)
     {
-        
+
         $update = User::find(Auth::user()->id);
         if ($request->file()) {
             $request->validate([
@@ -22,8 +102,7 @@ class UserController extends Controller
             $picture = $request->file('file')->storeAs('users', $renames, 'public');
             $update->file = '/storage/' . $picture;
 
-        }
-        else{
+        } else {
             $update->file = "";
         }
         $update->file = "";
@@ -32,98 +111,15 @@ class UserController extends Controller
         $update->date_of_birth = $request->date_of_birth;
         $update->username = $request->username;
         $update->advertising = $request->advertising;
-        
+
         $update->update();
 
     }
     public function profilupdate()
     {
-
-        ?>
-        <form action="/profil/modositas/mentes" id="update" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="_token" id="csrf-token" value="<?php echo csrf_token() ?>" />
-        <ul class="list-group">
-            <li class="list-group-item">
-                <div class="form-group">
-                    <label for="lastname">Vezetéknék:</label>
-                    <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo Auth::user()->lastname ?>">
-                </div>
-            </li>
-            <li class="list-group-item">
-                <div class="form-group">
-                    <label for="firstname">Vezetéknék:</label>
-                    <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo Auth::user()->firstname ?>">
-                </div>
-            </li>
-            <li class="list-group-item">
-                <div class="form-group">
-                    <label for="date_of_birth">Születési dátum:</label>
-                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="<?php echo Auth::user()->date_of_birth ?>">
-                </div>
-            </li>
-            <li class="list-group-item">
-                <div class="form-group">
-                    <label for="username">Felhasználó név:</label>
-                    <input type="text" class="form-control" id="username" name="username" value="<?php echo Auth::user()->username ?>">
-                </div>
-            </li>
-            <li class="list-group-item">
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" value="<?php echo Auth::user()->email ?>">
-                </div>
-            </li>
-            <li class="list-group-item">
-                <div class="form-group">
-                    <label for="advertising">Hírdetésre feliratkozott?</label>
-                    <select class="form-control" id="advertising" name="advertising">
-                        <option value="1" >igen</option>
-                        <option value="0">nem</option>
-                    </select>
-                </div>
-            </li>
-            <li class="list-group-item">
-                <div class="custom-file" lang="hu">
-                    <input type="file" class="custom-file-input" name="file" id="file">
-                    <label class="custom-file-label" for="customFile">Profilkép</label>
-                </div>
-            </li>
-            <li class="list-group-item">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div></div>
-                    <button type="submit" value="Submit" class="btn btn-primary">Mentés</button>
-                </div>
-            </li>
-        </ul>
-    </form>
-        <?php
-}
-    public function data()
-    {
-        ?>
-        <h2>Saját adatok</h2>
-            <ul class="list-group">
-                <li class="list-group-item">Vezetéknév: <?php echo Auth::user()->lastname ?></li>
-                <li class="list-group-item">Keresztnév: <?php echo Auth::user()->firstname ?></li>
-                <li class="list-group-item">Születési dátum: <?php echo Auth::user()->date_of_birth ?></li>
-                <li class="list-group-item">Felhasználó név: <?php echo Auth::user()->username ?></li>
-                <li class="list-group-item">Email: <?php echo Auth::user()->email ?></li>
-                <?php
-if (Auth::user()->advertising == 1) {
-            echo '<li class="list-group-item">Hírdetésre feliratkozott? igen</li>';
-        } else {
-            echo '<li class="list-group-item">Hírdetésre feliratkozott? nem</li>';
-        }
-        ?>
-                <li class="list-group-item">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>Regisztált: <?php echo Auth::user()->created_at ?></div>
-                        <button class="btn btn-primary" onclick="edit()">Módosítás</button>
-                    </div>
-                </li>
-            </ul>
-        <?php
-}
+        $layout = Product::layout();
+        return view('user.profil', compact('layout'));
+    }
 
     public function show()
     {

@@ -39,8 +39,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/profil', [UserController::class, 'show']);
-    Route::post('/profil', [UserController::class, 'data'])->name('profildata');
-    Route::post('/profil/modositas', [UserController::class, 'profilupdate'])->name('profilupdate');
+    Route::get('/profil/modositas', [UserController::class, 'profilupdate'])->name('profilupdate');
+    Route::post('/profil/cimek', [UserController::class, 'profiltitles'])->name('profiltitles');
+    Route::post('/profil/letrehoz/cimek', [UserController::class, 'addtitles'])->name('addtitles');
     Route::post('/profil/modositas/mentes', [UserController::class, 'profilupdatesave']);
     /*Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy')*/;

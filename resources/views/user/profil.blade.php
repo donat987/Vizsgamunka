@@ -1,53 +1,72 @@
-@extends('layouts.user')
-@section('content')
-    <section class="section-content mt-5">
-        <div class="container">
-            <div class="container-fluid">
+@extends('layouts.profil')
+@section('profilcontent')
+    <div class="col-lg-12">
+        <div class="card mb-4">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-sm-3">
-                        <div class="d-flex flex-column align-items-center justify-content-center p-3">
-                            <img src="https://via.placeholder.com/150" class="rounded-circle mb-2" alt="User Avatar">
-                            <h5>{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h5>
-                            <p>{{ Auth::user()->username }}</p>
-                            <a href="">Eddigi rendelések</a>
-                            <a href="">Szállítási címek</a>
-                            <a href="">Jelszó módosítás</a>
-                        </div>
+                        <p class="mb-0">Teljse név</p>
                     </div>
-                    <div class="col-sm-9" id="tartalom">
-
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">{{ Auth::user()->lastname }} {{ Auth::user()->firstname }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Felhasználó név</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">{{ Auth::user()->username }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Email</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">{{ Auth::user()->email }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Születési dátum</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">{{ Auth::user()->date_of_birth }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Hírlevélre feliratkozott?</p>
+                    </div>
+                    <div class="col-sm-9">
+                        @if (Auth::user()->advertising == 1)
+                            <p class="text-muted mb-0">Igen</p>
+                        @else
+                            <p class="text-muted mb-0">Nem</p>
+                        @endif
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Regisztált</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">{{ Auth::user()->created_at }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <button class="btn btn-primary" onclick="window.location.href='/profil/modositas'">Módosítás</button>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <script>
-        sajatadat();
-
-        function sajatadat() {
-            $.ajax({
-                url: "{{ route('profildata') }}",
-                method: "post",
-                data: {
-                    "_token": "{{ csrf_token() }}"
-                },
-                success: function(data) {
-                    $('#tartalom').html(data);
-                }
-            });
-        }
-
-        function edit() {
-            $.ajax({
-                url: "{{ route('profilupdate') }}",
-                method: "post",
-                data: {
-                    "_token": "{{ csrf_token() }}"
-                },
-                success: function(data) {
-                    $('#tartalom').html(data);
-                }
-            });
-        }
-    </script>
+    </div>
 @endsection
