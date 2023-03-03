@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-3">
-                        <p class="mb-0">Teljse név</p>
+                        <p class="mb-0">Teljes név</p>
                     </div>
                     <div class="col-sm-9">
                         <p class="text-muted mb-0">{{ Auth::user()->lastname }} {{ Auth::user()->firstname }}</p>
@@ -63,10 +63,12 @@
                 <hr>
                 <div class="row">
                     <div class="col-sm-12 text-center">
-                        <button class="btn btn-primary" onclick="window.location.href='/profil/modositas'">Módosítás</button>
+                        <button class="btn btn-primary w-25"
+                            onclick="window.location.href='/profil/modositas'">Módosítás</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+   
 @endsection

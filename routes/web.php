@@ -40,8 +40,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profil', [UserController::class, 'show']);
     Route::get('/profil/modositas', [UserController::class, 'profilupdate'])->name('profilupdate');
-    Route::post('/profil/cimek', [UserController::class, 'profiltitles'])->name('profiltitles');
-    Route::post('/profil/letrehoz/cimek', [UserController::class, 'addtitles'])->name('addtitles');
+    Route::get('/profil/cimek', [UserController::class, 'profiltitles'])->name('profiltitles');
+    Route::get('/profil/cimek/hozzaad', [UserController::class, 'addtitles'])->name('addtitles');
+    Route::get('/profil/cimek/modositas/{id}', [UserController::class, 'titlesupdate'])->name('titlesupdate');
+    Route::get('/profil/cimek/torles/{id}', [UserController::class, 'titlesdelete'])->name('titlesdelete');
+    Route::post('/profil/cimek/modositas/mentes', [UserController::class, 'titlesupdatesave'])->name('titlesupdatesave');
+    Route::post('/profil/cimek/hozzaad/mentes', [UserController::class, 'addtitlessave'])->name('addtitlessave');
     Route::post('/profil/modositas/mentes', [UserController::class, 'profilupdatesave']);
     /*Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy')*/;

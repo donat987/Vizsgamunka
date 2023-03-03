@@ -4,90 +4,132 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\User_adresses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
+    public function titlesdelete($id)
+    {
+        $sql = DB::table('user_adresses')
+            ->select(DB::raw("count(1) as van"))
+            ->where('id', '=', $id)
+            ->where('userid', '=', Auth::user()->id)
+            ->get();
+        if ($sql[0]->van != 0) {
+            $delete = User_adresses::find($id);
+            $delete->delete();
+            return redirect('/profil/cimek');
+        } else {
+            return redirect('/profil/cimek');
+        }
+    }
+    public function titlesupdatesave(Request $request)
+    {
+        $validated = $request->validate([
+            'teljes_név' => 'required|min:5|max:50',
+            'irányítószám' => 'required|numeric|digits:4',
+            'település' => 'required|min:2|max:50',
+            'utca' => 'required|min:2|max:50',
+            'házszám' => 'required|min:1|max:7',
+            'egyéb' => 'max:50',
+            'telefonszám' => 'required|numeric',
+        ]);
+        $update = User_adresses::find($request->id);
+        if (!$request->adószám) {
+            $update->tax_number = "";
+        } else {
+            $update->tax_number = $request->adószám;
+        }
+        if (!$request->egyéb) {
+            $update->other = "";
+        } else {
+            $update->other = $request->egyéb;
+        }
+        $update->userid = Auth::user()->id;
+        $update->zipcode = $request->irányítószám;
+        $update->name = $request->teljes_név;
+        $update->city = $request->település;
+        $update->street = $request->utca;
+        $update->house_number = $request->házszám;
+        $update->mobile_number = $request->telefonszám;
+        $update->update();
+        return redirect('/profil/cimek');
+    }
+    public function titlesupdate($id)
+    {
+        $sql = DB::table('user_adresses')
+            ->select(DB::raw("count(1) as van"))
+            ->where('id', '=', $id)
+            ->where('userid', '=', Auth::user()->id)
+            ->get();
+        if ($sql[0]->van != 0) {
+            $sql = DB::table('user_adresses')
+                ->select(DB::raw("*"))
+                ->where('id', '=', $id)
+                ->where('userid', '=', Auth::user()->id)
+                ->get();
+            $layout = Product::layout();
+            return view('user.editprofiltitles', compact('layout', 'sql'));
+        } else {
+            return redirect('/profil/cimek');
+        }
+    }
+    public function addtitlessave(Request $request)
+    {
+        $validated = $request->validate([
+            'teljes_név' => 'required|min:5|max:50',
+            'irányítószám' => 'required|numeric|digits:4',
+            'település' => 'required|min:2|max:50',
+            'utca' => 'required|min:2|max:50',
+            'házszám' => 'required|min:1|max:7',
+            'egyéb' => 'max:50',
+            'telefonszám' => 'required|numeric',
+        ]);
+        $save = new user_adresses();
+        if (!$request->adószám) {
+            $save->tax_number = "";
+        } else {
+            $save->tax_number = $request->adószám;
+        }
+        if (!$request->egyéb) {
+            $save->other = "";
+        } else {
+            $save->other = $request->egyéb;
+        }
+        $save->userid = Auth::user()->id;
+        $save->zipcode = $request->irányítószám;
+        $save->name = $request->teljes_név;
+        $save->city = $request->település;
+        $save->street = $request->utca;
+        $save->house_number = $request->házszám;
+        $save->mobile_number = $request->telefonszám;
+        $save->save();
+        $sql = DB::table('user_adresses')
+            ->select('*')
+            ->where('userid', '=', Auth::user()->id)
+            ->get();
+        $layout = Product::layout();
+        return view('user.profiltitles', compact('layout', 'sql'));
+
+    }
     public function addtitles()
     {
-        ?>
-                <form>
-        <div class="form-group">
-            <label for="name">Név</label>
-            <input type="text" class="form-control" id="name" placeholder="Név">
-        </div>
-        <div class="form-group">
-            <label for="id">Irányító szám</label>
-            <input type="text" class="form-control" id="id" placeholder="Irányító szám">
-        </div>
-        <div class="form-group">
-            <label for="street">Utca</label>
-            <input type="text" class="form-control" id="street" placeholder="Utca">
-        </div>
-        <div class="form-group">
-            <label for="other">Egyéb</label>
-            <input type="text" class="form-control" id="other" placeholder="Egyéb">
-        </div>
-        <div class="form-group">
-            <label for="phone">Telefonszám</label>
-            <input type="text" class="form-control" id="phone" placeholder="Telefonszám">
-        </div>
-        <div class="form-group">
-            <label for="house">Házszám</label>
-            <input type="text" class="form-control" id="house" placeholder="Házszám">
-        </div>
-        <div class="form-group">
-            <label for="tax">Adószám</label>
-            <input type="text" class="form-control" id="tax" placeholder="Adószám">
-        </div>
-        <button type="submit" class="btn btn-primary">Küldés</button>
-        </form>
-        <?php
-}
+        $layout = Product::layout();
+        return view('user.addtitles', compact('layout'));
+    }
     public function profiltitles()
     {
         $sql = DB::table('user_adresses')
             ->select('*')
             ->where('userid', '=', Auth::user()->id)
             ->get();
-        if (isset($sql[0])) {
-            ?>
-        <h2>Felvett címek</h2>
-        <div class="row">
-            <?php
-foreach ($sql as $i) {
-                ?>
-            <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                <p class="card-text">Név: <?php echo $i->name ?></p>
-                <p class="card-text">Cím: <?php echo $i->zipcode ?> <?php echo $i->city ?> <?php echo $i->street ?> <?php echo $i->house_number ?></p>
-                <p class="card-text">Egyéb: <?php echo $i->other ?></p>
-                <p class="card-text">Mobil: <?php echo $i->mobile_number ?></p>
-                <?php
-if ($i->tax_number != "") {
-                    ?>
-                        <p class="card-text">Adószám: <?php echo $i->tax_number ?></p>
-                        <?php
-}
-                ?>
-                <p class="card-text"><button>Módosítás</button></p>
-                </div>
-            </div>
-            </div>
-            <?php
-}
-            ?>
-        </div>
-        <?php
-} else {
-            ?>
-            <h2>Önnek még nincsen felvett címe</h2>
-            <button onclick="addtitles()">Cím felvétele</button>
-            <?php
-}
+        $layout = Product::layout();
+        return view('user.profiltitles', compact('layout', 'sql'));
     }
 
     public function profilupdatesave(Request $request)
@@ -95,30 +137,65 @@ if ($i->tax_number != "") {
 
         $update = User::find(Auth::user()->id);
         if ($request->file()) {
-            $request->validate([
+            $valid = $request->validate([
                 'file' => 'required|mimes:img,png,jpg|max:2048',
             ]);
-            $renames = time() . '_' . rand() . $request->file->getClientOriginalName();
-            $picture = $request->file('file')->storeAs('users', $renames, 'public');
-            $update->file = '/storage/' . $picture;
-
-        } else {
-            $update->file = "";
+            $image = $valid['file'];
+            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+            $explode = explode('/', Auth::user()->file);
+            Storage::delete('/public/users/' . $explode[3]);
+            $path = '/public/users/' . $filename;
+            $file = '/storage/users/' . $filename;
+            $img = Image::make($image);
+            $img->fit(300, 300, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            Storage::put($path, (string) $img->encode());
+            $update->file = $file;
         }
-        $update->file = "";
-        $update->firstname = $request->firstname;
-        $update->lastname = $request->lastname;
-        $update->date_of_birth = $request->date_of_birth;
-        $update->username = $request->username;
-        $update->advertising = $request->advertising;
-
-        $update->update();
+        $validated = $request->validate([
+            'vezetéknév' => 'required|min:3|max:20',
+            'keresztnév' => 'required|min:3|max:20',
+            'születési_dátum' => 'required|date',
+            'felhasználónév' => 'required|min:3|max:20',
+            'email' => 'required|email',
+        ]);
+        if (strtotime($request->születési_dátum . ' + 18 years') <= time()) {
+            $sql = DB::table('users')
+                ->select(DB::raw("count(username) as name"))
+                ->where('username', '=', $request->felhasználónév)
+                ->get();
+            if ($sql[0]->name == 0 || $request->felhasználónév == Auth::user()->username) {
+                $sql = DB::table('users')
+                    ->select(DB::raw("count(email) as email"))
+                    ->where('email', '=', $request->email)
+                    ->get();
+                if ($sql[0]->email == 0 || $request->email == Auth::user()->email) {
+                    $update->firstname = $request->vezetéknév;
+                    $update->lastname = $request->keresztnév;
+                    $update->date_of_birth = $request->születési_dátum;
+                    $update->username = $request->felhasználónév;
+                    $update->email = $request->email;
+                    $update->advertising = $request->advertising;
+                    $update->update();
+                    $layout = Product::layout();
+                    return view('user.profil', compact('layout'));
+                } else {
+                    return redirect()->back()->with('error', 'Ez az emalcím foglalt!');
+                }
+            } else {
+                return redirect()->back()->with('error', 'Ez a fálhasználónév foglalt!');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Még nem töltötte be a 18 életévét!');
+        }
 
     }
     public function profilupdate()
     {
         $layout = Product::layout();
-        return view('user.profil', compact('layout'));
+        return view('user.edituser', compact('layout'));
     }
 
     public function show()
