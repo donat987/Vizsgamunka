@@ -16,6 +16,7 @@ class User_adresses extends Model
         'house_number',
         'other',
         'tax_number',
-        'mobile_number'
+        'mobile_number',
+        'company_name'
     ];
 }

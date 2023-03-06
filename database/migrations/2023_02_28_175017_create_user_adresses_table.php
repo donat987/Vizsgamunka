@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string("other");
             $table->string("tax_number");
             $table->string("mobile_number");
+            $table->string("company_name");
             $table->timestamps();
             $table->foreign('userid')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });

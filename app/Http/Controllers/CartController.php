@@ -420,7 +420,62 @@ class CartController extends Controller
     public function checkout()
     {
         $layout = Product::layout();
-        return view('user.checkout', compact('layout'));
+        $cart = [];
+        $sql = DB::table('user_adresses')
+        ->select('*')
+        ->where('userid','=',Auth::user()->id)
+        ->get();
+        if (null !== Cookie::get('kedvezmenykosar')) {
+            if (count(json_decode(Cookie::get('kedvezmenykosar')))) {
+                $netto = 0;
+                $brutto = 0;
+                foreach (json_decode(Cookie::get('kedvezmenykosar')) as $sor) {
+                    $price = 0;
+                    $oneprice = 0;
+                    if ($sor->actionprice != 0) {
+                        $price = $sor->actionprice * $sor->quantity;
+                        $brutto += round($sor->actionprice * $sor->quantity);
+                        $netto += round($sor->actiontaxprice * $sor->quantity);
+                    } else {
+                        $price = $sor->oneprice * $sor->quantity;
+                        $brutto += round($sor->oneprice * $sor->quantity);
+                        $netto += round($sor->taxprice * $sor->quantity);
+                    }
+                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price];
+                }
+                $allp = $brutto +1500;
+                return view('user.checkout', compact('layout', 'cart', 'netto', 'brutto', 'allp', 'sql'));
+            } else {
+                return redirect('/kosar');
+            }
+        } elseif (null !== Cookie::get('cart')) {
+            if (count(json_decode(Cookie::get('cart')))) {
+                $netto = 0;
+                $brutto = 0;
+                foreach (json_decode(Cookie::get('cart')) as $sor) {
+                    $price = 0;
+                    if ($sor->actionprice != 0) {
+                        $price = ($sor->actionprice * $sor->quantity);
+                        $oneprice = $sor->actionprice;
+                        $brutto += round($sor->actionprice * $sor->quantity);
+                        $netto += round($sor->actiontaxprice * $sor->quantity);
+                    } else {
+                        $price = ($sor->oneprice * $sor->quantity);
+                        $oneprice = $sor->oneprice;
+                        $brutto += round($sor->oneprice * $sor->quantity);
+                        $netto += round($sor->taxprice * $sor->quantity);
+                    }
+                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price];
+                }
+                $allp = $brutto +1500;
+                return view('user.checkout', compact('layout', 'cart', 'netto', 'brutto', 'allp', 'sql'));
+            } else {
+                return redirect('/kosar');
+            }
+
+        } else {
+            return redirect('/kosar');
+        }
     }
 
     public function show()
