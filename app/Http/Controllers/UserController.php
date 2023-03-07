@@ -50,6 +50,11 @@ class UserController extends Controller
         } else {
             $update->other = $request->egyéb;
         }
+        if (!$request->cég_név) {
+            $update->company_name = "";
+        } else {
+            $update->company_name = $request->cég_név;
+        }
         $update->userid = Auth::user()->id;
         $update->zipcode = $request->irányítószám;
         $update->name = $request->teljes_név;
@@ -100,6 +105,11 @@ class UserController extends Controller
             $save->other = "";
         } else {
             $save->other = $request->egyéb;
+        }
+        if (!$request->cég_név) {
+            $save->company_name = "";
+        } else {
+            $save->company_name = $request->cég_név;
         }
         $save->userid = Auth::user()->id;
         $save->zipcode = $request->irányítószám;

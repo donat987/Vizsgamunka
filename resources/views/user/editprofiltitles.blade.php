@@ -68,6 +68,12 @@
             </div>
         </li>
         <li class="list-group-item">
+            <div class="form-group">
+                <label for="cég_név">Cégnév:</label>
+                <input type="text" class="form-control" id="cég_név" name="cég_név" value="{{$sql[0]->company_name}}>
+            </div>
+        </li>
+        <li class="list-group-item">
             <div class="d-flex justify-content-between align-items-center">
                 <button type="button" onclick="window.location.href='/profil/cimek'" class="btn btn-secondary w-25">Vissza</button>
                 <button type="button" onclick="window.location.href='/profil/cimek/torles/{{$sql[0]->id}}'" class="btn btn-danger w-25">Törlés</button>
