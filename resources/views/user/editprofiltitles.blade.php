@@ -69,8 +69,32 @@
         </li>
         <li class="list-group-item">
             <div class="form-group">
-                <label for="cég_név">Cégnév:</label>
-                <input type="text" class="form-control" id="cég_név" name="cég_név" value="{{$sql[0]->company_name}}>
+                <label for="cégnév">Cégnév:</label>
+                <input type="text" class="form-control" id="cégnév" name="cégnév" value="{{$sql[0]->company_name}}">
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                <label for="cég_irányítószám">Cég irányítószám:</label>
+                <input type="text" class="form-control" id="cég_irányítószám" name="cég_irányítószám" value="{{$sql[0]->company_zipcode}}">
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                <label for="cég_település">Cég település:</label>
+                <input type="text" class="form-control" id="cég_település" name="cég_település" value="{{$sql[0]->company_city}}">
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                <label for="cég_utca">Cég utca:</label>
+                <input type="text" class="form-control" id="cég_utca" name="cég_utca" value="{{$sql[0]->company_street}}">
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                <label for="cég_házszám">Cég házszám:</label>
+                <input type="text" class="form-control" id="cég_házszám" name="cég_házszám" value="{{$sql[0]->company_house_number}}">
             </div>
         </li>
         <li class="list-group-item">

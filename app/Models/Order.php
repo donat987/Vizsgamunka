@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User_adresses extends Model
+class Order extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'statesid',
         'userid',
+        'zipcode',
         'name',
         'city',
         'street',
@@ -17,10 +19,13 @@ class User_adresses extends Model
         'other',
         'tax_number',
         'mobile_number',
+        'email',
+        'shippingid',
+        'couponid',
         'company_name',
         'company_zipcode',
         'company_city',
         'company_street',
-        'company_house_number',
+        'company_house_number'
     ];
 }

@@ -50,10 +50,31 @@ class UserController extends Controller
         } else {
             $update->other = $request->egyéb;
         }
-        if (!$request->cég_név) {
+        if (!$request->cégnév) {
             $update->company_name = "";
         } else {
-            $update->company_name = $request->cég_név;
+            $update->company_name = $request->cégnév;
+        }
+
+        if (!$request->cég_irányítószám) {
+            $update->company_zipcode = "";
+        } else {
+            $update->company_zipcode = $request->cég_irányítószám;
+        }
+        if (!$request->cég_település) {
+            $update->company_city = "";
+        } else {
+            $update->company_city = $request->cég_település;
+        }
+        if (!$request->cég_utca) {
+            $update->company_street = "";
+        } else {
+            $update->company_street = $request->cég_utca;
+        }
+        if (!$request->cég_házszám) {
+            $update->company_house_number = "";
+        } else {
+            $update->company_house_number = $request->cég_házszám;
         }
         $update->userid = Auth::user()->id;
         $update->zipcode = $request->irányítószám;
@@ -106,10 +127,29 @@ class UserController extends Controller
         } else {
             $save->other = $request->egyéb;
         }
-        if (!$request->cég_név) {
+        if (!$request->cégnév) {
             $save->company_name = "";
         } else {
-            $save->company_name = $request->cég_név;
+            $save->company_name = $request->cégnév;
+        }if (!$request->cég_irányítószám) {
+            $save->company_zipcode = "";
+        } else {
+            $save->company_zipcode = $request->cég_irányítószám;
+        }
+        if (!$request->cég_település) {
+            $save->company_city = "";
+        } else {
+            $save->company_city = $request->cég_település;
+        }
+        if (!$request->cég_utca) {
+            $save->company_street = "";
+        } else {
+            $save->company_street = $request->cég_utca;
+        }
+        if (!$request->cég_házszám) {
+            $save->company_house_number = "";
+        } else {
+            $save->company_house_number = $request->cég_házszám;
         }
         $save->userid = Auth::user()->id;
         $save->zipcode = $request->irányítószám;

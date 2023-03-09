@@ -63,6 +63,7 @@ Route::get('/kosarvegleges', [CartController::class, 'cartall'])->name("teljes")
 Route::get('/kosar/betolt', [CartController::class, 'cart'])->name("cartt");
 Route::get('/kosartorles', [CartController::class, 'delet']);
 Route::get('/kosar/veglegesites', [CartController::class, 'checkout'])->name("checkout");
+Route::post('/kosar/veglegesites/rendeles', [CartController::class, 'order'])->name("order");
 
 
 Route::get('/email', [UserController::class, 'hiteles']);

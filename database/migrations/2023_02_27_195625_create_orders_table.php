@@ -25,6 +25,12 @@ return new class extends Migration
             $table->string("other");
             $table->string("tax_number");
             $table->string("mobile_number");
+            $table->string("email");
+            $table->string("company_name");
+            $table->string("company_zipcode");
+            $table->string("company_city");
+            $table->string("company_street");
+            $table->string("company_house_number");
             $table->unsignedBigInteger('shippingid');
             $table->unsignedBigInteger('couponid');
             $table->timestamps();

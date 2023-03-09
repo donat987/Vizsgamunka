@@ -2,15 +2,171 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderMail;
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\Ordered_product;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Mail;
 
 class CartController extends Controller
 {
+    public function order(Request $request)
+    {
+        $validated = $request->validate([
+            'irányítószám' => 'required|numeric|digits:4',
+            'teljes_név' => 'required|min:2|max:50',
+            'város' => 'required|min:2|max:50',
+            'utca' => 'required|min:2|max:50',
+            'házszám' => 'required|min:1|max:7',
+            'megjegyzés' => 'max:50',
+            'telefonszám' => 'required|numeric',
+            'email' => 'required|email',
+        ]);
+        $oder = new Order;
+        $oder->statesid = 1;
+        if (Auth::check()) {
+            $oder->userid = Auth::user()->id;
+        } else {
+            $oder->userid = 0;
+        }
+        $oder->zipcode = $request->irányítószám;
+        $oder->name = $request->teljes_név;
+        $oder->city = $request->város;
+        $oder->street = $request->utca;
+        $oder->house_number = $request->házszám;
+        if (isset($request->megjegyzés)) {
+            $oder->other = $request->megjegyzés;
+        } else {
+            $oder->other = "";
+        }
+        $oder->email = $request->email;
+        if (isset($request->adószám)) {
+            $oder->tax_number = $request->adószám;
+        } else {
+            $oder->tax_number = "";
+        }
+
+        if (isset($request->cégnév)) {
+            $oder->company_name = $request->cégnév;
+        } else {
+            $oder->company_name = "";
+        }
+
+        if (isset($request->cég_irányítószám)) {
+            $oder->company_zipcode = $request->cég_irányítószám;
+        } else {
+            $oder->company_zipcode = "";
+        }
+        if (isset($request->cég_város)) {
+            $oder->company_city = $request->cég_város;
+        } else {
+            $oder->company_city = "";
+        }
+        if (isset($request->cég_utca)) {
+            $oder->company_street = $request->cég_utca;
+        } else {
+            $oder->company_street = "";
+        }
+        if (isset($request->cég_házszám)) {
+            $oder->company_house_number = $request->cég_házszám;
+        } else {
+            $oder->company_house_number = "";
+        }
+
+        $oder->mobile_number = $request->telefonszám;
+        $oder->shippingid = 1;
+        if ($request->cookie('kupon')) {
+            $sql = DB::table('coupons')
+                ->select('id')
+                ->where('active', '=', 1)
+                ->where('end', '>', date("Y-m-d H:i:s"))
+                ->where('start', '<', date("Y-m-d H:i:s"))
+                ->where('couponcode', '=', Cookie::get('kupon'))
+                ->get();
+            $oder->couponid = $sql[0]->id;
+        } else {
+            $oder->couponid = 0;
+        }
+        $oder->save();
+        $id = $oder->id;
+        if(Cookie::get('kedvezmenykosar')){
+            foreach (json_decode(Cookie::get('kedvezmenykosar'), true) as $cart) {
+                $oder_pro = new Ordered_product;
+                $oder_pro->ordersid = $id;
+                $oder_pro->productsid = $cart["id"];
+                $oder_pro->piece = $cart["quantity"];
+                if ($cart["actiontaxprice"] == 0) {
+                    $oder_pro->clear_amount = $cart["taxprice"];
+                    $oder_pro->gross_amount = $cart["oneprice"];
+                } else {
+                    $oder_pro->clear_amount = $cart["actiontaxprice"];
+                    $oder_pro->gross_amount = $cart["actiontaxprice"];
+                }
+                $oder_pro->save();
+    
+            }
+        }
+        else{
+            foreach (json_decode(Cookie::get('cart'), true) as $cart) {
+                $oder_pro = new Ordered_product;
+                $oder_pro->ordersid = $id;
+                $oder_pro->productsid = $cart["id"];
+                $oder_pro->piece = $cart["quantity"];
+                if ($cart["actiontaxprice"] == 0) {
+                    $oder_pro->clear_amount = $cart["taxprice"];
+                    $oder_pro->gross_amount = $cart["oneprice"];
+                } else {
+                    $oder_pro->clear_amount = $cart["actiontaxprice"];
+                    $oder_pro->gross_amount = $cart["actiontaxprice"];
+                }
+                $oder_pro->save();
+    
+            }
+        }
+        
+        /*if (Auth::check()) {
+            $sql = DB::table('carts')
+                ->select('id')
+                ->where('userid', '=', 1)
+                ->get();
+            foreach ($sql as $s) {
+                $delete = Cart::find($s);
+                $delete->delete();
+            }
+        }*/
+        
+        $mailData = [
+            'name' => $request->teljes_név,
+            'productid' => $id,
+            'date' => date('Y. m. d.'),
+            'mobil' => $request->telefonszám,
+            'house_number' => $request->házszám,
+            'comment' => $request->megjegyzés,
+            'zipcode' => $request->irányítószám,
+            'city' => $request->város,
+            'street' => $request->utca,
+            'tax_number' => $request->adószám,
+            'company_name' => $request->cégnév,
+            'company_zipcode' => $request->cég_irányítószám,
+            'company_city' => $request->cég_város,
+            'company_street' => $request->cég_utca,
+            'company_house_number' => $request->cég_házszám
+
+        ];
+        Mail::to($request->email)->send(new OrderMail($mailData));
+        /*Cookie::queue(Cookie::forget('cart'));
+        Cookie::queue(Cookie::forget('kedvezmeny'));
+        Cookie::queue(Cookie::forget('kedvezmenykosar'));
+        Cookie::queue(Cookie::forget('kupon'));*/
+
+        $layout = Product::layout();
+        return view('user.thanks', compact('layout'));
+    }
     public function cupon(Request $request)
     {
         $kupon = $request->input("cupontext");
@@ -243,6 +399,7 @@ class CartController extends Controller
             }
 
         } else {
+            Cookie::queue(Cookie::forget('kupon'));
             echo "<h5 class='text-danger'>Sajnos nem jó kódot adtál meg!</h5>";
         }
     }
@@ -421,10 +578,6 @@ class CartController extends Controller
     {
         $layout = Product::layout();
         $cart = [];
-        $sql = DB::table('user_adresses')
-        ->select('*')
-        ->where('userid','=',Auth::user()->id)
-        ->get();
         if (null !== Cookie::get('kedvezmenykosar')) {
             if (count(json_decode(Cookie::get('kedvezmenykosar')))) {
                 $netto = 0;
@@ -443,8 +596,16 @@ class CartController extends Controller
                     }
                     $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price];
                 }
-                $allp = $brutto +1500;
-                return view('user.checkout', compact('layout', 'cart', 'netto', 'brutto', 'allp', 'sql'));
+                $allp = $brutto + 1500;
+                if (Auth::check()) {
+                    $sql = DB::table('user_adresses')
+                        ->select('*')
+                        ->where('userid', '=', Auth::user()->id)
+                        ->get();
+                    return view('user.checkout', compact('layout', 'cart', 'netto', 'brutto', 'allp', 'sql'));
+                } else {
+                    return view('user.checkout', compact('layout', 'cart', 'netto', 'brutto', 'allp'));
+                }
             } else {
                 return redirect('/kosar');
             }
@@ -467,8 +628,16 @@ class CartController extends Controller
                     }
                     $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price];
                 }
-                $allp = $brutto +1500;
-                return view('user.checkout', compact('layout', 'cart', 'netto', 'brutto', 'allp', 'sql'));
+                $allp = $brutto + 1500;
+                if (Auth::check()) {
+                    $sql = DB::table('user_adresses')
+                        ->select('*')
+                        ->where('userid', '=', Auth::user()->id)
+                        ->get();
+                    return view('user.checkout', compact('layout', 'cart', 'netto', 'brutto', 'allp', 'sql'));
+                } else {
+                    return view('user.checkout', compact('layout', 'cart', 'netto', 'brutto', 'allp'));
+                }
             } else {
                 return redirect('/kosar');
             }

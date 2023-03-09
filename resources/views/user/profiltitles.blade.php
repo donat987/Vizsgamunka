@@ -25,6 +25,7 @@
                             </div>
                         </div>
                         <hr>
+                        @if ($i->other != '')
                         <div class="row">
                             <div class="col-sm-3">
                                 <p class="mb-0">Egyéb</p>
@@ -34,6 +35,7 @@
                             </div>
                         </div>
                         <hr>
+                        @endif
                         <div class="row">
                             <div class="col-sm-3">
                                 <p class="mb-0">Mobil</p>

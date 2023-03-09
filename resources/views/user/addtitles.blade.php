@@ -69,7 +69,31 @@
         <li class="list-group-item">
             <div class="form-group">
                 <label for="cég_név">Cégnév:</label>
-                <input type="text" class="form-control" id="cég_név" name="cég_név">
+                <input type="text" class="form-control" id="cégnév" name="cégnév">
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                <label for="cég_irányítószám">Cég irányítószám:</label>
+                <input type="text" class="form-control" id="cég_irányítószám" name="cég_irányítószám">
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                <label for="cég_település">Cég település:</label>
+                <input type="text" class="form-control" id="cég_település" name="cég_település">
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                <label for="cég_utca">Cég utca:</label>
+                <input type="text" class="form-control" id="cég_utca" name="cég_utca">
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                <label for="cég_házszám">Cég házszám:</label>
+                <input type="text" class="form-control" id="cég_házszám" name="cég_házszám">
             </div>
         </li>
         <li class="list-group-item">
