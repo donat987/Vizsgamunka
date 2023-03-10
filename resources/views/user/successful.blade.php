@@ -2,7 +2,7 @@
 @section('content')
 <section class="section-content">
     <div class="container">
-        <h2>Sikeresen aktiválta fiokját!</h2>
+        <h2>{{$successful}}</h2>
     </div>
     <div class="container">
         <header class="section-heading">

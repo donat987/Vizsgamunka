@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string("company_city");
             $table->string("company_street");
             $table->string("company_house_number");
+            $table->string("box_number");
             $table->unsignedBigInteger('shippingid');
             $table->unsignedBigInteger('couponid');
             $table->timestamps();

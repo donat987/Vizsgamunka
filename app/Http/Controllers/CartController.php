@@ -34,6 +34,7 @@ class CartController extends Controller
         } else {
             $oder->userid = 0;
         }
+        $oder->box_number ="";
         $oder->zipcode = $request->irányítószám;
         $oder->name = $request->teljes_név;
         $oder->city = $request->város;
@@ -94,7 +95,7 @@ class CartController extends Controller
         }
         $oder->save();
         $id = $oder->id;
-        if(Cookie::get('kedvezmenykosar')){
+        if (Cookie::get('kedvezmenykosar')) {
             foreach (json_decode(Cookie::get('kedvezmenykosar'), true) as $cart) {
                 $oder_pro = new Ordered_product;
                 $oder_pro->ordersid = $id;
@@ -105,13 +106,12 @@ class CartController extends Controller
                     $oder_pro->gross_amount = $cart["oneprice"];
                 } else {
                     $oder_pro->clear_amount = $cart["actiontaxprice"];
-                    $oder_pro->gross_amount = $cart["actiontaxprice"];
+                    $oder_pro->gross_amount = $cart["actionprice"];
                 }
                 $oder_pro->save();
-    
+
             }
-        }
-        else{
+        } else {
             foreach (json_decode(Cookie::get('cart'), true) as $cart) {
                 $oder_pro = new Ordered_product;
                 $oder_pro->ordersid = $id;
@@ -122,24 +122,33 @@ class CartController extends Controller
                     $oder_pro->gross_amount = $cart["oneprice"];
                 } else {
                     $oder_pro->clear_amount = $cart["actiontaxprice"];
-                    $oder_pro->gross_amount = $cart["actiontaxprice"];
+                    $oder_pro->gross_amount = $cart["actionprice"];
                 }
                 $oder_pro->save();
-    
+
             }
         }
-        
-        /*if (Auth::check()) {
+
+        if (Auth::check()) {
             $sql = DB::table('carts')
                 ->select('id')
-                ->where('userid', '=', 1)
+                ->where('userid', '=', Auth::user()->id)
                 ->get();
             foreach ($sql as $s) {
-                $delete = Cart::find($s);
+                $delete = Cart::find($s->id);
                 $delete->delete();
             }
-        }*/
-        
+        }
+
+        $netto = 0;
+        $brutto = 0;
+        foreach (json_decode(Cookie::get('finalcart')) as $sor) {
+                $brutto += round($sor->brutto);
+                $netto += round($sor->netto);
+        }
+        $freight_price = 1500;
+        $final = $brutto + $freight_price;
+
         $mailData = [
             'name' => $request->teljes_név,
             'productid' => $id,
@@ -155,17 +164,34 @@ class CartController extends Controller
             'company_zipcode' => $request->cég_irányítószám,
             'company_city' => $request->cég_város,
             'company_street' => $request->cég_utca,
-            'company_house_number' => $request->cég_házszám
-
+            'company_house_number' => $request->cég_házszám,
+            'taxprice' => $brutto,
+            'price' => $netto,
+            'finalprice' => $final,
+            'freight_price' => $freight_price,
         ];
         Mail::to($request->email)->send(new OrderMail($mailData));
-        /*Cookie::queue(Cookie::forget('cart'));
+        Cookie::queue(Cookie::forget('cart'));
         Cookie::queue(Cookie::forget('kedvezmeny'));
         Cookie::queue(Cookie::forget('kedvezmenykosar'));
-        Cookie::queue(Cookie::forget('kupon'));*/
+        Cookie::queue(Cookie::forget('kupon'));
+        Cookie::queue(Cookie::forget('finalcart'));
+        $sql = "round(products.price + ((products.price / 100) * vat)) as price, COUNT(1) as db,round(actionprice + ((actionprice / 100) * vat)) as actionprice, round(AVG(evaluations.point)*20) as point";
 
+        $negyrandom = DB::table('products')
+            ->select('products.id as id', 'name', 'file', 'link')
+            ->selectRaw($sql)
+            ->join('evaluations', 'evaluations.productid', '=', 'products.id')
+            ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->where('products.quantity', '>', 0)
+            ->where('products.active', '=', 1)
+            ->groupBy('products.id')
+            ->orderByRaw("RAND()")
+            ->take(8)
+            ->get();
         $layout = Product::layout();
-        return view('user.thanks', compact('layout'));
+        $successful = "Sikeres rendelés, köszönjük!";
+        return view('user.successful', compact('layout' , 'successful', 'negyrandom'));
     }
     public function cupon(Request $request)
     {
@@ -200,13 +226,13 @@ class CartController extends Controller
                         if ($item->actionprice == 0) {
                             $actionprice = round($item->oneprice / (($szaz / 100) + 1));
                             $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
-                            $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                            $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
+                            $netto += round(($item->taxprice - $actiontaxprice) * $item->quantity);
+                            $brutto += round(($item->oneprice - $actionprice) * $item->quantity);
                         } else {
                             $actionprice = round($item->actionprice / (($szaz / 100) + 1));
                             $actiontaxprice = round($item->actiontaxprice / (($szaz / 100) + 1));
-                            $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                            $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
+                            $netto += round(($item->actiontaxprice - $actiontaxprice) * $item->quantity);
+                            $brutto += round(($item->actionprice - $actionprice) * $item->quantity);
                         }
                         $termek[] = ['id' => $item->id, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
                     }
@@ -215,16 +241,31 @@ class CartController extends Controller
                     Cookie::queue('kedvezmeny', json_encode($kedvezmeny), 60);
                     echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
                 } else {
-                    $afa = 0;
+                    $termek = [];
                     $db = 0;
-                    foreach (json_decode(Cookie::get('cart')) as $sor) {
-                        $afa += $sor->vat;
+                    foreach (json_decode(Cookie::get('cart')) as $item) {
                         $db += 1;
                     }
-                    $netto = round(($sql[0]->ft / ((($afa / $db) / 100) + 1)));
-                    $brutto = $sql[0]->ft;
-                    $kedvezmeny[] = ['nettokedvezmeny' => $netto, 'bruttokedvezmeny' => $brutto];
-
+                    $szaz = $sql[0]->ft;
+                    foreach (json_decode(Cookie::get('cart')) as $item) {
+                        $actionprice = 0;
+                        $actiontaxprice = 0;
+                        $csokk = $szaz/($item->vat/100+1);
+                        if ($item->actionprice == 0) {
+                            $actionprice = round($item->oneprice-(($szaz/$db)/$item->quantity));
+                            $actiontaxprice = round($item->taxprice-(($csokk/$db)/$item->quantity));
+                            $netto += round(($item->taxprice - $actiontaxprice) * $item->quantity);
+                            $brutto += round(($item->oneprice - $actionprice) * $item->quantity);
+                        } else {
+                            $actionprice = round($item->actionprice-(($szaz/$db)/$item->quantity));
+                            $actiontaxprice = round($item->actiontaxprice-(($csokk/$db)/$item->quantity));
+                            $netto += round(($item->actiontaxprice - $actiontaxprice) * $item->quantity);
+                            $brutto += round(($item->actionprice - $actionprice) * $item->quantity);
+                        }
+                        $termek[] = ['id' => $item->id, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
+                    }
+                    $kedvezmeny[] = ['nettokedvezmeny' => round($netto), 'bruttokedvezmeny' => round($brutto)];
+                    Cookie::queue('kedvezmenykosar', json_encode($termek), 60);
                     Cookie::queue('kedvezmeny', json_encode($kedvezmeny), 60);
                     echo "<h5 class='text'>Sikeresen aktiváltuk a kuponját!</h5>";
                 }
@@ -237,8 +278,8 @@ class CartController extends Controller
                     if ($item->actionprice != 0) {
                         $actionprice = round($item->actionprice / (($szaz / 100) + 1));
                         $actiontaxprice = round($item->actiontaxprice / (($szaz / 100) + 1));
-                        $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                        $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
+                        $netto += round(($item->actiontaxprice - $actiontaxprice) * $item->quantity);
+                        $brutto += round(($item->actionprice - $actionprice) * $item->quantity);
                     }
                     $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
                 }
@@ -256,8 +297,8 @@ class CartController extends Controller
                     if ($item->actionprice == 0) {
                         $actionprice = round($item->oneprice / (($szaz / 100) + 1));
                         $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
-                        $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                        $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
+                        $netto += round(($item->taxprice - $actiontaxprice) * $item->quantity);
+                        $brutto += round(($item->oneprice - $actionprice ) * $item->quantity);
                     }
                     $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
                 }
@@ -287,13 +328,13 @@ class CartController extends Controller
                             if ($item->actionprice == 0) {
                                 $actionprice = round($item->oneprice / (($szaz / 100) + 1));
                                 $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
-                                $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                                $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $netto += round(($item->taxprice - $actiontaxprice) * $item->quantity);
+                                $brutto += round(($item->oneprice - $actionprice) * $item->quantity);
                             } else {
                                 $actionprice = round($item->actionprice / (($szaz / 100) + 1));
                                 $actiontaxprice = round($item->actiontaxprice / (($szaz / 100) + 1));
-                                $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                                $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $netto += round(($item->actiontaxprice - $actiontaxprice) * $item->quantity);
+                                $brutto += round(($item->actionprice - $actionprice) * $item->quantity);
                             }
                         }
                     }
@@ -329,13 +370,13 @@ class CartController extends Controller
                             if ($item->actionprice == 0) {
                                 $actionprice = round($item->oneprice / (($szaz / 100) + 1));
                                 $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
-                                $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                                $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $netto += round(($item->taxprice - $actiontaxprice) * $item->quantity);
+                                $brutto += round(($item->oneprice - $actionprice) * $item->quantity);
                             } else {
                                 $actionprice = round($item->actionprice / (($szaz / 100) + 1));
                                 $actiontaxprice = round($item->actiontaxprice / (($szaz / 100) + 1));
-                                $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                                $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $netto += round(($item->actiontaxprice - $actiontaxprice) * $item->quantity);
+                                $brutto += round(($item->actionprice - $actionprice) * $item->quantity);
                             }
                         }
                     }
@@ -372,13 +413,13 @@ class CartController extends Controller
                             if ($item->actionprice == 0) {
                                 $actionprice = round($item->oneprice / (($szaz / 100) + 1));
                                 $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
-                                $netto += round(($item->taxprice - (round($item->taxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                                $brutto += round(($item->oneprice - (round($item->oneprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $netto += round(($item->taxprice - $actiontaxprice) * $item->quantity);
+                                $brutto += round(($item->oneprice - $actionprice) * $item->quantity);
                             } else {
                                 $actionprice = round($item->actionprice / (($szaz / 100) + 1));
                                 $actiontaxprice = round($item->actiontaxprice / (($szaz / 100) + 1));
-                                $netto += round(($item->actiontaxprice - (round($item->actiontaxprice / (($szaz / 100) + 1)))) * $item->quantity);
-                                $brutto += round(($item->actionprice - (round($item->actionprice / (($szaz / 100) + 1)))) * $item->quantity);
+                                $netto += round(($item->actiontaxprice - $actiontaxprice) * $item->quantity);
+                                $brutto += round(($item->actionprice - $actionprice) * $item->quantity);
                             }
                         }
                     }
@@ -408,7 +449,6 @@ class CartController extends Controller
         $netto = 0;
         $brutto = 0;
         $kedvezmeny = json_decode(Cookie::get('kedvezmeny'));
-        print_r($kedvezmeny);
         foreach (json_decode(Cookie::get('cart')) as $sor) {
             if ($sor->actionprice == 0) {
                 $brutto += round($sor->oneprice * $sor->quantity);
@@ -578,25 +618,32 @@ class CartController extends Controller
     {
         $layout = Product::layout();
         $cart = [];
+        Cookie::queue(Cookie::forget('finalcart'));
         if (null !== Cookie::get('kedvezmenykosar')) {
             if (count(json_decode(Cookie::get('kedvezmenykosar')))) {
                 $netto = 0;
                 $brutto = 0;
                 foreach (json_decode(Cookie::get('kedvezmenykosar')) as $sor) {
                     $price = 0;
-                    $oneprice = 0;
+                    $b = 0;
+                    $n = 0;
                     if ($sor->actionprice != 0) {
                         $price = $sor->actionprice * $sor->quantity;
                         $brutto += round($sor->actionprice * $sor->quantity);
                         $netto += round($sor->actiontaxprice * $sor->quantity);
+                        $b = round($sor->actionprice * $sor->quantity);
+                        $n = round($sor->actiontaxprice * $sor->quantity);
                     } else {
                         $price = $sor->oneprice * $sor->quantity;
                         $brutto += round($sor->oneprice * $sor->quantity);
                         $netto += round($sor->taxprice * $sor->quantity);
+                        $b = round($sor->oneprice * $sor->quantity);
+                        $n = round($sor->taxprice * $sor->quantity);
                     }
-                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price];
+                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price, 'brutto' => $b, 'netto' => $n];
                 }
                 $allp = $brutto + 1500;
+                Cookie::queue('finalcart', json_encode($cart), 60);
                 if (Auth::check()) {
                     $sql = DB::table('user_adresses')
                         ->select('*')
@@ -615,20 +662,25 @@ class CartController extends Controller
                 $brutto = 0;
                 foreach (json_decode(Cookie::get('cart')) as $sor) {
                     $price = 0;
+                    $b = 0;
+                    $n = 0;
                     if ($sor->actionprice != 0) {
-                        $price = ($sor->actionprice * $sor->quantity);
-                        $oneprice = $sor->actionprice;
+                        $price = $sor->actionprice * $sor->quantity;
                         $brutto += round($sor->actionprice * $sor->quantity);
                         $netto += round($sor->actiontaxprice * $sor->quantity);
+                        $b = round($sor->actionprice * $sor->quantity);
+                        $n = round($sor->actiontaxprice * $sor->quantity);
                     } else {
-                        $price = ($sor->oneprice * $sor->quantity);
-                        $oneprice = $sor->oneprice;
+                        $price = $sor->oneprice * $sor->quantity;
                         $brutto += round($sor->oneprice * $sor->quantity);
                         $netto += round($sor->taxprice * $sor->quantity);
+                        $b = round($sor->oneprice * $sor->quantity);
+                        $n = round($sor->taxprice * $sor->quantity);
                     }
-                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price];
-                }
+                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price, 'brutto' => $b, 'netto' => $n];
+               }
                 $allp = $brutto + 1500;
+                Cookie::queue('finalcart', json_encode($cart), 60);
                 if (Auth::check()) {
                     $sql = DB::table('user_adresses')
                         ->select('*')

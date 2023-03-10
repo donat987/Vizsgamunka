@@ -16,29 +16,29 @@
                 <div class="row">
                     <div class="col-md-4">
                         <figure class="item-feature">
-                            <span class="text-primary"><i class="fa fa-2x fa-truck"></i></span>
+                            <span class="text-primary  d-flex justify-content-center"><i class="fa fa-2x fa-truck"></i></span>
                             <figcaption class="pt-3">
-                                <h5 class="title">Gyors szállítás</h5>
-                                <p>Ha 12:00-ig leadja a rendelését, akkor másnap megérkezik az othonához! as</p>
+                                <h5 class="title d-flex justify-content-center">Gyors szállítás</h5>
+                                <p >Ha 12:00-ig leadja a rendelését, akkor másnap megérkezik az othonához!</p>
                             </figcaption>
                         </figure> <!-- iconbox // -->
                     </div><!-- col // -->
                     <div class="col-md-4">
                         <figure class="item-feature">
-                            <span class="text-primary"><i class="fa fa-2x fa-landmark"></i></span>
+                            <span class="text-primary d-flex justify-content-center"><i class="fa fa-2x fa-wine-bottle"></i></span>
                             <figcaption class="pt-3">
-                                <h5 class="title">Creative Strategy</h5>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                <h5 class="title  d-flex justify-content-center">Tudjuk, hogy törékeny</h5>
+                                <p >Ne félj, a termékeket gondosan becsomagljuk, hogy ne legyen bajuk!
                                 </p>
                             </figcaption>
                         </figure> <!-- iconbox // -->
                     </div><!-- col // -->
                     <div class="col-md-4">
                         <figure class="item-feature">
-                            <span class="text-primary"><i class="fa fa-2x fa-lock"></i></span>
+                            <span class="text-primary  d-flex justify-content-center"><i class="fa fa-2x fa-glasses"></i></span>
                             <figcaption class="pt-3">
-                                <h5 class="title">High secured </h5>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                <h5 class="title  d-flex justify-content-center">Figyelünk a minőségre</h5>
+                                <p >Amit az oldalon találsz, az egy gondosan kiválogatott kollekció.
                                 </p>
                             </figcaption>
                         </figure> <!-- iconbox // -->

@@ -26,6 +26,7 @@ class Order extends Model
         'company_zipcode',
         'company_city',
         'company_street',
-        'company_house_number'
+        'company_house_number',
+        'box_number'
     ];
 }

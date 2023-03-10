@@ -11,8 +11,8 @@
                         <p>{{ Auth::user()->username }}</p>
                         <button type="button" onclick="window.location.href='/profil'" class="btn btn-outline-secondary btn-block  mt-1 mb-1">Profil</button>
                         <button type="button" onclick="window.location.href='/profil/cimek'" class="btn btn-outline-secondary btn-block  mt-1 mb-1">Címek</button>
-                        <button type="button" onclick="window.location.href='/profil'" class="btn btn-outline-secondary btn-block  mt-1 mb-1">Vissza</button>
-                        <button type="button" onclick="window.location.href='/profil'" class="btn btn-outline-secondary btn-block  mt-1 mb-1">Vissza</button>
+                        <button type="button" onclick="window.location.href='/profil/rendelesek'" class="btn btn-outline-secondary btn-block  mt-1 mb-1">Aktív rendelések</button>
+                        <button type="button" onclick="window.location.href='/profil/teljesitettrendelesek'" class="btn btn-outline-secondary btn-block  mt-1 mb-1">Teljesített rendelések</button>
                     </div>
                 </div>
                 <div class="col-sm-9" id="tartalom">

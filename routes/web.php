@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/profil/cimek/modositas/mentes', [UserController::class, 'titlesupdatesave'])->name('titlesupdatesave');
     Route::post('/profil/cimek/hozzaad/mentes', [UserController::class, 'addtitlessave'])->name('addtitlessave');
     Route::post('/profil/modositas/mentes', [UserController::class, 'profilupdatesave']);
+    Route::get('/profil/rendelesek', [UserController::class, 'profilorder']);
+    Route::get('/profil/teljesitettrendelesek', [UserController::class, 'profiloldorder']);
     /*Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy')*/;
 });

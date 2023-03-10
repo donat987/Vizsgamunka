@@ -2,7 +2,7 @@
 @section('profilcontent')
     <div class="col-lg-12">
         <div class="card mb-4">
-            <div class="card-body">
+            <div class="card-body p-5">
                 <div class="row">
                     <div class="col-sm-3">
                         <p class="mb-0">Teljes név</p>
@@ -70,5 +70,4 @@
             </div>
         </div>
     </div>
-   
 @endsection

@@ -244,10 +244,67 @@ class UserController extends Controller
     }
     public function profilupdate()
     {
+
         $layout = Product::layout();
         return view('user.edituser', compact('layout'));
     }
 
+    public function profiloldorder()
+    {
+        $sq = DB::table('orders')
+            ->select('id')
+            ->where('userid', '=', Auth::user()->id)
+            ->where('statesid', '>', 4)
+            ->paginate(3, ['*'], 'oldal');
+        $orders = [];
+        foreach ($sq as $sor) {
+            $alorder = [];
+            $sql = DB::table('orders')
+                ->select('orders.zipcode as zipcode', 'orders.city as city', 'orders.street as street', 'orders.house_number as house_number', 'orders.other as other', 'orders.name as name', 'orders.mobile_number as mobile_number', 'orders.tax_number as tax_number', 'orders.company_name as company_name', 'orders.company_zipcode as company_zipcode', 'orders.company_city as company_city', 'orders.company_street as company_street', 'orders.company_house_number as company_house_number', 'orders.box_number as box_number', 'states.id as statesid', 'states.status as states', 'orders.created_at as date', 'ordered_products.piece as price', 'ordered_products.gross_amount', 'shipping_methods.price as shippingprice', 'orders.id as ordersid', 'products.file as file', 'products.name as products_name')
+                ->join('ordered_products', 'ordered_products.ordersid', '=', 'orders.id')
+                ->join('products', 'ordered_products.productsid', '=', 'products.id')
+                ->join('states', 'states.id', '=', 'orders.statesid')
+                ->join('shipping_methods', 'shipping_methods.id', '=', 'orders.shippingid')
+                ->where('orders.userid', '=', Auth::user()->id)
+                ->where('orders.id', '=', $sor->id)
+                ->get();
+            foreach ($sql as $a) {
+                $alorder[] = ['zipcode' => $a->zipcode, 'city' => $a->city, 'street' => $a->street, 'house_number' => $a->house_number, 'other' => $a->other, 'name' => $a->name, 'mobile_number' => $a->mobile_number, 'tax_number' => $a->tax_number, 'company_name' => $a->company_name, 'company_zipcode' => $a->company_zipcode, 'company_city' => $a->company_city, 'company_street' => $a->company_street, 'company_house_number' => $a->company_house_number, 'box_number' => $a->box_number, 'statesid' => $a->statesid, 'states' => $a->states, 'date' => $a->date, 'price' => $a->price, 'gross_amount' => $a->gross_amount, 'shippingprice' => $a->shippingprice, 'ordersid' => $a->ordersid, 'file' => $a->file , 'products_name'=>$a->products_name];
+            }
+            $orders[] = $alorder;
+        }
+
+        $layout = Product::layout();
+        return view('user.oldorders', compact('layout', 'orders', 'sq'));
+    }
+    public function profilorder()
+    {
+        $sq = DB::table('orders')
+            ->select('id')
+            ->where('userid', '=', Auth::user()->id)
+            ->where('statesid', '<', 5)
+            ->get();
+        $orders = [];
+        foreach ($sq as $sor) {
+            $alorder = [];
+            $sql = DB::table('orders')
+                ->select('orders.zipcode as zipcode', 'orders.city as city', 'orders.street as street', 'orders.house_number as house_number', 'orders.other as other', 'orders.name as name', 'orders.mobile_number as mobile_number', 'orders.tax_number as tax_number', 'orders.company_name as company_name', 'orders.company_zipcode as company_zipcode', 'orders.company_city as company_city', 'orders.company_street as company_street', 'orders.company_house_number as company_house_number', 'orders.box_number as box_number', 'states.id as statesid', 'states.status as states', 'orders.created_at as date', 'ordered_products.piece as price', 'ordered_products.gross_amount', 'shipping_methods.price as shippingprice', 'orders.id as ordersid', 'products.file as file', 'products.name as products_name')
+                ->join('ordered_products', 'ordered_products.ordersid', '=', 'orders.id')
+                ->join('products', 'ordered_products.productsid', '=', 'products.id')
+                ->join('states', 'states.id', '=', 'orders.statesid')
+                ->join('shipping_methods', 'shipping_methods.id', '=', 'orders.shippingid')
+                ->where('orders.userid', '=', Auth::user()->id)
+                ->where('orders.id', '=', $sor->id)
+                ->get();
+            foreach ($sql as $a) {
+                $alorder[] = ['zipcode' => $a->zipcode, 'city' => $a->city, 'street' => $a->street, 'house_number' => $a->house_number, 'other' => $a->other, 'name' => $a->name, 'mobile_number' => $a->mobile_number, 'tax_number' => $a->tax_number, 'company_name' => $a->company_name, 'company_zipcode' => $a->company_zipcode, 'company_city' => $a->company_city, 'company_street' => $a->company_street, 'company_house_number' => $a->company_house_number, 'box_number' => $a->box_number, 'statesid' => $a->statesid, 'states' => $a->states, 'date' => $a->date, 'price' => $a->price, 'gross_amount' => $a->gross_amount, 'shippingprice' => $a->shippingprice, 'ordersid' => $a->ordersid, 'file' => $a->file , 'products_name'=>$a->products_name];
+            }
+            $orders[] = $alorder;
+        }
+
+        $layout = Product::layout();
+        return view('user.orders', compact('layout', 'orders'));
+    }
     public function show()
     {
         $layout = Product::layout();
@@ -276,6 +333,7 @@ class UserController extends Controller
             ->take(8)
             ->get();
         $layout = Product::layout();
-        return view('user.email', compact('layout', 'negyrandom'));
+        $successful = "Sikeresen aktiválta fiokját!";
+        return view('user.successful', compact('layout', 'successful', 'negyrandom'));
     }
 }
