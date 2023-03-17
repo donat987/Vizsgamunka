@@ -113,13 +113,19 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label class="form-label">Űrtartalom</label>
                                             <input type="text" name="liter" class="form-control">
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label class="form-label">Alkoholfok</label>
+                                            <input type="text" name="alcohol" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="input-group input-group-static mb-4">
                                             <label class="form-label">Egyéb jellemző pl.(évjárat, szín)</label>
                                             <input type="text" name="other" class="form-control">

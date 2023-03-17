@@ -12,7 +12,7 @@
                             <a href="/termek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
                             <figcaption class="info-wrap">
                                 <a href="/termek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
-
+                                @if ($sor->db != 0)
                                 <div class="rating-wrap">
                                     <ul class="rating-stars">
                                         <li style="width:{{$sor->point}}%" class="stars-active">
@@ -28,6 +28,24 @@
                                     </ul>
                                     <span class="label-rating text-muted"> {{$sor->db}}db értékelés</span>
                                 </div>
+                                @else
+                                <div class="rating-wrap">
+                                    <ul class="rating-stars">
+                                        <li style="width:0%" class="stars-active">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <span class="label-rating text-muted"> 0db értékelés</span>
+                                </div>
+                                @endif
+                                
                                 
                                 @if ($sor->actionprice != 0)
                                     <div class="price-old mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->

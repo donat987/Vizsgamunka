@@ -34,7 +34,7 @@
                         </a> <!-- brand-wrap.// -->
                     </div>
                     <div class="col-lg-6 col-12 col-sm-12">
-                        <form action="/kereses/szures" class="search">
+                        <form action="/kereses" class="search">
                             <div class="input-group w-100">
                                 <input type="text" name="keres" class="form-control" placeholder="Keresés">
                                 <div class="input-group-append">
@@ -160,7 +160,7 @@
                                     fajták</strong></a>
                             <div class="dropdown-menu">
                                 @foreach ($layout['category'] as $cat)
-                                    <a class="dropdown-item" href="#">{{ $cat->subcategory2 }}</a>
+                                    <a class="dropdown-item" href="/kereses?fajta={{ $cat->subcategory2 }}">{{ $cat->subcategory2 }}</a>
                                 @endforeach
                             </div>
                         </li>

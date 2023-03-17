@@ -56,7 +56,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/akcios-termekek', [ProductController::class, 'action']);
 Route::get('/osszes-termekek', [ProductController::class, 'all']);
 Route::get('/termek/{termek}', [ProductController::class, 'productshow']);
-Route::get('/kereses/{keres}', [ProductController::class, 'search']);
+Route::get('/kereses', [ProductController::class, 'search']);
 Route::post("/termek/ertekeles", [ProductController::class,'star'])->name("starsave");
 Route::post("/kosarhozadas", [CartController::class, "addToCart"])->name("addtocart");
 Route::get('/kosar', [CartController::class, 'show']);
