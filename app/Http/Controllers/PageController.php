@@ -15,11 +15,11 @@ class PageController extends Controller
 
     public function index()
     {
-        $sql = "round(products.price + ((products.price / 100) * vat)) as price, COUNT(1) as db,round(actionprice + ((actionprice / 100) * vat)) as actionprice, round(AVG(evaluations.point)*20) as point";
+        $sql = "round(products.price + ((products.price / 100) * vat)) as price, COUNT(point) as db,round(actionprice + ((actionprice / 100) * vat)) as actionprice, round(AVG(evaluations.point)*20) as points";
         $negyrandom = DB::table('products')
             ->select('products.id as id', 'name', 'file', 'link')
             ->selectRaw($sql)
-            ->join('evaluations', 'evaluations.productid', '=', 'products.id')
+            ->leftJoin('evaluations', 'evaluations.productid', '=', 'products.id')
             ->join('categories', 'categories.id', '=', 'products.categoryid')
             ->where('products.quantity', '>', 0)
             ->where('products.active', '=', 1)
@@ -28,8 +28,37 @@ class PageController extends Controller
             ->orderByRaw("RAND()")
             ->take(4)
             ->get();
+
+        $sql = "round(products.price + ((products.price / 100) * vat)) as price, COUNT(point) as db,round(actionprice + ((actionprice / 100) * vat)) as actionprice, round(AVG(evaluations.point)*20) as points";
+        $negyrandombor = DB::table('products')
+            ->select('products.id as id', 'name', 'file', 'link')
+            ->selectRaw($sql)
+            ->leftJoin('evaluations', 'evaluations.productid', '=', 'products.id')
+            ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->where('products.quantity', '>', 0)
+            ->where('products.active', '=', 1)
+            ->where('categories.subcategory2', '=', 'Bor')
+            ->groupBy('products.id')
+            ->orderByRaw("RAND()")
+            ->take(4)
+            ->get();
+
+        $sql = "round(products.price + ((products.price / 100) * vat)) as price, COUNT(point) as db,round(actionprice + ((actionprice / 100) * vat)) as actionprice, round(AVG(evaluations.point)*20) as points";
+        $negyrandomwiskey = DB::table('products')
+            ->select('products.id as id', 'name', 'file', 'link')
+            ->selectRaw($sql)
+            ->leftJoin('evaluations', 'evaluations.productid', '=', 'products.id')
+            ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->where('products.quantity', '>', 0)
+            ->where('products.active', '=', 1)
+            ->where('categories.subcategory2', '=', 'Whiskey')
+            ->groupBy('products.id')
+            ->orderByRaw("RAND()")
+            ->take(4)
+            ->get();
+
         $layout = Product::layout();
-        return view('user.welcome', compact('layout', 'negyrandom'));
+        return view('user.welcome', compact('layout', 'negyrandom', 'negyrandomwiskey' , 'negyrandombor'));
     }
 
     /* public function index()

@@ -52,31 +52,52 @@
     <section class="section-content">
         <div class="container">
             <header class="section-heading">
-                <a href="#" class="btn btn-outline-primary float-right">Összes termék</a>
+                <a href="/termekek?fajta%5B%5D=Pálinka" class="btn btn-outline-primary float-right">Összes termék</a>
                 <h3 class="section-title">Pálinka különlegességek</h3>
                 
             </header><!-- sect-heading -->
             <div class="row">
                 @foreach ($negyrandom as $sor)
                     <div class="col-md-3">
-                        <div href="/termek/{{ $sor->link }}" class="card card-product-grid">
-                            <a href="/termek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
+                        <div href="/termekek/{{ $sor->link }}" class="card card-product-grid">
+                            <a href="/termekek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
                             <figcaption class="info-wrap">
-                                <a href="/termek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
+                                <a href="/termekek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
 
-                                <div class="rating-wrap">
-                                    <ul class="rating-stars">
-                                        <li style="width:{{ $sor->point }}%" class="stars-active">
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i>
-                                        </li>
-                                    </ul>
-                                    <span class="label-rating text-muted"> {{ $sor->db }}db értékelés</span>
-                                </div>
+                                @if ($sor->db != 0)
+                                                <div class="rating-wrap">
+                                                    <ul class="rating-stars">
+                                                        <li style="width:{{ $sor->points }}%" class="stars-active">
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                                class="fa fa-star"></i>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                                class="fa fa-star"></i>
+                                                        </li>
+                                                    </ul>
+                                                    <span class="label-rating text-muted"> {{ $sor->db }}db
+                                                        értékelés</span>
+                                                </div>
+                                            @else
+                                                <div class="rating-wrap">
+                                                    <ul class="rating-stars">
+                                                        <li style="width:0%" class="stars-active">
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                                class="fa fa-star"></i>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                                class="fa fa-star"></i>
+                                                        </li>
+                                                    </ul>
+                                                    <span class="label-rating text-muted"> 0db értékelés</span>
+                                                </div>
+                                            @endif
                                 @if ($sor->actionprice != 0)
                                     <div class="price-old mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
                                     <div class="price mt-1 ">{{ $sor->actionprice }} ft</div> <!-- price-wrap.// -->
@@ -87,7 +108,130 @@
                         </div>
                     </div> <!-- col.// -->
                 @endforeach
+            </div> <!-- row.// -->
+        </div> <!-- container .//  -->
+    </section>
 
+    <section class="section-content">
+        <div class="container">
+            <header class="section-heading">
+                <a href="/termekek?fajta%5B%5D=Bor" class="btn btn-outline-primary float-right">Összes termék</a>
+                <h3 class="section-title">Bor különlegességek</h3>
+                
+            </header><!-- sect-heading -->
+            <div class="row">
+                @foreach ($negyrandombor as $sor)
+                    <div class="col-md-3">
+                        <div href="/termekek/{{ $sor->link }}" class="card card-product-grid">
+                            <a href="/termekek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
+                            <figcaption class="info-wrap">
+                                <a href="/termekek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
+                                @if ($sor->db != 0)
+                                <div class="rating-wrap">
+                                    <ul class="rating-stars">
+                                        <li style="width:{{ $sor->points }}%" class="stars-active">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <span class="label-rating text-muted"> {{ $sor->db }}db
+                                        értékelés</span>
+                                </div>
+                            @else
+                                <div class="rating-wrap">
+                                    <ul class="rating-stars">
+                                        <li style="width:0%" class="stars-active">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <span class="label-rating text-muted"> 0db értékelés</span>
+                                </div>
+                            @endif
+                                @if ($sor->actionprice != 0)
+                                    <div class="price-old mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
+                                    <div class="price mt-1 ">{{ $sor->actionprice }} ft</div> <!-- price-wrap.// -->
+                                @else
+                                    <div class="price mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
+                                @endif
+                            </figcaption>
+                        </div>
+                    </div> <!-- col.// -->
+                @endforeach
+            </div> <!-- row.// -->
+        </div> <!-- container .//  -->
+    </section>
+
+    <section class="section-content">
+        <div class="container">
+            <header class="section-heading">
+                <a href="/termekek?fajta%5B%5D=Whiskey" class="btn btn-outline-primary float-right">Összes termék</a>
+                <h3 class="section-title">Whiskey különlegességek</h3>
+                
+            </header><!-- sect-heading -->
+            <div class="row">
+                @foreach ($negyrandomwiskey as $sor)
+                    <div class="col-md-3">
+                        <div href="/termekek/{{ $sor->link }}" class="card card-product-grid">
+                            <a href="/termekek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
+                            <figcaption class="info-wrap">
+                                <a href="/termekek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
+                                @if ($sor->db != 0)
+                                <div class="rating-wrap">
+                                    <ul class="rating-stars">
+                                        <li style="width:{{ $sor->points }}%" class="stars-active">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <span class="label-rating text-muted"> {{ $sor->db }}db
+                                        értékelés</span>
+                                </div>
+                            @else
+                                <div class="rating-wrap">
+                                    <ul class="rating-stars">
+                                        <li style="width:0%" class="stars-active">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                class="fa fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <span class="label-rating text-muted"> 0db értékelés</span>
+                                </div>
+                            @endif
+                                @if ($sor->actionprice != 0)
+                                    <div class="price-old mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
+                                    <div class="price mt-1 ">{{ $sor->actionprice }} ft</div> <!-- price-wrap.// -->
+                                @else
+                                    <div class="price mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
+                                @endif
+                            </figcaption>
+                        </div>
+                    </div> <!-- col.// -->
+                @endforeach
             </div> <!-- row.// -->
         </div> <!-- container .//  -->
     </section>

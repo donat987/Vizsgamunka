@@ -38,7 +38,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profil', [UserController::class, 'show']);
+    Route::get('/profil', [UserController::class, 'show'])->name('profil');
     Route::get('/profil/modositas', [UserController::class, 'profilupdate'])->name('profilupdate');
     Route::get('/profil/cimek', [UserController::class, 'profiltitles'])->name('profiltitles');
     Route::get('/profil/cimek/hozzaad', [UserController::class, 'addtitles'])->name('addtitles');
@@ -47,15 +47,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/profil/cimek/modositas/mentes', [UserController::class, 'titlesupdatesave'])->name('titlesupdatesave');
     Route::post('/profil/cimek/hozzaad/mentes', [UserController::class, 'addtitlessave'])->name('addtitlessave');
     Route::post('/profil/modositas/mentes', [UserController::class, 'profilupdatesave']);
-    Route::get('/profil/rendelesek', [UserController::class, 'profilorder']);
+    Route::get('/profil/rendelesek', [UserController::class, 'profilorder'])->name("orders");
     Route::get('/profil/teljesitettrendelesek', [UserController::class, 'profiloldorder']);
     /*Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy')*/;
 });
 
+Route::get('/termekek', [ProductController::class, 'search']);
+Route::get('/termekek/{termek}', [ProductController::class, 'productshow']);
+
 Route::get('/akcios-termekek', [ProductController::class, 'action']);
 Route::get('/osszes-termekek', [ProductController::class, 'all']);
-Route::get('/termek/{termek}', [ProductController::class, 'productshow']);
+Route::get('/termekek/{termek}', [ProductController::class, 'productshow']);
 Route::get('/kereses', [ProductController::class, 'search']);
 Route::post("/termek/ertekeles", [ProductController::class,'star'])->name("starsave");
 Route::post("/kosarhozadas", [CartController::class, "addToCart"])->name("addtocart");

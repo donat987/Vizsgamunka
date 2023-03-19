@@ -34,7 +34,7 @@
                         </a> <!-- brand-wrap.// -->
                     </div>
                     <div class="col-lg-6 col-12 col-sm-12">
-                        <form action="/kereses" class="search">
+                        <form action="/termekek" class="search">
                             <div class="input-group w-100">
                                 <input type="text" name="keres" class="form-control" placeholder="Keresés">
                                 <div class="input-group-append">
@@ -160,7 +160,7 @@
                                     fajták</strong></a>
                             <div class="dropdown-menu">
                                 @foreach ($layout['category'] as $cat)
-                                    <a class="dropdown-item" href="/kereses?fajta={{ $cat->subcategory2 }}">{{ $cat->subcategory2 }}</a>
+                                    <a class="dropdown-item" href="/termekek?fajta%5B%5D={{ $cat->subcategory2 }}">{{ $cat->subcategory2 }}</a>
                                 @endforeach
                             </div>
                         </li>
@@ -169,41 +169,15 @@
                                 href="#"><strong></i>Országok</strong></a>
                             <div class="dropdown-menu">
                                 @foreach ($layout['country'] as $con)
-                                    <a class="dropdown-item" href="#">{{ $con->subcategory1 }}</a>
-                                @endforeach
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong>Borok</strong></a>
-                            <div class="dropdown-menu">
-                                @foreach ($layout['category'] as $cat)
-                                    <a class="dropdown-item" href="#">{{ $cat->subcategory2 }}</a>
-                                @endforeach
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link pl-0" data-toggle="dropdown" href="#"><strong>
-                                    Sörök</strong></a>
-                            <div class="dropdown-menu">
-                                @foreach ($layout['category'] as $cat)
-                                    <a class="dropdown-item" href="#">{{ $cat->subcategory2 }}</a>
-                                @endforeach
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link pl-0" data-toggle="dropdown"
-                                href="#"><strong>Pálinkák</strong></a>
-                            <div class="dropdown-menu">
-                                @foreach ($layout['category'] as $cat)
-                                    <a class="dropdown-item" href="#">{{ $cat->subcategory2 }}</a>
+                                    <a class="dropdown-item" href="/termekek?orszag%5B%5D={{ $con->subcategory1 }}">{{ $con->subcategory1 }}</a>
                                 @endforeach
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/akcios-termekek">Akciós termékek</a>
+                            <a class="nav-link" href="/termekek?akcio=1">Akciós termékek</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/osszes-termekek">Összes termék</a>
+                            <a class="nav-link" href="/termekek">Összes termék</a>
                         </li>
 
                         <li class="nav-item">
@@ -223,47 +197,26 @@
     <footer class="section-footer border-top bg">
         <div class="container">
             <section class="footer-top  padding-y">
-                <div class="row">
-                    <aside class="col-md col-6">
-                        <h6 class="title">Brands</h6>
+                <div class="row" style="text-align: center;">
+                    <aside class="col-md col-6" style="text-align: left;">
+                        <h6 class="title">Segíthetek?</h6>
                         <ul class="list-unstyled">
-                            <li> <a href="#">Adidas</a></li>
-                            <li> <a href="#">Puma</a></li>
-                            <li> <a href="#">Reebok</a></li>
-                            <li> <a href="#">Nike</a></li>
+                            <li> <a href="/gyakori-kerdesek">Gyakori kérdések</a></li>
+                            <li> <a href="/afsz">Áfsz</a></li>
+                            <li> <a href="/szallitas">Szállítás</a></li>
                         </ul>
                     </aside>
-                    <aside class="col-md col-6">
-                        <h6 class="title">Company</h6>
-                        <ul class="list-unstyled">
-                            <li> <a href="#">About us</a></li>
-                            <li> <a href="#">Career</a></li>
-                            <li> <a href="#">Find a store</a></li>
-                            <li> <a href="#">Rules and terms</a></li>
-                            <li> <a href="#">Sitemap</a></li>
-                        </ul>
-                    </aside>
-                    <aside class="col-md col-6">
-                        <h6 class="title">Help</h6>
-                        <ul class="list-unstyled">
-                            <li> <a href="#">Contact us</a></li>
-                            <li> <a href="#">Money refund</a></li>
-                            <li> <a href="#">Order status</a></li>
-                            <li> <a href="#">Shipping info</a></li>
-                            <li> <a href="#">Open dispute</a></li>
-                        </ul>
-                    </aside>
-                    <aside class="col-md col-6">
+                    <aside class="col-md col-6" style="text-align: center;">
                         <h6 class="title">Felhasználó</h6>
                         <ul class="list-unstyled">
-                            <li> <a href="/bejelentkezes"> Bejelentkezés </a></li>
-                            <li> <a href="/regisztacio"> Regisztráció </a></li>
-                            <li> <a href="#"> Account Setting </a></li>
-                            <li> <a href="#"> My Orders </a></li>
+                            <li> <a href="{{ route('login') }}"> Bejelentkezés </a></li>
+                            <li> <a href="{{ route('register') }}"> Regisztráció </a></li>
+                            <li> <a href="{{ route('profil') }}"> Felhasználó </a></li>
+                            <li> <a href="{{ route('orders') }}"> Rendelések </a></li>
                         </ul>
                     </aside>
-                    <aside class="col-md">
-                        <h6 class="title">Social</h6>
+                    <aside class="col-md" style="text-align: right;">
+                        <h6 class="title">Közösségi oldalak</h6>
                         <ul class="list-unstyled">
                             <li><a href="#"> <i class="fab fa-facebook"></i> Facebook </a></li>
                             <li><a href="#"> <i class="fab fa-twitter"></i> Twitter </a></li>
@@ -275,20 +228,64 @@
             </section> <!-- footer-top.// -->
             <section class="footer-bottom row">
                 <div class="col-md-2">
-                    <p class="text-muted"> 2021 Company name </p>
+                    <p class="text-muted"> 2023 Italdiszkont </p>
                 </div>
                 <div class="col-md-8 text-md-center">
-                    <span class="px-2">info@com</span>
-                    <span class="px-2">+000-000-0000</span>
-                    <span class="px-2">Street name 123, ABC</span>
-                </div>
-                <div class="col-md-2 text-md-right text-muted">
-                    <i class="fab fa-lg fa-cc-visa"></i>
-                    <i class="fab fa-lg fa-cc-paypal"></i>
-                    <i class="fab fa-lg fa-cc-mastercard"></i>
+                    <span class="px-2">inf@dalosdonat.hu</span>
+                    <span class="px-2">+36-99-265-59-52</span>
+                    <span class="px-2">Kiskar utca 123, Szombathely</span>
                 </div>
             </section>
         </div><!-- //container -->
+        <div class="cookie-disclaimer">
+            <div class="cookie-close accept-cookie"><i class="fa fa-times"></i></div>
+            <div class="container">
+              <p>Figyelem! Az oldal sütikat tartalmaz! <a href="https://nevetnikek.hu/cookie/">Mi az a süti?</a>. 
+                <br>Az oldalon elvégzett rendelés nem kerül kiszállításara, ez egy vizsga munka!</p>
+              <button type="button" class="btn btn-primary accept-cookie">Elfogadom!</button>
+            </div>
+          </div>
+          <script>$(document).ready(function() { 
+            var cookie = false;
+            var cookieContent = $('.cookie-disclaimer');
+        
+            checkCookie();
+        
+            if (cookie === true) {
+              cookieContent.hide();
+            }
+        
+            function setCookie(cname, cvalue, exdays) {
+              var d = new Date();
+              d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+              var expires = "expires=" + d.toGMTString();
+              document.cookie = cname + "=" + cvalue + "; " + expires;
+            }
+        
+            function getCookie(cname) {
+              var name = cname + "=";
+              var ca = document.cookie.split(';');
+              for (var i = 0; i < ca.length; i++) {
+                var c = ca[i].trim();
+                if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
+              }
+              return "";
+            }
+        
+            function checkCookie() {
+              var check = getCookie("acookie");
+              if (check !== "") {
+                return cookie = true;
+              } else {
+                  return cookie = false; //setCookie("acookie", "accepted", 365);
+              }
+              
+            }
+            $('.accept-cookie').click(function () {
+              setCookie("acookie", "accepted", 365);
+              cookieContent.hide(500);
+            });
+        });</script>
     </footer>
     <!-- ========================= FOOTER END // ========================= -->
 

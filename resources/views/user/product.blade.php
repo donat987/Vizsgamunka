@@ -28,7 +28,7 @@
                         @endif
                         <p>Márka: Agárdi Pálinka</p>
                         <p>Gyümölcs: Birs</p>
-                        <p>Mennyiség: 0.5 l.</p>
+                        <p>Mennyiség: {{ $product[0]->capacity }} l.</p>
                         <p>{{ $product[0]->description }}</p>
                         <input type="number" name="quantity" value="1">
                         <p><input type='submit' value='Kosárba' class='btn btn-outline-dark  btn-lg btn-block' /></p>
