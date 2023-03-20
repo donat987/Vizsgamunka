@@ -499,7 +499,7 @@
                                                                 <td align="center"
                                                                     style="padding:0;Margin:0;font-size:0px"><img
                                                                         class="adapt-img"
-                                                                        src="dalosdonat.hu/assets/images/logo.png" alt
+                                                                        src="https://dalosdonat.hu/assets/images/logo.png" alt
                                                                         style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
                                                                         height="32"></td>
                                                             </tr>
@@ -525,22 +525,19 @@
                                                                             <td style="Margin:0;padding-left:5px;padding-right:5px;padding-top:9px;padding-bottom:10px;border:0"
                                                                                 width="33.33%" valign="top"
                                                                                 bgcolor="transparent" align="center"><a
-                                                                                    target="_blank"
-                                                                                    href="dalosdonat.hu/"
+                                                                                    target="_blank" href="https://dalosdonat.hu/"
                                                                                     style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;display:block;font-family:arial, 'helvetica neue', helvetica, sans-serif;color:#010101;font-size:16px">Főoldal</a>
                                                                             </td>
                                                                             <td style="Margin:0;padding-left:5px;padding-right:5px;padding-top:9px;padding-bottom:10px;border:0"
                                                                                 width="33.33%" valign="top"
                                                                                 bgcolor="transparent" align="center"><a
-                                                                                    target="_blank"
-                                                                                    href="dalosdonat.hu/osszes-termekek"
+                                                                                    target="_blank" href="https://dalosdonat.hu/termekek"
                                                                                     style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;display:block;font-family:arial, 'helvetica neue', helvetica, sans-serif;color:#010101;font-size:16px">Termékek</a>
                                                                             </td>
                                                                             <td style="Margin:0;padding-left:5px;padding-right:5px;padding-top:9px;padding-bottom:10px;border:0"
                                                                                 width="33.33%" valign="top"
                                                                                 bgcolor="transparent" align="center">
-                                                                                <a target="_blank"
-                                                                                    href="dalosdonat.hu/blog"
+                                                                                <a target="_blank" href="https://dalosdonat.hu/blog"
                                                                                     style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;display:block;font-family:arial, 'helvetica neue', helvetica, sans-serif;color:#010101;font-size:16px">Blog</a>
                                                                             </td>
                                                                         </tr>
@@ -637,7 +634,7 @@
                                                                     <!--[if !mso]><!-- --><span
                                                                         class="msohide es-button-border-2 es-button-border"
                                                                         style="border-style:solid;border-color:#0b5394;background:#3d85c6;border-width:0px 0px 2px 0px;display:inline-block;border-radius:30px;width:auto;mso-hide:all"><a
-                                                                            href="dalosdonat.hu/email?token={{ $mailData['activator'] }}"
+                                                                            href="https://dalosdonat.hu/email?token={{ $mailData['activator'] }}"
                                                                             class="es-button es-button-1"
                                                                             target="_blank"
                                                                             style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:18px;border-style:solid;border-color:#3d85c6;border-width:10px 20px 10px 20px;display:inline-block;background:#3d85c6;border-radius:30px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center">Aktiválás</a></span>

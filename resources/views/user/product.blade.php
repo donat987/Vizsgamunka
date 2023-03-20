@@ -22,16 +22,24 @@
                         <h2 class='text-primary'>{{ $product[0]->name }}</h2>
                         @if ($product[0]->actionprice != 0)
                             <h3 class="price-old danger text-primary ">{{ $product[0]->price }} ft</h3>
-                            <h2 class="text-primary ">{{ $product[0]->actionprice }} ft</h2> 
+                            <h2 class="text-primary ">{{ $product[0]->actionprice }} ft</h2>
                         @else
-                            <h2 class="text-primary ">{{ $product[0]->price }} ft</h2> 
+                            <h2 class="text-primary ">{{ $product[0]->price }} ft</h2>
                         @endif
                         <p>Márka: Agárdi Pálinka</p>
                         <p>Gyümölcs: Birs</p>
                         <p>Mennyiség: {{ $product[0]->capacity }} l.</p>
                         <p>{{ $product[0]->description }}</p>
-                        <input type="number" name="quantity" value="1">
-                        <p><input type='submit' value='Kosárba' class='btn btn-outline-dark  btn-lg btn-block' /></p>
+                        <div class="input-group mb-3">
+                            <input type="text" name="quantity" class="form-control" placeholder="Darabszám"
+                                aria-label="Darabszám" aria-describedby="button-addon2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">db</span>
+                            </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Kosárba</button>
+                            </div>
+                        </div>
 
                     </div>
                 </div>

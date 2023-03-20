@@ -13,10 +13,10 @@
         <div class="row">
             @foreach ($negyrandom as $sor)
                 <div class="col-md-3">
-                    <div href="/termek/{{ $sor->link }}" class="card card-product-grid">
-                        <a href="/termek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
+                    <div href="/termekek/{{ $sor->link }}" class="card card-product-grid">
+                        <a href="/termekek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
                         <figcaption class="info-wrap">
-                            <a href="/termek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
+                            <a href="/termekek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
 
                             <div class="rating-wrap">
                                 <ul class="rating-stars">

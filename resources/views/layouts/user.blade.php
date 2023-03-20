@@ -201,9 +201,9 @@
                     <aside class="col-md col-6" style="text-align: left;">
                         <h6 class="title">Segíthetek?</h6>
                         <ul class="list-unstyled">
-                            <li> <a href="/gyakori-kerdesek">Gyakori kérdések</a></li>
-                            <li> <a href="/afsz">Áfsz</a></li>
-                            <li> <a href="/szallitas">Szállítás</a></li>
+                            <li> <a href="#">Gyakori kérdések</a></li>
+                            <li> <a href="#">Áfsz</a></li>
+                            <li> <a href="#">Szállítás</a></li>
                         </ul>
                     </aside>
                     <aside class="col-md col-6" style="text-align: center;">
@@ -231,7 +231,7 @@
                     <p class="text-muted"> 2023 Italdiszkont </p>
                 </div>
                 <div class="col-md-8 text-md-center">
-                    <span class="px-2">inf@dalosdonat.hu</span>
+                    <span class="px-2">info@dalosdonat.hu</span>
                     <span class="px-2">+36-99-265-59-52</span>
                     <span class="px-2">Kiskar utca 123, Szombathely</span>
                 </div>

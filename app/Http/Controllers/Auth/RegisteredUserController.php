@@ -49,6 +49,7 @@ class RegisteredUserController extends Controller
         for ($i = 0; $i < 60; $i++) {
             $random .= $characters[rand(0, strlen($characters) - 1)];
         }
+	$u = "";
         $user = User::create([
             'username' => $request->username,
             'lastname' => $request->lastname,
@@ -56,8 +57,10 @@ class RegisteredUserController extends Controller
             'token' => $random,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'file' => "",
-            'email_verified_at' => "",
+            'file' => $u,
+
+            'advertising' => 0,
+
         ]);
         $mailData = [
             'activator' => $random,

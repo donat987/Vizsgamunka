@@ -24,9 +24,9 @@ class ProductController extends Controller
             $evolutionsave->comment = $request->comment;
             $evolutionsave->save();
         } else {
-            $message = $request->rating;
             echo "<script type='text/javascript'>alert('Előbb jelentkezz be!');</script>";
         }
+        return back();
     }
 
     public function search(Request $request)

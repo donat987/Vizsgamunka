@@ -1,4 +1,4 @@
-<!DOCTYPE html
+ <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html style="font-family:arial, 'helvetica neue', helvetica, sans-serif">
 
@@ -483,7 +483,7 @@
                                                                 <td align="center"
                                                                     style="padding:0;Margin:0;font-size:0px"><img
                                                                         class="adapt-img"
-                                                                        src="https://gftosc.stripocdn.email/content/guids/CABINET_794a61bc3cc5b9c34d2d78042c72f48b22d79ca056f2282ead3b4946593a8194/images/logo.png"
+                                                                        src="https://dalosdonat.hu/assets/images/logo.png"
                                                                         alt
                                                                         style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
                                                                         width="160"></td>
@@ -510,19 +510,19 @@
                                                                             <td style="Margin:0;padding-left:5px;padding-right:5px;padding-top:9px;padding-bottom:10px;border:0"
                                                                                 width="33.33%" valign="top"
                                                                                 bgcolor="transparent" align="center"><a
-                                                                                    target="_blank" href=""
+                                                                                    target="_blank" href="https://dalosdonat.hu/"
                                                                                     style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;display:block;font-family:arial, 'helvetica neue', helvetica, sans-serif;color:#010101;font-size:16px">Főoldal</a>
                                                                             </td>
                                                                             <td style="Margin:0;padding-left:5px;padding-right:5px;padding-top:9px;padding-bottom:10px;border:0"
                                                                                 width="33.33%" valign="top"
                                                                                 bgcolor="transparent" align="center"><a
-                                                                                    target="_blank" href=""
+                                                                                    target="_blank" href="https://dalosdonat.hu/termekek"
                                                                                     style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;display:block;font-family:arial, 'helvetica neue', helvetica, sans-serif;color:#010101;font-size:16px">Termékek</a>
                                                                             </td>
                                                                             <td style="Margin:0;padding-left:5px;padding-right:5px;padding-top:9px;padding-bottom:10px;border:0"
                                                                                 width="33.33%" valign="top"
                                                                                 bgcolor="transparent" align="center">
-                                                                                <a target="_blank" href=""
+                                                                                <a target="_blank" href="https://dalosdonat.hu/blog"
                                                                                     style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:none;display:block;font-family:arial, 'helvetica neue', helvetica, sans-serif;color:#010101;font-size:16px">Blog</a>
                                                                             </td>
                                                                         </tr>
@@ -874,13 +874,13 @@
                                                                         <tr>
                                                                             <td class="es-m-txt-c" align="center"
                                                                                 style="padding:0;Margin:0;font-size:0px">
-                                                                                <a href="https://viewstripo.email"
+                                                                                <a href=""
                                                                                     target="_blank"
                                                                                     style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#2CB543;font-size:14px"><img
                                                                                         class="p_image"
-                                                                                        src="https://gftosc.stripocdn.email/content/guids/CABINET_794a61bc3cc5b9c34d2d78042c72f48b22d79ca056f2282ead3b4946593a8194/images/palinka40.png"
-                                                                                        alt="Natural Balance L.I.D., sale 30%"
-                                                                                        title="Natural Balance L.I.D., sale 30%"
+                                                                                        src="https://dalosdonat.hu/{{ $sor->file }}"
+                                                                                        alt="{{ $sor->name }}"
+                                                                                        title="{{ $sor->name }}"
                                                                                         width="80"
                                                                                         style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a>
                                                                             </td>

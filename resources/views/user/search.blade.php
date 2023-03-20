@@ -84,12 +84,6 @@
                                 const paragraphs = document.getElementsByTagName("p");
                                 const searchParams = new URLSearchParams(window.location.search);
 
-                                arnovekvo() {
-                                    var searchParams = new URLSearchParams(window.location.search);
-                                    searchParams.append('newParamName', 'newParamValue');
-                                    var newUrl = url.split('?')[0] + '?' + searchParams.toString();
-                                    window.location.href = newUrl;
-                                }
 
                                 if (searchParams.has('maximumurtartalom')) {
                                     maximumcapacityInput.value = searchParams.get('maximumurtartalom');

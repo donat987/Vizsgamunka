@@ -640,7 +640,7 @@ class CartController extends Controller
                         $b = round($sor->oneprice * $sor->quantity);
                         $n = round($sor->taxprice * $sor->quantity);
                     }
-                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price, 'brutto' => $b, 'netto' => $n];
+                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price, 'brutto' => $b, 'netto' => $n, 'file' => $sor->file];
                 }
                 $allp = $brutto + 1500;
                 Cookie::queue('finalcart', json_encode($cart), 60);
@@ -677,7 +677,7 @@ class CartController extends Controller
                         $b = round($sor->oneprice * $sor->quantity);
                         $n = round($sor->taxprice * $sor->quantity);
                     }
-                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price, 'brutto' => $b, 'netto' => $n];
+                    $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price, 'brutto' => $b, 'netto' => $n, 'file' => $sor->file];
                }
                 $allp = $brutto + 1500;
                 Cookie::queue('finalcart', json_encode($cart), 60);
