@@ -8,7 +8,7 @@
                     <div class="col-12">
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                                <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                                <div class="text-dark bg-gradient-info shadow-primary border-radius-lg pt-4 pb-3">
                                     <h6 class="text-white text-capitalize ps-3">Új termék felvétele</h6>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" class="btn btn-primary btn-lg w-100" data-bs-toggle="modal"
+                                        <button type="button" class="btn btn-info btn-lg w-100" data-bs-toggle="modal"
                                             data-bs-target="#addcategory">
                                             Kategória felvétele
                                         </button>
@@ -82,7 +82,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" class="btn btn-primary btn-lg w-100" data-bs-toggle="modal"
+                                        <button type="button" class="btn btn-info btn-lg w-100" data-bs-toggle="modal"
                                             data-bs-target="#addbrand">
                                             Márka felvétele
                                         </button>
@@ -140,7 +140,7 @@
                                     <div class="col-md-2">
                                         <div class="form-check">
                                             <label class="custom-control-label" for="customCheck1">Elérhető:</label>
-                                            <input class="form-check-input" name="active" type="checkbox"
+                                            <input class="form-check-info" name="active" type="checkbox"
                                                 id="fcustomCheck1" checked="">
                                         </div>
                                     </div>
@@ -157,7 +157,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="submit" class="btn btn-primary btn-lg w-100"
+                                        <button type="submit" class="btn btn-info btn-lg w-100"
                                             data-bs-toggle="modal">
                                             Termék felvétele
                                         </button>

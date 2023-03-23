@@ -34,6 +34,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post("/admin/ujtermek/addcateglekeres1", [PageController::class, 'categ2'])->name("addcategory2");
     Route::post("/admin/ujtermek/addcateglekeres2", [PageController::class, 'categ3'])->name("addcategory3");
     Route::post("/admin/ujtermek/addcateglekeres3", [PageController::class, 'categ4'])->name("addcategory4");
+    Route::get("/admin/rendelesek", [PageController::class, 'order'])->name("adminorder");
 });
 
 

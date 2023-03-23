@@ -16,29 +16,32 @@
                 <div class="row">
                     <div class="col-md-4">
                         <figure class="item-feature">
-                            <span class="text-primary  d-flex justify-content-center"><i class="fa fa-2x fa-truck"></i></span>
+                            <span class="text-primary  d-flex justify-content-center"><i
+                                    class="fa fa-2x fa-truck"></i></span>
                             <figcaption class="pt-3">
                                 <h5 class="title d-flex justify-content-center">Gyors szállítás</h5>
-                                <p >Ha 12:00-ig leadja a rendelését, akkor másnap megérkezik az othonához!</p>
+                                <p>Ha 12:00-ig leadja a rendelését, akkor másnap megérkezik az othonához!</p>
                             </figcaption>
                         </figure> <!-- iconbox // -->
                     </div><!-- col // -->
                     <div class="col-md-4">
                         <figure class="item-feature">
-                            <span class="text-primary d-flex justify-content-center"><i class="fa fa-2x fa-wine-bottle"></i></span>
+                            <span class="text-primary d-flex justify-content-center"><i
+                                    class="fa fa-2x fa-wine-bottle"></i></span>
                             <figcaption class="pt-3">
                                 <h5 class="title  d-flex justify-content-center">Tudjuk, hogy törékeny</h5>
-                                <p >Ne félj, a termékeket gondosan becsomagljuk, hogy ne legyen bajuk!
+                                <p>Ne félj, a termékeket gondosan becsomagljuk, hogy ne legyen bajuk!
                                 </p>
                             </figcaption>
                         </figure> <!-- iconbox // -->
                     </div><!-- col // -->
                     <div class="col-md-4">
                         <figure class="item-feature">
-                            <span class="text-primary  d-flex justify-content-center"><i class="fa fa-2x fa-glasses"></i></span>
+                            <span class="text-primary  d-flex justify-content-center"><i
+                                    class="fa fa-2x fa-glasses"></i></span>
                             <figcaption class="pt-3">
                                 <h5 class="title  d-flex justify-content-center">Figyelünk a minőségre</h5>
-                                <p >Amit az oldalon találsz, az egy gondosan kiválogatott kollekció.
+                                <p>Amit az oldalon találsz, az egy gondosan kiválogatott kollekció.
                                 </p>
                             </figcaption>
                         </figure> <!-- iconbox // -->
@@ -54,7 +57,7 @@
             <header class="section-heading">
                 <a href="/termekek?fajta%5B%5D=Pálinka" class="btn btn-outline-primary float-right">Összes termék</a>
                 <h3 class="section-title">Pálinka különlegességek</h3>
-                
+
             </header><!-- sect-heading -->
             <div class="row">
                 @foreach ($negyrandom as $sor)
@@ -65,39 +68,39 @@
                                 <a href="/termekek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
 
                                 @if ($sor->db != 0)
-                                                <div class="rating-wrap">
-                                                    <ul class="rating-stars">
-                                                        <li style="width:{{ $sor->points }}%" class="stars-active">
-                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                class="fa fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                class="fa fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <span class="label-rating text-muted"> {{ $sor->db }}db
-                                                        értékelés</span>
-                                                </div>
-                                            @else
-                                                <div class="rating-wrap">
-                                                    <ul class="rating-stars">
-                                                        <li style="width:0%" class="stars-active">
-                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                class="fa fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                                class="fa fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <span class="label-rating text-muted"> 0db értékelés</span>
-                                                </div>
-                                            @endif
+                                    <div class="rating-wrap">
+                                        <ul class="rating-stars">
+                                            <li style="width:{{ $sor->points }}%" class="stars-active">
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                        </ul>
+                                        <span class="label-rating text-muted"> {{ $sor->db }}db
+                                            értékelés</span>
+                                    </div>
+                                @else
+                                    <div class="rating-wrap">
+                                        <ul class="rating-stars">
+                                            <li style="width:0%" class="stars-active">
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                        </ul>
+                                        <span class="label-rating text-muted"> 0db értékelés</span>
+                                    </div>
+                                @endif
                                 @if ($sor->actionprice != 0)
                                     <div class="price-old mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
                                     <div class="price mt-1 ">{{ $sor->actionprice }} ft</div> <!-- price-wrap.// -->
@@ -117,7 +120,7 @@
             <header class="section-heading">
                 <a href="/termekek?fajta%5B%5D=Bor" class="btn btn-outline-primary float-right">Összes termék</a>
                 <h3 class="section-title">Bor különlegességek</h3>
-                
+
             </header><!-- sect-heading -->
             <div class="row">
                 @foreach ($negyrandombor as $sor)
@@ -127,39 +130,39 @@
                             <figcaption class="info-wrap">
                                 <a href="/termekek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
                                 @if ($sor->db != 0)
-                                <div class="rating-wrap">
-                                    <ul class="rating-stars">
-                                        <li style="width:{{ $sor->points }}%" class="stars-active">
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i>
-                                        </li>
-                                    </ul>
-                                    <span class="label-rating text-muted"> {{ $sor->db }}db
-                                        értékelés</span>
-                                </div>
-                            @else
-                                <div class="rating-wrap">
-                                    <ul class="rating-stars">
-                                        <li style="width:0%" class="stars-active">
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i>
-                                        </li>
-                                    </ul>
-                                    <span class="label-rating text-muted"> 0db értékelés</span>
-                                </div>
-                            @endif
+                                    <div class="rating-wrap">
+                                        <ul class="rating-stars">
+                                            <li style="width:{{ $sor->points }}%" class="stars-active">
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                        </ul>
+                                        <span class="label-rating text-muted"> {{ $sor->db }}db
+                                            értékelés</span>
+                                    </div>
+                                @else
+                                    <div class="rating-wrap">
+                                        <ul class="rating-stars">
+                                            <li style="width:0%" class="stars-active">
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                        </ul>
+                                        <span class="label-rating text-muted"> 0db értékelés</span>
+                                    </div>
+                                @endif
                                 @if ($sor->actionprice != 0)
                                     <div class="price-old mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
                                     <div class="price mt-1 ">{{ $sor->actionprice }} ft</div> <!-- price-wrap.// -->
@@ -179,49 +182,50 @@
             <header class="section-heading">
                 <a href="/termekek?fajta%5B%5D=Whiskey" class="btn btn-outline-primary float-right">Összes termék</a>
                 <h3 class="section-title">Whiskey különlegességek</h3>
-                
+
             </header><!-- sect-heading -->
             <div class="row">
                 @foreach ($negyrandomwiskey as $sor)
                     <div class="col-md-3">
                         <div href="/termekek/{{ $sor->link }}" class="card card-product-grid">
-                            <a href="/termekek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
+                            <a href="/termekek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}">
+                            </a>
                             <figcaption class="info-wrap">
                                 <a href="/termekek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
                                 @if ($sor->db != 0)
-                                <div class="rating-wrap">
-                                    <ul class="rating-stars">
-                                        <li style="width:{{ $sor->points }}%" class="stars-active">
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i>
-                                        </li>
-                                    </ul>
-                                    <span class="label-rating text-muted"> {{ $sor->db }}db
-                                        értékelés</span>
-                                </div>
-                            @else
-                                <div class="rating-wrap">
-                                    <ul class="rating-stars">
-                                        <li style="width:0%" class="stars-active">
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                                class="fa fa-star"></i>
-                                        </li>
-                                    </ul>
-                                    <span class="label-rating text-muted"> 0db értékelés</span>
-                                </div>
-                            @endif
+                                    <div class="rating-wrap">
+                                        <ul class="rating-stars">
+                                            <li style="width:{{ $sor->points }}%" class="stars-active">
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                        </ul>
+                                        <span class="label-rating text-muted"> {{ $sor->db }}db
+                                            értékelés</span>
+                                    </div>
+                                @else
+                                    <div class="rating-wrap">
+                                        <ul class="rating-stars">
+                                            <li style="width:0%" class="stars-active">
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                                    class="fa fa-star"></i>
+                                            </li>
+                                        </ul>
+                                        <span class="label-rating text-muted"> 0db értékelés</span>
+                                    </div>
+                                @endif
                                 @if ($sor->actionprice != 0)
                                     <div class="price-old mt-1 ">{{ $sor->price }} ft</div> <!-- price-wrap.// -->
                                     <div class="price mt-1 ">{{ $sor->actionprice }} ft</div> <!-- price-wrap.// -->
@@ -236,7 +240,7 @@
         </div> <!-- container .//  -->
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
-    
+
     </section>
     <!-- ========================= FOOTER ========================= -->
 @endsection

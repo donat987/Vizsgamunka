@@ -12,6 +12,10 @@ class PageController extends Controller
     {
         return view("admin.desboard");
     }
+    public function order()
+    {
+        return view("admin.order");
+    }
 
     public function index()
     {
