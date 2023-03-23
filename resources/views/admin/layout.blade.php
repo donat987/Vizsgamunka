@@ -21,11 +21,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-
-
     <!-- CSS Files -->
-    <link id="pagestyle" href="/css/material-dashboard.css?v=3.0.4" rel="stylesheet" />
+    <link id="pagestyle" href="{{ asset('css/material-dashboard.css') }}" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show bg-gray-200">

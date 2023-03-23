@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel</title>
@@ -18,7 +19,7 @@
     <script src="{{ asset('/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
 
-  
+
 </head>
 
 <body>
@@ -183,7 +184,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/blog">Blog</a>
                         </li>
-                        
+
                     </ul>
                 </div> <!-- collapse .// -->
             </div> <!-- container .// -->
@@ -240,28 +241,28 @@
         <div class="cookie-disclaimer">
             <div class="cookie-close accept-cookie"><i class="fa fa-times"></i></div>
             <div class="container">
-              <p>Figyelem! Az oldal sütikat tartalmaz! <a href="https://nevetnikek.hu/cookie/">Mi az a süti?</a>. 
+              <p>Figyelem! Az oldal sütikat tartalmaz! <a href="https://nevetnikek.hu/cookie/">Mi az a süti?</a>.
                 <br>Az oldalon elvégzett rendelés nem kerül kiszállításara, ez egy vizsga munka!</p>
               <button type="button" class="btn btn-primary accept-cookie">Elfogadom!</button>
             </div>
           </div>
-          <script>$(document).ready(function() { 
+          <script>$(document).ready(function() {
             var cookie = false;
             var cookieContent = $('.cookie-disclaimer');
-        
+
             checkCookie();
-        
+
             if (cookie === true) {
               cookieContent.hide();
             }
-        
+
             function setCookie(cname, cvalue, exdays) {
               var d = new Date();
               d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
               var expires = "expires=" + d.toGMTString();
               document.cookie = cname + "=" + cvalue + "; " + expires;
             }
-        
+
             function getCookie(cname) {
               var name = cname + "=";
               var ca = document.cookie.split(';');
@@ -271,7 +272,7 @@
               }
               return "";
             }
-        
+
             function checkCookie() {
               var check = getCookie("acookie");
               if (check !== "") {
@@ -279,7 +280,7 @@
               } else {
                   return cookie = false; //setCookie("acookie", "accepted", 365);
               }
-              
+
             }
             $('.accept-cookie').click(function () {
               setCookie("acookie", "accepted", 365);

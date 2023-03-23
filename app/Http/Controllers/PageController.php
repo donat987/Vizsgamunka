@@ -10,11 +10,34 @@ class PageController extends Controller
 {
     public function adminpage()
     {
+
         return view("admin.desboard");
+    }
+    public function ordershow($request)
+    {
+        $product = DB::table('ordered_products')
+            ->select('*')
+            ->join('products', 'products.id', '=', 'ordered_products.productsid')
+            ->where('ordered_products.ordersid', '=', $request)
+            ->get();
+        $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+            ->join('users', 'users.id', '=', 'orders.userid')
+            ->join('states', 'states.id', '=', 'orders.statesid')
+            ->where('orders.id', '=', $request)
+            ->where('statesid', '=', 1)
+            ->get();
+        return view("admin.ordershow", compact('sql', 'product'));
     }
     public function order()
     {
-        return view("admin.order");
+        $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+            ->join('users', 'users.id', '=', 'orders.userid')
+            ->join('states', 'states.id', '=', 'orders.statesid')
+            ->where('statesid', '=', 1)
+            ->get();
+        return view("admin.order", compact('sql'));
     }
 
     public function index()
@@ -62,7 +85,7 @@ class PageController extends Controller
             ->get();
 
         $layout = Product::layout();
-        return view('user.welcome', compact('layout', 'negyrandom', 'negyrandomwiskey' , 'negyrandombor'));
+        return view('user.welcome', compact('layout', 'negyrandom', 'negyrandomwiskey', 'negyrandombor'));
     }
 
     /* public function index()
