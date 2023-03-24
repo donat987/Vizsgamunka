@@ -13,6 +13,7 @@ class Ordered_product extends Model
         'productsid',
         'clear_amount',
         'gross_amount',
-        'piece'
+        'piece',
+        'packed'
     ];
 }
