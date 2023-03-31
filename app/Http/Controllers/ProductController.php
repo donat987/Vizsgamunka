@@ -238,8 +238,8 @@ class ProductController extends Controller
             ]);
             $image = $valid['file'];
             $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-            $explode = explode('/', Auth::user()->file);
-            Storage::delete('/public/product/' . $explode[3]);
+            /*$explode = explode('/', Auth::user()->file);
+            Storage::delete('/public/product/' . $explode[3]);*/
             $path = '/public/product/' . $filename;
             $file = '/storage/product/' . $filename;
             $img = Image::make($image);

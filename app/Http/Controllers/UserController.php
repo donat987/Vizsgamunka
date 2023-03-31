@@ -317,7 +317,6 @@ class UserController extends Controller
             ->where('token', '=', $request->token)
             ->get();
         $update = User::find($userid[0]->id);
-        $update->token = '';
         $update->email_verified_at = date("Y-m-d H:i:s");
         $update->update();
         $sql = "round(products.price + ((products.price / 100) * vat)) as price, COUNT(1) as db,round(actionprice + ((actionprice / 100) * vat)) as actionprice, round(AVG(evaluations.point)*20) as point";

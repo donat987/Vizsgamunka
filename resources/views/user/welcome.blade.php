@@ -20,7 +20,7 @@
                                     class="fa fa-2x fa-truck"></i></span>
                             <figcaption class="pt-3">
                                 <h5 class="title d-flex justify-content-center">Gyors szállítás</h5>
-                                <p>Ha 12:00-ig leadja a rendelését, akkor másnap megérkezik az othonához!</p>
+                                <p>Ha hétköznap 12:00-ig leadja a rendelését, akkor már másnap kézbesítjük.</p>
                             </figcaption>
                         </figure> <!-- iconbox // -->
                     </div><!-- col // -->
@@ -30,7 +30,7 @@
                                     class="fa fa-2x fa-wine-bottle"></i></span>
                             <figcaption class="pt-3">
                                 <h5 class="title  d-flex justify-content-center">Tudjuk, hogy törékeny</h5>
-                                <p>Ne félj, a termékeket gondosan becsomagljuk, hogy ne legyen bajuk!
+                                <p>Biztonságos csomagolás, elégedettséggel garantálva! Minden árut gondosan becsomagolunk, hogy az épségben és jó állapotban érkezzen meg.
                                 </p>
                             </figcaption>
                         </figure> <!-- iconbox // -->
@@ -41,7 +41,7 @@
                                     class="fa fa-2x fa-glasses"></i></span>
                             <figcaption class="pt-3">
                                 <h5 class="title  d-flex justify-content-center">Figyelünk a minőségre</h5>
-                                <p>Amit az oldalon találsz, az egy gondosan kiválogatott kollekció.
+                                <p>Stílusos és minőségi termékek egy helyen! Az oldalunkon található összes termék gondosan kiválogatott, hogy biztosítsuk a legjobb minőséget és stílust minden vásárlónk számára.
                                 </p>
                             </figcaption>
                         </figure> <!-- iconbox // -->

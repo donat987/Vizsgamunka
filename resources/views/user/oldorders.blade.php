@@ -91,7 +91,7 @@
                             <tr>
                                 <th></th>
                                 <th>Termék neve</th>
-                                <th class="text-center">Darabár ár</th>
+                                <th class="text-center">Darab ár</th>
                                 <th class="text-center">Darabszám</th>
                                 <th class="text-center">Teljes összeg</th>
                             </tr>

@@ -143,7 +143,7 @@
                     </div>
                     <div class="modal-footer">
                         <a href="/kosartorles" class="btn btn-secondary">Kosár ürítése</a>
-                        <a href="/kosar" class="btn btn-primary">Ugrás a kosár oldal</a>
+                        <a href="/kosar" class="btn btn-primary">Ugrás a kosárhoz</a>
                     </div>
                 </div>
             </div>

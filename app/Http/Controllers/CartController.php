@@ -34,7 +34,7 @@ class CartController extends Controller
         } else {
             $oder->userid = 0;
         }
-        $oder->box_number ="";
+        $oder->box_number = "";
         $oder->zipcode = $request->irányítószám;
         $oder->name = $request->teljes_név;
         $oder->city = $request->város;
@@ -143,8 +143,8 @@ class CartController extends Controller
         $netto = 0;
         $brutto = 0;
         foreach (json_decode(Cookie::get('finalcart')) as $sor) {
-                $brutto += round($sor->brutto);
-                $netto += round($sor->netto);
+            $brutto += round($sor->brutto);
+            $netto += round($sor->netto);
         }
         $freight_price = 1500;
         $final = $brutto + $freight_price;
@@ -191,7 +191,7 @@ class CartController extends Controller
             ->get();
         $layout = Product::layout();
         $successful = "Sikeres rendelés, köszönjük!";
-        return view('user.successful', compact('layout' , 'successful', 'negyrandom'));
+        return view('user.successful', compact('layout', 'successful', 'negyrandom'));
     }
     public function cupon(Request $request)
     {
@@ -250,15 +250,15 @@ class CartController extends Controller
                     foreach (json_decode(Cookie::get('cart')) as $item) {
                         $actionprice = 0;
                         $actiontaxprice = 0;
-                        $csokk = $szaz/($item->vat/100+1);
+                        $csokk = $szaz / ($item->vat / 100 + 1);
                         if ($item->actionprice == 0) {
-                            $actionprice = round($item->oneprice-(($szaz/$db)/$item->quantity));
-                            $actiontaxprice = round($item->taxprice-(($csokk/$db)/$item->quantity));
+                            $actionprice = round($item->oneprice - (($szaz / $db) / $item->quantity));
+                            $actiontaxprice = round($item->taxprice - (($csokk / $db) / $item->quantity));
                             $netto += round(($item->taxprice - $actiontaxprice) * $item->quantity);
                             $brutto += round(($item->oneprice - $actionprice) * $item->quantity);
                         } else {
-                            $actionprice = round($item->actionprice-(($szaz/$db)/$item->quantity));
-                            $actiontaxprice = round($item->actiontaxprice-(($csokk/$db)/$item->quantity));
+                            $actionprice = round($item->actionprice - (($szaz / $db) / $item->quantity));
+                            $actiontaxprice = round($item->actiontaxprice - (($csokk / $db) / $item->quantity));
                             $netto += round(($item->actiontaxprice - $actiontaxprice) * $item->quantity);
                             $brutto += round(($item->actionprice - $actionprice) * $item->quantity);
                         }
@@ -298,7 +298,7 @@ class CartController extends Controller
                         $actionprice = round($item->oneprice / (($szaz / 100) + 1));
                         $actiontaxprice = round($item->taxprice / (($szaz / 100) + 1));
                         $netto += round(($item->taxprice - $actiontaxprice) * $item->quantity);
-                        $brutto += round(($item->oneprice - $actionprice ) * $item->quantity);
+                        $brutto += round(($item->oneprice - $actionprice) * $item->quantity);
                     }
                     $termek[] = ['id' => $item->id, 'brandid' => $item->brandid, 'categoryid' => $item->categoryid, 'actionprice' => $actionprice, 'vat' => $item->vat, 'oneprice' => $item->oneprice, 'product_name' => $item->product_name, 'quantity' => $item->quantity, 'file' => $item->file, 'taxprice' => $item->taxprice, 'actiontaxprice' => $actiontaxprice, 'link' => $item->link];
                 }
@@ -468,27 +468,35 @@ class CartController extends Controller
                 <h3 class="text-black h4 text-uppercase">Kosár összesen</h3>
             </div>
         </div>
-        <?php if (null !== Cookie::get('kedvezmeny')) {?>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <span class="text-black">kedvezmény:</span>
-            </div>
-            <div class="col-md-6 text-right">
-                <strong class="text-black"><?php echo $kedvezmeny[0]->bruttokedvezmeny ?> Ft</strong>
-            </div>
-        </div>
-        <?php }?>
+        <?php if (null !== Cookie::get('kedvezmeny')) { ?>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <span class="text-black">Teljes összeg ÁFA nélkül:</span>
+                    <span class="text-black">kedvezmény:</span>
                 </div>
+                <div class="col-md-6 text-right">
+                    <strong class="text-black">
+                        <?php echo $kedvezmeny[0]->bruttokedvezmeny ?> Ft
+                    </strong>
+                </div>
+            </div>
+        <?php } ?>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <span class="text-black">Teljes összeg ÁFA nélkül:</span>
+            </div>
             <div class="col-md-6 text-right">
-                <?php if (null !== Cookie::get('kedvezmeny')) {?>
-                    <strong class="price-old text-black"><?php echo $netto ?> Ft</strong>
-                    <strong class="text-black"><?php echo $nettokedvezmeny ?> Ft</strong>
-                <?php } else {?>
-                    <strong class="text-black"><?php echo $netto ?> Ft</strong>
-                <?php }?>
+                <?php if (null !== Cookie::get('kedvezmeny')) { ?>
+                    <strong class="price-old text-black">
+                        <?php echo $netto ?> Ft
+                    </strong>
+                    <strong class="text-black">
+                        <?php echo $nettokedvezmeny ?> Ft
+                    </strong>
+                <?php } else { ?>
+                    <strong class="text-black">
+                        <?php echo $netto ?> Ft
+                    </strong>
+                <?php } ?>
             </div>
         </div>
         <div class="row mb-5">
@@ -496,22 +504,29 @@ class CartController extends Controller
                 <span class="text-black">Fizetendő</span>
             </div>
             <div class="col-md-6 text-right">
-            <?php if (null !== Cookie::get('kedvezmeny')) {?>
-                    <strong class="price-old text-black"><?php echo $brutto ?> Ft</strong>
-                    <strong class="text-black"><?php echo $bruttoketvezmeny ?> Ft</strong>
-                <?php } else {?>
-                    <strong class="text-black"><?php echo $brutto ?> Ft</strong>
-                <?php }?>
+                <?php if (null !== Cookie::get('kedvezmeny')) { ?>
+                    <strong class="price-old text-black">
+                        <?php echo $brutto ?> Ft
+                    </strong>
+                    <strong class="text-black">
+                        <?php echo $bruttoketvezmeny ?> Ft
+                    </strong>
+                <?php } else { ?>
+                    <strong class="text-black">
+                        <?php echo $brutto ?> Ft
+                    </strong>
+                <?php } ?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-primary btn-lg btn-block" onclick="window.location = '/kosar/veglegesites'">Pénztár</button>
+                <button class="btn btn-primary btn-lg btn-block"
+                    onclick="window.location = '/kosar/veglegesites'">Pénztár</button>
             </div>
         </div>
 
-    <?php
-}
+        <?php
+    }
     public function cart()
     {
         if (null !== Cookie::get('kedvezmenykosar')) {
@@ -522,45 +537,65 @@ class CartController extends Controller
                         <tr>
                             <th></th>
                             <th>Termék neve</th>
-                            <th class="text-center">Darabár ár</th>
+                            <th class="text-center">Darab ár</th>
                             <th class="text-center" style="width: 140px;">Darabszám</th>
                             <th class="text-center">Teljes összeg</th>
                             <th class="text-center">Törlés</th>
                         </tr>
                     </thead>
                     <tbody>
-                    <?php foreach (json_decode(Cookie::get('kedvezmenykosar')) as $sor) {?>
-                        <tr>
-                            <td><img width="100px" src="<?php echo $sor->file; ?>"</td>
-                            <td class="align-middle"><?php echo $sor->product_name; ?></td>
-                            <?php if ($sor->actionprice == 0) {?>
-                            <td class="align-middle text-center"><?php echo $sor->oneprice; ?> Ft</td>
-                            <?php } else {?>
-                            <td class="align-middle text-center"><p class="price-old"><?php echo $sor->oneprice; ?></p><?php echo $sor->actionprice; ?> Ft</td>
-                            <?php }?>
-                            <td class="align-middle text-center">
-                                <div class="input-group align-items-center " style="max-width: 120px;">
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-outline-primary js-btn-minus" id="<?php echo $sor->id; ?>" onclick="minus(this.id)" name="minus" type="button">−</button>
+                        <?php foreach (json_decode(Cookie::get('kedvezmenykosar')) as $sor) { ?>
+                            <tr>
+                                <td><img width="100px" src="<?php echo $sor->file; ?>" </td>
+                                <td class="align-middle">
+                                    <?php echo $sor->product_name; ?>
+                                </td>
+                                <?php if ($sor->actionprice == 0) { ?>
+                                    <td class="align-middle text-center">
+                                        <?php echo $sor->oneprice; ?> Ft
+                                    </td>
+                                <?php } else { ?>
+                                    <td class="align-middle text-center">
+                                        <p class="price-old">
+                                            <?php echo $sor->oneprice; ?>
+                                        </p>
+                                        <?php echo $sor->actionprice; ?> Ft
+                                    </td>
+                                <?php } ?>
+                                <td class="align-middle text-center">
+                                    <div class="input-group align-items-center " style="max-width: 120px;">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-outline-primary js-btn-minus" id="<?php echo $sor->id; ?>"
+                                                onclick="minus(this.id)" name="minus" type="button">−</button>
+                                        </div>
+                                        <input type="text" id="" style="padding: 6px" class="form-control text-center border mr-0"
+                                            value="<?php echo $sor->quantity ?>" readonly="e<?php echo $sor->link; ?>" id="">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-primary js-btn-plus" id="<?php echo $sor->id; ?>"
+                                                onclick="plus(this.id)" name="plus" type="button">+</button>
+                                        </div>
                                     </div>
-                                    <input type="text" id="" style="padding: 6px" class="form-control text-center border mr-0" value="<?php echo $sor->quantity ?>" readonly="e<?php echo $sor->link; ?>" id="">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-primary js-btn-plus" id="<?php echo $sor->id; ?>" onclick="plus(this.id)" name="plus" type="button">+</button>
-                                    </div>
-                                </div>
-                            </td>
-                            <?php if ($sor->actionprice == 0) {?>
-                            <td class="align-middle text-center"><?php echo $sor->oneprice * $sor->quantity; ?> Ft</td>
-                            <?php } else {?>
-                            <td class="align-middle text-center"><p class="price-old"><?php echo $sor->oneprice * $sor->quantity; ?></p><?php echo $sor->actionprice * $sor->quantity; ?> Ft</td>
-                            <?php }?>
-                            <td class="align-middle text-center"><a id="<?php echo $sor->id; ?>" onclick="delet(this.id)"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a></td>
-                        </tr>
-                    <?php }?>
+                                </td>
+                                <?php if ($sor->actionprice == 0) { ?>
+                                    <td class="align-middle text-center">
+                                        <?php echo $sor->oneprice * $sor->quantity; ?> Ft
+                                    </td>
+                                <?php } else { ?>
+                                    <td class="align-middle text-center">
+                                        <p class="price-old">
+                                            <?php echo $sor->oneprice * $sor->quantity; ?>
+                                        </p>
+                                        <?php echo $sor->actionprice * $sor->quantity; ?> Ft
+                                    </td>
+                                <?php } ?>
+                                <td class="align-middle text-center"><a id="<?php echo $sor->id; ?>" onclick="delet(this.id)"><i
+                                            class="fa fa-trash fa-2x" aria-hidden="true"></i></a></td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
-               <?php
-}
+                <?php
+            }
         } else {
             ?>
             <table class="table">
@@ -568,45 +603,65 @@ class CartController extends Controller
                     <tr>
                         <th></th>
                         <th>Termék neve</th>
-                        <th class="text-center">Darabár ár</th>
+                        <th class="text-center">Darabs ár</th>
                         <th class="text-center" style="width: 140px;">Darabszám</th>
                         <th class="text-center">Teljes összeg</th>
                         <th class="text-center">Törlés</th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach (json_decode(Cookie::get('cart')) as $sor) {?>
-                    <tr>
-                        <td><img width="100px" src="<?php echo $sor->file; ?>"</td>
-                        <td class="align-middle"><?php echo $sor->product_name; ?></td>
-                        <?php if ($sor->actionprice == 0) {?>
-                        <td class="align-middle text-center"><?php echo $sor->oneprice; ?> Ft</td>
-                        <?php } else {?>
-                        <td class="align-middle text-center"><p class="price-old"><?php echo $sor->oneprice; ?></p><?php echo $sor->actionprice; ?> Ft</td>
-                        <?php }?>
-                        <td class="align-middle text-center">
-                            <div class="input-group align-items-center " style="max-width: 120px;">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-primary js-btn-minus" id="<?php echo $sor->id; ?>" onclick="minus(this.id)" name="minus" type="button">−</button>
+                    <?php foreach (json_decode(Cookie::get('cart')) as $sor) { ?>
+                        <tr>
+                            <td><img width="100px" src="<?php echo $sor->file; ?>" </td>
+                            <td class="align-middle">
+                                <?php echo $sor->product_name; ?>
+                            </td>
+                            <?php if ($sor->actionprice == 0) { ?>
+                                <td class="align-middle text-center">
+                                    <?php echo $sor->oneprice; ?> Ft
+                                </td>
+                            <?php } else { ?>
+                                <td class="align-middle text-center">
+                                    <p class="price-old">
+                                        <?php echo $sor->oneprice; ?>
+                                    </p>
+                                    <?php echo $sor->actionprice; ?> Ft
+                                </td>
+                            <?php } ?>
+                            <td class="align-middle text-center">
+                                <div class="input-group align-items-center " style="max-width: 120px;">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-primary js-btn-minus" id="<?php echo $sor->id; ?>"
+                                            onclick="minus(this.id)" name="minus" type="button">−</button>
+                                    </div>
+                                    <input type="text" id="" style="padding: 6px" class="form-control text-center border mr-0"
+                                        value="<?php echo $sor->quantity ?>" readonly="e<?php echo $sor->link; ?>" id="">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary js-btn-plus" id="<?php echo $sor->id; ?>"
+                                            onclick="plus(this.id)" name="plus" type="button">+</button>
+                                    </div>
                                 </div>
-                                <input type="text" id="" style="padding: 6px" class="form-control text-center border mr-0" value="<?php echo $sor->quantity ?>" readonly="e<?php echo $sor->link; ?>" id="">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-primary js-btn-plus" id="<?php echo $sor->id; ?>" onclick="plus(this.id)" name="plus" type="button">+</button>
-                                </div>
-                            </div>
-                        </td>
-                        <?php if ($sor->actionprice == 0) {?>
-                        <td class="align-middle text-center"><?php echo $sor->oneprice * $sor->quantity; ?> Ft</td>
-                        <?php } else {?>
-                        <td class="align-middle text-center"><p class="price-old"><?php echo $sor->oneprice * $sor->quantity; ?></p><?php echo $sor->actionprice * $sor->quantity; ?> Ft</td>
-                        <?php }?>
-                        <td class="align-middle text-center"><a id="<?php echo $sor->id; ?>" onclick="delet(this.id)"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a></td>
-                    </tr>
-                <?php }?>
+                            </td>
+                            <?php if ($sor->actionprice == 0) { ?>
+                                <td class="align-middle text-center">
+                                    <?php echo $sor->oneprice * $sor->quantity; ?> Ft
+                                </td>
+                            <?php } else { ?>
+                                <td class="align-middle text-center">
+                                    <p class="price-old">
+                                        <?php echo $sor->oneprice * $sor->quantity; ?>
+                                    </p>
+                                    <?php echo $sor->actionprice * $sor->quantity; ?> Ft
+                                </td>
+                            <?php } ?>
+                            <td class="align-middle text-center"><a id="<?php echo $sor->id; ?>" onclick="delet(this.id)"><i
+                                        class="fa fa-trash fa-2x" aria-hidden="true"></i></a></td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
-           <?php
-}
+            <?php
+        }
     }
 
     public function delet()
@@ -678,7 +733,7 @@ class CartController extends Controller
                         $n = round($sor->taxprice * $sor->quantity);
                     }
                     $cart[] = ['name' => $sor->product_name, 'quantity' => $sor->quantity, 'price' => $price, 'brutto' => $b, 'netto' => $n, 'file' => $sor->file];
-               }
+                }
                 $allp = $brutto + 1500;
                 Cookie::queue('finalcart', json_encode($cart), 60);
                 if (Auth::check()) {

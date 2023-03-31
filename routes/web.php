@@ -36,7 +36,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post("/admin/ujtermek/addcateglekeres3", [PageController::class, 'categ4'])->name("addcategory4");
     Route::get("/admin/rendelesek", [PageController::class, 'order'])->name("adminorder");
     Route::get("/admin/rendelesek/{id}", [PageController::class, 'ordershow']);
-    Route::post("/admin/rendelesek/{id}", [PageController::class, 'ordershowsave']);
+    Route::post("/admin/rendelesek/modsoitas", [PageController::class, 'ordershowsave'])->name("ordershowsave");
 });
 
 

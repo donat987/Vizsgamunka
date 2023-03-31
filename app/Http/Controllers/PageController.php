@@ -15,8 +15,8 @@ class PageController extends Controller
 {
     public function adminpage()
     {
-
-        return view("admin.desboard");
+        $sql = DB::select("SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, SUM(gross_amount) AS revenue FROM ordered_products WHERE created_at >= NOW() - INTERVAL 6 MONTH GROUP BY month ORDER BY month ASC LIMIT 0, 25");
+        return view("admin.desboard", compact('sql'));
     }
     public function ordershowsave(Request $request)
     {
@@ -45,8 +45,7 @@ class PageController extends Controller
             $update->update();
         }
         if ($temp1 == $temp2) {
-            $orders = DB::table('ordered_products')->select('name', 'piece', 'gross_amount')->join('products', 'products.id', '=', 'ordered_products.productsid')->where('ordersid', '=', $request->id)->get();
-            Cookie::queue('orders', json_encode($orders), 60);
+            $orders = DB::table('ordered_products')->select('name', 'piece', 'gross_amount', 'file')->join('products', 'products.id', '=', 'ordered_products.productsid')->where('ordersid', '=', $request->id)->get();
             $sql = DB::table('orders')
                 ->select('orders.id as id', 'orders.name', 'city', 'orders.email as email', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
                 ->join('users', 'users.id', '=', 'orders.userid')
@@ -82,7 +81,8 @@ class PageController extends Controller
                 'price' => $netto,
                 'finalprice' => $final,
                 'freight_price' => $freight_price,
-                'status' => "Várakozás a feladásra"
+                'status' => "Várakozás a feladásra",
+                'order' => $orders,
             ];
             Mail::to($sql[0]->email)->send(new Picking_upMail($mailData));
             $update = Order::find($request->id);
@@ -110,10 +110,7 @@ class PageController extends Controller
 
 
         if (DB::table('orders')->where('statesid', '=', 1)->where('id', '=', $request)->count() == 1) {
-            $orders = DB::table('ordered_products')->select('name', 'piece', 'gross_amount')->join('products', 'products.id', '=', 'ordered_products.productsid')->where('ordersid', '=', $request)->get();
-            //dd($orders);
-            Cookie::queue('orders', json_encode($orders), 60);
-            dd(json_decode(Cookie::get('orders')));
+            $orders = DB::table('ordered_products')->select('name', 'piece', 'gross_amount', 'file')->join('products', 'products.id', '=', 'ordered_products.productsid')->where('ordersid', '=', $request)->get();
             $netto = 0;
             $brutto = 0;
             foreach (DB::table('ordered_products')->select('*')->where('ordersid', '=', $request)->get() as $sor) {
@@ -143,6 +140,7 @@ class PageController extends Controller
                 'finalprice' => $final,
                 'freight_price' => $freight_price,
                 'status' => "Csomagolás alatt",
+                'order' => $orders,
             ];
             Mail::to($sql[0]->email)->send(new Picking_upMail($mailData));
             $update = Order::find($request);

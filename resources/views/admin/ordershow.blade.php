@@ -89,7 +89,7 @@
             </ul>
         </div>
         <div class="card-body px-0 pb-2">
-            <form action="#" method="POST">
+            <form action="{{route("ordershowsave")}}" method="POST">
                 @csrf
                 <input type="hidden" name="id" value="{{$sql[0]->id}}">
                 <div class="table-responsive p-0">
