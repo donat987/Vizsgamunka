@@ -5,8 +5,8 @@
             <div class="card">
                 <div class="card-header p-3 pt-2">
                     <div
-                        class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
-                        <i class="material-icons opacity-10">weekend</i>
+                        class="icon icon-lg icon-shape bg-gradient-info shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                        <i class="material-icons opacity-10">payments</i>
                     </div>
                     <div class="text-end pt-1">
                         <p class="text-sm mb-0 text-capitalize">Mai bevétel</p>
@@ -15,7 +15,12 @@
                 </div>
                 <hr class="dark horizontal my-0">
                 <div class="card-footer p-3">
-                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+55% </span>than lask week</p>
+                    <p class="mb-0">@if ($dayftszaz < 0)
+                        <span class="text-danger text-sm font-weight-bolder">{{$dayftszaz}}% </span>
+                    @else
+                    <span class="text-success text-sm font-weight-bolder">{{$dayftszaz}}% </span>
+                    @endif
+                     tegnapi naphoz képest</p>
                 </div>
             </div>
         </div>
@@ -23,7 +28,7 @@
             <div class="card">
                 <div class="card-header p-3 pt-2">
                     <div
-                        class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
+                        class="icon icon-lg icon-shape bg-gradient-info shadow-primary text-center border-radius-xl mt-n4 position-absolute">
                         <i class="material-icons opacity-10">person</i>
                     </div>
                     <div class="text-end pt-1">
@@ -33,7 +38,12 @@
                 </div>
                 <hr class="dark horizontal my-0">
                 <div class="card-footer p-3">
-                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">+3% </span>than lask month</p>
+                    <p class="mb-0">@if ($daypszaz < 0)
+                        <span class="text-danger text-sm font-weight-bolder">{{$daypszaz}}% </span>
+                    @else
+                    <span class="text-success text-sm font-weight-bolder">{{$daypszaz}}% </span>
+                    @endif
+                     tegnapi naphoz képest</p>
                 </div>
             </div>
         </div>
@@ -41,8 +51,8 @@
             <div class="card">
                 <div class="card-header p-3 pt-2">
                     <div
-                        class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
-                        <i class="material-icons opacity-10">person</i>
+                        class="icon icon-lg icon-shape bg-gradient-info shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                        <i class="material-icons opacity-10">shopping_basket</i>
                     </div>
                     <div class="text-end pt-1">
                         <p class="text-sm mb-0 text-capitalize">Eladott termékek</p>
@@ -51,7 +61,12 @@
                 </div>
                 <hr class="dark horizontal my-0">
                 <div class="card-footer p-3">
-                    <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-2%</span> than yesterday</p>
+                    <p class="mb-0">@if ($daytszaz < 0)
+                        <span class="text-danger text-sm font-weight-bolder">{{$daytszaz}}% </span>
+                    @else
+                    <span class="text-success text-sm font-weight-bolder">{{$daytszaz}}% </span>
+                    @endif
+                     tegnapi naphoz képest</p>
                 </div>
             </div>
         </div>
@@ -60,10 +75,10 @@
                 <div class="card-header p-3 pt-2">
                     <div
                         class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
-                        <i class="material-icons opacity-10">weekend</i>
+                        <i class="material-icons opacity-10">payments</i>
                     </div>
                     <div class="text-end pt-1">
-                        <p class="text-sm mb-0 text-capitalize">Sales</p>
+                        <p class="text-sm mb-0 text-capitalize">Aktuális hónap bevétel</p>
                         <h4 class="mb-0">{{$MonthRevenue}} Ft</h4>
                     </div>
                 </div>
@@ -91,7 +106,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h6 class="mb-0 "> Daily Sales </h6>
+                    <h6 class="mb-0 "> Bevétel havi bontásban</h6>
                     <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
                     <hr class="dark horizontal">
                     <div class="d-flex ">
@@ -112,7 +127,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h6 class="mb-0 "> Daily Sales </h6>
+                    <h6 class="mb-0 "> Eladott termék havi bontásban </h6>
                     <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
                     <hr class="dark horizontal">
                     <div class="d-flex ">
@@ -133,7 +148,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h6 class="mb-0 "> Daily Sales </h6>
+                    <h6 class="mb-0 "> Bevétel napi bontásban </h6>
                     <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
                     <hr class="dark horizontal">
                     <div class="d-flex ">

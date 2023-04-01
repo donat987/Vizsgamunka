@@ -19,12 +19,26 @@ class PageController extends Controller
         $today = DB::table('ordered_products')
             ->whereDate('created_at', today())
             ->sum('gross_amount');
+        $lastday = DB::table('ordered_products')
+            ->whereDate('created_at', now()->subDay()->format('Y-m-d'))
+            ->sum('gross_amount');
+        $dayftszaz = intval(((floatval($today) - floatval($lastday)) / floatval($lastday)) * 100);
         $todayp = DB::table('orders')
             ->whereDate('created_at', '=', date('Y-m-d'))
             ->count();
+        $lastdayp = DB::table('orders')
+            ->whereDate('created_at', now()->subDay()->format('Y-m-d'))
+            ->count();
+        $daypszaz = intval(((floatval($todayp) - floatval($lastdayp)) / floatval($lastdayp)) * 100);
         $todayt = DB::table('ordered_products')
             ->whereDate('created_at', '=', date('Y-m-d'))
             ->sum('piece');
+
+        $lasttodayt = DB::table('ordered_products')
+            ->whereDate('created_at', now()->subDay()->format('Y-m-d'))
+            ->sum('piece');
+
+        $daytszaz = intval(((floatval($todayt) - floatval($lasttodayt)) / floatval($lasttodayt)) * 100);
         $data = DB::connection()->getPdo()->query("SET lc_time_names = 'hu_HU'");
         $dateft = DB::table('ordered_products')
             ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS month'), DB::raw('SUM(gross_amount) AS revenue'))
@@ -113,7 +127,7 @@ class PageController extends Controller
                 $monthft[] = ['revenue' => $i->revenue, 'month' => "Dec"];
             }
         }
-        return view("admin.desboard", compact('monthft', 'today', 'todayp', 'todayt', 'datedb', 'dayft', 'MonthRevenue', 'monthbev'));
+        return view("admin.desboard", compact('monthft', 'today', 'todayp', 'todayt', 'datedb', 'dayft', 'MonthRevenue', 'monthbev', 'dayftszaz', 'daypszaz', 'daytszaz'));
     }
     public function ordershowsave(Request $request)
     {
