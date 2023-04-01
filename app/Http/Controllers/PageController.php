@@ -6,6 +6,7 @@ use App\Mail\Picking_upMail;
 use App\Models\Order;
 use App\Models\Ordered_product;
 use App\Models\Product;
+use Carbon\Carbon;
 use Cookie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +16,104 @@ class PageController extends Controller
 {
     public function adminpage()
     {
-        $sql = DB::select("SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, SUM(gross_amount) AS revenue FROM ordered_products WHERE created_at >= NOW() - INTERVAL 6 MONTH GROUP BY month ORDER BY month ASC LIMIT 0, 25");
-        return view("admin.desboard", compact('sql'));
+        $today = DB::table('ordered_products')
+            ->whereDate('created_at', today())
+            ->sum('gross_amount');
+        $todayp = DB::table('orders')
+            ->whereDate('created_at', '=', date('Y-m-d'))
+            ->count();
+        $todayt = DB::table('ordered_products')
+            ->whereDate('created_at', '=', date('Y-m-d'))
+            ->sum('piece');
+        $data = DB::connection()->getPdo()->query("SET lc_time_names = 'hu_HU'");
+        $dateft = DB::table('ordered_products')
+            ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS month'), DB::raw('SUM(gross_amount) AS revenue'))
+            ->whereRaw('created_at >= DATE_SUB(NOW(), INTERVAL 8 MONTH)')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+        $datedb = DB::table('ordered_products')
+            ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS month'), DB::raw('SUM(piece) AS piece'))
+            ->whereRaw('created_at >= DATE_SUB(NOW(), INTERVAL 8 MONTH)')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+        $datedayft = DB::table('ordered_products')
+            ->select(DB::raw("DATE_FORMAT(created_at, '%Y.%m.%d') AS date, SUM(gross_amount) AS revenue"))
+            ->whereBetween('created_at', [Carbon::now()->subDays(20)->startOfDay(), Carbon::now()->endOfDay()])
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->get();
+
+        $MonthRevenue = DB::table('ordered_products')
+            ->whereBetween('created_at', [now()->startOfMonth(), now()])
+            ->sum('gross_amount');
+        $lastMonthRevenue = DB::table('ordered_products')
+            ->select(DB::raw('SUM(gross_amount) as revenue'))
+            ->whereRaw('YEAR(created_at) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH)')
+            ->whereRaw('MONTH(created_at) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)')
+            ->first()
+            ->revenue;
+        $monthbev = intval(((floatval($MonthRevenue) - floatval($lastMonthRevenue)) / floatval($lastMonthRevenue)) * 100);
+        $dayft = [];
+        foreach ($datedayft as $i) {
+            $temp = (explode(".", $i->date));
+            if ($temp[1] == "1") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Jan " . $temp[2] . "."];
+            } elseif ($temp[1] == "2") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Feb " . $temp[2] . "."];
+            } elseif ($temp[1] == "3") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Már " . $temp[2] . "."];
+            } elseif ($temp[1] == "4") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Ápr" . $temp[2] . "."];
+            } elseif ($temp[1] == "5") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Máj " . $temp[2] . "."];
+            } elseif ($temp[1] == "6") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Jún " . $temp[2] . "."];
+            } elseif ($temp[1] == "7") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Júl " . $temp[2] . "."];
+            } elseif ($temp[1] == "8") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Aug " . $temp[2] . "."];
+            } elseif ($temp[1] == "9") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Szept " . $temp[2] . "."];
+            } elseif ($temp[1] == "10") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Okt " . $temp[2] . "."];
+            } elseif ($temp[1] == "11") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Nov " . $temp[2] . "."];
+            } elseif ($temp[1] == "12") {
+                $dayft[] = ['revenue' => $i->revenue, 'days' => "Dec " . $temp[2] . "."];
+            }
+        }
+        $monthft = [];
+        foreach ($dateft as $i) {
+            $temp = (explode("-", $i->month));
+            if ($temp[1] == "1") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Jan"];
+            } elseif ($temp[1] == "2") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Feb"];
+            } elseif ($temp[1] == "3") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Már"];
+            } elseif ($temp[1] == "4") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Ápr"];
+            } elseif ($temp[1] == "5") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Máj"];
+            } elseif ($temp[1] == "6") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Jún"];
+            } elseif ($temp[1] == "7") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Júl"];
+            } elseif ($temp[1] == "8") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Aug"];
+            } elseif ($temp[1] == "9") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Szept"];
+            } elseif ($temp[1] == "10") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Okt"];
+            } elseif ($temp[1] == "11") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Nov"];
+            } elseif ($temp[1] == "12") {
+                $monthft[] = ['revenue' => $i->revenue, 'month' => "Dec"];
+            }
+        }
+        return view("admin.desboard", compact('monthft', 'today', 'todayp', 'todayt', 'datedb', 'dayft', 'MonthRevenue', 'monthbev'));
     }
     public function ordershowsave(Request $request)
     {
