@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PageController;
@@ -36,6 +37,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post("/admin/ujtermek/addcateglekeres3", [PageController::class, 'categ4'])->name("addcategory4");
     Route::get("/admin/rendelesek", [PageController::class, 'order'])->name("adminorder");
     Route::get("/admin/rendelesek/{id}", [PageController::class, 'ordershow']);
+    Route::get("/admin/blog", [BlogController::class, 'blog']);
+    Route::post("/admin/blog", [BlogController::class, 'save'])->name("blogsave");
     Route::post("/admin/rendelesek/modsoitas", [PageController::class, 'ordershowsave'])->name("ordershowsave");
 });
 

@@ -14,6 +14,7 @@ use Mail;
 
 class PageController extends Controller
 {
+
     public function adminpage()
     {
         $today = DB::table('ordered_products')

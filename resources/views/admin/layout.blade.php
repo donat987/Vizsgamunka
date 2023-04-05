@@ -23,6 +23,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('css/material-dashboard.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('trumbowyg/ui/trumbowyg.css') }}">
+    <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/colors/ui/trumbowyg.colors.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/emoji/ui/trumbowyg.emoji.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/giphy/ui/trumbowyg.giphy.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/table/ui/trumbowyg.table.min.css') }}">
 </head>
 
 <body class="g-sidenav-show bg-gray-200">

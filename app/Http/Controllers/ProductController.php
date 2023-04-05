@@ -228,9 +228,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:img,png,jpg|max:2048',
-        ]);
         $save = new Product();
         if ($request->file()) {
             $valid = $request->validate([
