@@ -8,6 +8,11 @@
                         <h5 class="card-title text-center mb-5 fw-light fs-5">Regisztráció</h5>
                         <form action="{{ route('register') }}" method="POST">
                             @csrf
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
                             <div class="form-floating mb-3">
                                 <x-input-label for="username" :value="__('Felhasználó név')" />
                                 <x-text-input id="username" class="form-control" type="text" name="username"
@@ -40,8 +45,9 @@
                             </div>
                             <div class="form-floating mb-3">
                                 <x-input-label for="password_confirmation" :value="__('Jelszó újra')" />
-                                <x-text-input id="password_confirmation" class="form-control" type="password" name="password_confirmation"
-                                    :value="old('password_confirmation')" required autofocus placeholder="Jelszó" />
+                                <x-text-input id="password_confirmation" class="form-control" type="password"
+                                    name="password_confirmation" :value="old('password_confirmation')" required autofocus
+                                    placeholder="Jelszó" />
                                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                             </div>
                             <hr>

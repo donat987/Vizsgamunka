@@ -86,7 +86,7 @@
                     <div class="row">
                         <div class="col-sm-12 text-center">
                             <button class="btn btn-primary w-25"
-                                onclick="window.location.href='/profil/modositas'">Hozzáadás</button>
+                                onclick="window.location.href='/profil/cimek/hozzaad'">Hozzáadás</button>
                         </div>
                     </div>
                 </div>

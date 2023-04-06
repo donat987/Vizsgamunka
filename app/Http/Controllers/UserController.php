@@ -193,7 +193,7 @@ class UserController extends Controller
             $image = $valid['file'];
             $filename = uniqid() . '.' . $image->getClientOriginalExtension();
             $explode = explode('/', Auth::user()->file);
-            Storage::delete('/public/users/' . $explode[3]);
+            //Storage::delete('/public/users/' . $explode[3]);
             $path = '/public/users/' . $filename;
             $file = '/storage/users/' . $filename;
             $img = Image::make($image);
@@ -207,7 +207,6 @@ class UserController extends Controller
         $validated = $request->validate([
             'vezetéknév' => 'required|min:3|max:20',
             'keresztnév' => 'required|min:3|max:20',
-            'születési_dátum' => 'required|date',
             'felhasználónév' => 'required|min:3|max:20',
             'email' => 'required|email',
         ]);

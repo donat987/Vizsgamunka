@@ -18,21 +18,34 @@
                 <div class='row'>
                     <div class='col-lg-6'> <img src='{{ $product[0]->file }}' alt='Image' class='img-fluid'>
                     </div>
-                    <div class='col-lg-5 ml-auto'>
-                        <h2 class='text-primary'>{{ $product[0]->name }}</h2>
+                    <div class="col-lg-5 ml-auto d-flex flex-column">
+                        <h2 class="text">{{ $product[0]->name }}</h2>
                         @if ($product[0]->actionprice != 0)
-                            <h3 class="price-old danger text-primary ">{{ $product[0]->price }} ft</h3>
-                            <h2 class="text-primary ">{{ $product[0]->actionprice }} ft</h2>
+                            <h3 class="price-old text">{{ $product[0]->price }} ft</h3>
+                            <h2 class="text-danger">{{ $product[0]->actionprice }} ft</h2>
                         @else
-                            <h2 class="text-primary ">{{ $product[0]->price }} ft</h2>
+                            <h2 class="text">{{ $product[0]->price }} Ft</h2>
                         @endif
-                        <p>Márka: Agárdi Pálinka</p>
-                        <p>Gyümölcs: Birs</p>
-                        <p>Mennyiség: {{ $product[0]->capacity }} l.</p>
-                        <p>{{ $product[0]->description }}</p>
-                        <div class="input-group mb-3">
-                            <input type="text" name="quantity" class="form-control" placeholder="Darabszám"
-                                aria-label="Darabszám" aria-describedby="button-addon2">
+                        <p>Márka: <a class="text-body"
+                                href="/termekek?marka%5B%5D={{ $product[0]->brandname }}">{{ $product[0]->brandname }}</a>
+                        </p>
+                        <p>Űrtartalom: {{ $product[0]->capacity }} l.</p>
+                        <p>Alkoholfok: {{ $product[0]->alcohol }}°</p>
+                        <p>Származási ország: <a class="text-body"
+                                href="/termekek?orszag%5B%5D={{ $product[0]->subcategory1 }}">{{ $product[0]->subcategory1 }}</a>
+                        </p>
+                        <p>Italfajta: <a class="text-body"
+                                href="/termekek?fajta%5B%5D={{ $product[0]->subcategory2 }}">{{ $product[0]->subcategory2 }}</a>
+                        </p>
+                        <p>Megjelenés: {{ $product[0]->subcategory3 }} {{ $product[0]->subcategory4 }}</p>
+                        @if ($product[0]->other != '')
+                            <p>Egyéb: {{ $product[0]->other }}</p>
+                        @endif
+                        <p>Raktáron: {{ $product[0]->quantity }} db</p>
+                        <div class="input-group mb-3 mt-auto">
+                            <input type="number" value="1" min="1" max="{{ $product[0]->quantity }}"
+                                name="quantity" class="form-control" placeholder="Darabszám" aria-label="Darabszám"
+                                aria-describedby="button-addon2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">db</span>
                             </div>
@@ -40,42 +53,54 @@
                                 <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Kosárba</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </form>
-    <div class="container my-5">
-        <h1 class="text-center">Eddigi értékelések:</h1>
-        @foreach ($comment as $s)
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex align-items-center">
-                        <img width="50px" src="{{ $s->file }}" class="rounded-circle mr-3">
-                        <div>
-                            <h5 class="mb-0">{{ $s->username }}</h5>
-                            <small class="text-muted">Dátum: {{ $s->date }}.</small>
+    @if ($product[0]->description != '')
+        <div class="container my-5">
+            <h2 class="text-center">Leírás:</h2>
+            <p>{{ $product[0]->description }}</p>
+        </div>
+    @endif
+    @if (count($comment))
+        <div class="container my-5">
+
+            <h2 class="text-center">Eddigi értékelések:</h2>
+            @foreach ($comment as $s)
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <img width="50px" src="{{ $s->file }}" class="rounded-circle mr-3">
+                            <div>
+                                <h5 class="mb-0">{{ $s->username }}</h5>
+                                <small class="text-muted">Dátum: {{ $s->date }}.</small>
+                            </div>
+                            <div class="ml-auto">
+                                <span>
+                                    @for ($i = 0; $i < $s->point; $i++)
+                                        <i class="fas fa-star"></i>
+                                    @endfor
+                                </span>
+                            </div>
                         </div>
-                        <div class="ml-auto">
-                            <span>
-                                @for ($i = 0; $i < $s->point; $i++)
-                                    <i class="fas fa-star"></i>
-                                @endfor
-                            </span>
-                        </div>
+
                     </div>
-
+                    <div class="card-body">
+                        <p class="card-text">{{ $s->comment }}</p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p class="card-text">{{ $s->comment }}</p>
-                </div>
-            </div>
-        @endforeach
-    </div>
-
+            @endforeach
+        </div>
+    @endif
     <div class="container my-5">
-        <h1 class="text-center">Értékeld a terméket!</h1>
+        <h2 class="text-center">Értékeld a terméket!</h2>
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         <form action="{{ route('starsave') }}" id="starform" method="POST">
             @csrf
             <input type="hidden" id="productid" name="productid" value="{{ $product[0]->id }}">

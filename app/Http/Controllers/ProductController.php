@@ -14,8 +14,6 @@ class ProductController extends Controller
 {
     public function star(Request $request)
     {
-        // $message =  $request->rating;
-        //echo "<script type='text/javascript'>alert('$message');</script>";
         if (isset(Auth::user()->username)) {
             $evolutionsave = new Evaluation();
             $evolutionsave->userid = Auth::user()->id;
@@ -23,10 +21,11 @@ class ProductController extends Controller
             $evolutionsave->productid = $request->productid;
             $evolutionsave->comment = $request->comment;
             $evolutionsave->save();
+            return back();
         } else {
-            echo "<script type='text/javascript'>alert('Előbb jelentkezz be!');</script>";
+            return back()->with('error', 'Kérjük előbb jelentkezzen be!');
         }
-        return back();
+
     }
 
     public function search(Request $request)
@@ -41,6 +40,11 @@ class ProductController extends Controller
             ->select('subcategory1 as country')
             ->groupBy('subcategory1')
             ->orderBy('subcategory1', 'asc')
+            ->get();
+
+        $brands = DB::table('brands')
+            ->select('name as brand')
+            ->orderBy('name', 'asc')
             ->get();
 
         $sql = "max(round(price + ((price / 100) * vat))) as max";
@@ -152,10 +156,24 @@ class ProductController extends Controller
                 $order = "price ";
             } elseif ($request->input("rendezesar") == 2) {
                 $order = "price desc ";
-            }elseif ($request->input("rendezesar") == 0) {
+            } elseif ($request->input("rendezesar") == 0) {
                 $order = "id";
                 $temp = 0;
             }
+        }
+
+        $markakeres = "brands.name like '%%'";
+        if ($request->has("marka")) {
+            $markakeres = "(";
+            $temp = 0;
+            foreach ($request->input('marka') as $faj) {
+                if ($temp != 0) {
+                    $markakeres .= " or ";
+                }
+                $temp += 1;
+                $markakeres .= "brands.name = '" . $faj . "'";
+            }
+            $markakeres .= ")";
         }
 
         if ($request->has("rendezesert")) {
@@ -164,7 +182,7 @@ class ProductController extends Controller
                     $order = "points, db ";
                 } elseif ($request->input("rendezesert") == 2) {
                     $order = "points desc, db desc";
-                }elseif ($request->input("rendezesert") == 0) {
+                } elseif ($request->input("rendezesert") == 0) {
                     $order = "id";
                 }
             } else {
@@ -179,9 +197,10 @@ class ProductController extends Controller
         $sql = "round(price + ((price / 100) * vat)) as price, round(actionprice + ((actionprice / 100) * vat)) as actionprice , COUNT(point) as db, round(AVG(evaluations.point)*20) as points";
 
         $se = DB::table('products')
-            ->select('products.id as id', 'name', 'file', 'link')
+            ->select('products.id as id', 'products.name as name', 'products.file as file', 'products.link as link')
             ->selectraw($sql)
             ->join('categories', 'categories.id', '=', 'products.categoryid')
+            ->join('brands', 'brands.id', '=', 'products.brandid')
             ->leftJoin('evaluations', 'evaluations.productid', '=', 'products.id')
             ->where('quantity', '>', 0)
             ->whereraw($minmax)
@@ -190,12 +209,13 @@ class ProductController extends Controller
             ->whereraw($fajtakeres)
             ->whereraw($orszagkeres)
             ->whereraw($akciokeres)
+            ->whereraw($markakeres)
             ->where('active', '=', 1)
             ->groupBy('products.id')
             ->orderByRaw($order)
             ->paginate(15, ['*'], 'oldal');
         $layout = Product::layout();
-        return view('user.search', compact('layout', 'se', 'maxprice', 'category', 'country', 'minprice', 'maxcapacity', 'mincapacity'));
+        return view('user.search', compact('layout', 'se', 'maxprice', 'category', 'country','brands', 'minprice', 'maxcapacity', 'mincapacity'));
 
     }
 
@@ -218,7 +238,9 @@ class ProductController extends Controller
             ->paginate(16, ['*'], 'oldal');
         $sql = "round(price + ((price / 100) * vat)) as price, round(actionprice + ((actionprice / 100) * vat)) as actionprice";
         $product = DB::table('products')
-            ->select('price as taxprice', 'actionprice as actiontaxprice', 'active', 'brandid', 'capacity', 'categoryid', 'vat', 'id', 'name', 'file', 'description', 'link')
+            ->select('price as taxprice', 'subcategory', 'subcategory1', 'subcategory2', 'subcategory3', 'subcategory4','other', 'alcohol', 'actionprice as actiontaxprice', 'brands.name as brandname', 'active', 'brandid', 'capacity', 'quantity', 'categoryid', 'vat', 'products.id as id', 'products.name as name', 'products.file as file', 'description', 'link')
+            ->join('brands', 'brands.id', '=', 'products.brandid')
+            ->join('categories', 'categories.id', '=', 'products.categoryid')
             ->selectraw($sql)
             ->where('link', '=', $link)
             ->get();
@@ -271,7 +293,8 @@ class ProductController extends Controller
             }
             if ($request->categoryselect4 == null) {
                 $cat4 = "";
-            }if ($request->categoryselect5 == null) {
+            }
+            if ($request->categoryselect5 == null) {
                 $cat5 = "";
             }
             $catid = DB::table('categories')

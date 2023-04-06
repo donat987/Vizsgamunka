@@ -21,7 +21,7 @@
                                         <option value="0">Semmi</option>
                                         <option value="1">Növekvő</option>
                                         <option value="2">Csökkenő</option>
-                                        
+
                                     </select>
                                 </div>
                                 <label for="customRange2" class="form-label">Minimum ár:</label>
@@ -55,16 +55,23 @@
                                         <option value="{{ $cat->country }}">{{ $cat->country }}</option>
                                     @endforeach
                                 </select>
-
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Márka:
+                                </label>
+                                <select multiple class="form-control" name="marka[]">
+                                    @foreach ($brands as $cat)
+                                        <option value="{{ $cat->brand }}">{{ $cat->brand }}</option>
+                                    @endforeach
+                                </select>
                                 <label for="customRange2" class="form-label">Minimum kapacitás:</label>
                                 <p class="center" id="mincapacity">{{ $mincapacity }} Liter</p>
                                 <input type="range" class="form-range" style="width: 100%;" min="{{ $mincapacity }}"
-                                    max="{{ $maxcapacity }}" step="0.01" id="minimumcapacity" name="minimumurtartalom"
+                                    max="{{ $maxcapacity }}" step="0.05" id="minimumcapacity" name="minimumurtartalom"
                                     value="{{ $mincapacity }}">
 
                                 <label for="customRange2" class="form-label">Maximum kapacitás:</label>
                                 <p class="center" id="maxcapacity">{{ $maxcapacity }} Liter</p>
-                                <input type="range" step="0.01" style="width: 100%;" class="form-range"
+                                <input type="range" step="0.05" style="width: 100%;" class="form-range"
                                     min="{{ $mincapacity }}" max="{{ $maxcapacity }}" id="maximumcapacity"
                                     name="maximumurtartalom" value="{{ $maxcapacity }}">
 

@@ -37,6 +37,9 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        if (stripos($request->username, 'DROP TABLE') !== false) {
+            return redirect()->back()->withInput()->with('error', 'Hehe!');
+        }
         $request->validate([
             'username' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
@@ -44,6 +47,7 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
         $random = '';
         for ($i = 0; $i < 60; $i++) {
@@ -67,7 +71,7 @@ class RegisteredUserController extends Controller
             'name' => $request->firstname
         ];
         Mail::to($request->email)->send(new RegMail($mailData));
-        
+
         event(new Registered($user));
         Auth::login($user);
         return redirect(RouteServiceProvider::HOME);

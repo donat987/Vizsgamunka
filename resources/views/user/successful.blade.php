@@ -1,14 +1,14 @@
 @extends('layouts.user')
 @section('content')
 <section class="section-content">
-    <div class="container">
+    <div class="container mb-5 mt-5">
         <h2>{{$successful}}</h2>
     </div>
     <div class="container">
         <header class="section-heading">
-            <a href="#" class="btn btn-outline-primary float-right">Összes termék</a>
+            <a href="/termekek" class="btn btn-outline-primary float-right">Összes termék</a>
             <h3 class="section-title">Ajánló</h3>
-            
+
         </header><!-- sect-heading -->
         <div class="row">
             @foreach ($negyrandom as $sor)

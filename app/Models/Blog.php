@@ -14,6 +14,7 @@ class Blog extends Model
         'summary',
         'file',
         'userid',
-        'link'
+        'link',
+        'active'
     ];
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\OrderMail;
 use App\Models\Cart;
+use App\Mail\Picking_upMail;
 use App\Models\Order;
 use App\Models\Ordered_product;
 use App\Models\Product;
@@ -15,6 +16,65 @@ use Mail;
 
 class CartController extends Controller
 {
+    public function endorder(Request $request)
+    {
+        $id = $request->input('id');
+        $name = $request->input('nev');
+        $older = DB::table('orders')
+        ->select('*')
+        ->where('name','=',$name)
+        ->where('id','=',$id)
+        ->first();
+
+        if ($older) {
+            $update = Order::find($id);
+            $update->statesid = 6;
+            $update->update();
+            $orders = DB::table('ordered_products')->select('name', 'piece', 'gross_amount', 'file')->join('products', 'products.id', '=', 'ordered_products.productsid')->where('ordersid', '=', $id)->get();
+            $sql = DB::table('orders')
+                ->select('orders.id as id', 'orders.name', 'city', 'orders.email as email', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                ->join('users', 'users.id', '=', 'orders.userid')
+                ->join('states', 'states.id', '=', 'orders.statesid')
+                ->where('orders.id', '=', $id)
+                ->get();
+            $netto = 0;
+            $brutto = 0;
+            foreach (DB::table('ordered_products')->select('*')->where('ordersid', '=', $id)->get() as $sor) {
+                $brutto += round($sor->gross_amount);
+                $netto += round($sor->clear_amount);
+            }
+            $freight_price = 1500;
+            $final = $brutto + $freight_price;
+
+            $mailData = [
+                'name' => $sql[0]->name,
+                'productid' => $request->id,
+                'date' => $sql[0]->date,
+                'mobil' => $sql[0]->mobile_number,
+                'house_number' => $sql[0]->house_number,
+                'comment' => $sql[0]->other,
+                'zipcode' => $sql[0]->zipcode,
+                'city' => $sql[0]->city,
+                'street' => $sql[0]->street,
+                'tax_number' => $sql[0]->tax_number,
+                'company_name' => $sql[0]->company_name,
+                'company_zipcode' => $sql[0]->company_zipcode,
+                'company_city' => $sql[0]->company_city,
+                'company_street' => $sql[0]->company_street,
+                'company_house_number' => $sql[0]->company_house_number,
+                'taxprice' => $brutto,
+                'price' => $netto,
+                'finalprice' => $final,
+                'freight_price' => $freight_price,
+                'status' => "Rendelése lemondásra került",
+                'order' => $orders,
+            ];
+            Mail::to($sql[0]->email)->send(new Picking_upMail($mailData));
+            return redirect('/profil/teljesitettrendelesek');
+        } else {
+            return back();
+        }
+    }
     public function order(Request $request)
     {
         $validated = $request->validate([
@@ -100,6 +160,7 @@ class CartController extends Controller
                 $oder_pro = new Ordered_product;
                 $oder_pro->ordersid = $id;
                 $oder_pro->productsid = $cart["id"];
+                $oder_pro->packed = 0;
                 $oder_pro->piece = $cart["quantity"];
                 if ($cart["actiontaxprice"] == 0) {
                     $oder_pro->clear_amount = $cart["taxprice"];
@@ -116,6 +177,7 @@ class CartController extends Controller
                 $oder_pro = new Ordered_product;
                 $oder_pro->ordersid = $id;
                 $oder_pro->productsid = $cart["id"];
+                $oder_pro->packed = 0;
                 $oder_pro->piece = $cart["quantity"];
                 if ($cart["actiontaxprice"] == 0) {
                     $oder_pro->clear_amount = $cart["taxprice"];

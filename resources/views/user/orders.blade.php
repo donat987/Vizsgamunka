@@ -121,9 +121,11 @@
                             </tr>
                             @php $allprice += $o['shippingprice'] ;@endphp
                             <tr>
+                                @if($order[0]['statesid'] == 1)
                                 <td class="align-middle" style="width:50%"><button class="btn btn-primary"
-                                    onclick="window.location.href='/profil/modositas'">Rendelés lemodása</button></td>
-                                <td class="align-middle text-right">Fözetendő összeg:</td>
+                                    onclick="window.location.href='/profil/rendeleslemondas?id={{ $order[0]['ordersid'] }}&nev={{ $order[0]['name'] }}'">Rendelés lemodása</button></td>
+                                @endif
+                                    <td class="align-middle text-right">Fözetendő összeg:</td>
                                 <td class="align-middle text-center">{{$allprice}} Ft</td>
                             </tr>
                         </tbody>

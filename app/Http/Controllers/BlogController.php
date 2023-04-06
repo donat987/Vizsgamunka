@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,25 @@ use Intervention\Image\Facades\Image;
 
 class BlogController extends Controller
 {
+    public function show($link)
+    {
+        $sql = DB::table('blogs')
+        ->select('*')
+        ->where('link','=',$link)
+        ->get();
+        $layout = Product::layout();
+        return view("user.blog",compact('layout', 'sql'));
+    }
+    public function blogs()
+    {
+        $sql = DB::table('blogs')
+        ->select('*')
+        ->where('active','=',1)
+        ->orderBy('created_at','asc')
+        ->paginate(16, ['*'], 'oldal');
+        $layout = Product::layout();
+        return view("user.blogs",compact('layout', 'sql'));
+    }
     public function save(Request $request)
     {
         $save = new Blog();
@@ -24,8 +44,8 @@ class BlogController extends Controller
             $file = '/storage/blog/' . $filename;
             $img = Image::make($image);
             /*$img->fit(500, 500, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
+            $constraint->aspectRatio();
+            $constraint->upsize();
             });*/
             Storage::put($path, (string) $img->encode());
             $save->name = request("name");
@@ -33,6 +53,7 @@ class BlogController extends Controller
             $save->news = request("content");
             $save->file = $file;
             $save->userid = Auth::user()->id;
+            $save->active = 1;
             $save->link = "";
             $save->save();
             $id = $save->id;

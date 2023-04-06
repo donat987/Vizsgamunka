@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profil/modositas/mentes', [UserController::class, 'profilupdatesave']);
     Route::get('/profil/rendelesek', [UserController::class, 'profilorder'])->name("orders");
     Route::get('/profil/teljesitettrendelesek', [UserController::class, 'profiloldorder']);
+    Route::get('/profil/rendeleslemondas', [CartController::class, 'endorder']);
     /*Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy')*/;
 });
@@ -73,6 +74,8 @@ Route::post('/kosar/kupon', [CartController::class, "cupon"])->name("cupon");
 Route::get('/kosarvegleges', [CartController::class, 'cartall'])->name("teljes");
 Route::get('/kosar/betolt', [CartController::class, 'cart'])->name("cartt");
 Route::get('/kosartorles', [CartController::class, 'delet']);
+Route::get('/blog', [BlogController::class, 'blogs']);
+Route::get('/blog/{blog}', [BlogController::class, 'show']);
 Route::get('/kosar/veglegesites', [CartController::class, 'checkout'])->name("checkout");
 Route::post('/kosar/veglegesites/rendeles', [CartController::class, 'order'])->name("order");
 
