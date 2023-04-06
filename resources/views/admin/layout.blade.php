@@ -64,6 +64,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="{{ Request::path() === 'admin/ujtermek' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
+                        href="/admin/blog">
+                        <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Új hír felvétele</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="{{ Request::path() === 'admin/rendelesek' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/rendelesek">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
@@ -78,13 +87,6 @@
             </div>
             <div class="ps__rail-y" style="top: 0px; right: 0px;">
                 <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
-            </div>
-        </div>
-        <div class="sidenav-footer position-absolute w-100 bottom-0 ">
-            <div class="mx-3">
-                <a class="btn bg-gradient-primary mt-4 w-100"
-                    href="https://www.creative-tim.com/product/material-dashboard-pro?ref=sidebarfree"
-                    type="button">Upgrade to pro</a>
             </div>
         </div>
         <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
@@ -280,9 +282,6 @@
         </div>
     </main>
     <div class="fixed-plugin ps">
-        <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-            <i class="material-icons py-2">settings</i>
-        </a>
         <div class="card shadow-lg">
             <div class="card-header pb-0 pt-3">
                 <div class="float-start">
