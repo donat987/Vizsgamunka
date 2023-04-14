@@ -106,13 +106,10 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <hr class="dark horizontal">
                     <h6 class="mb-0 "> Bevétel havi bontásban</h6>
                     <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
-                    <hr class="dark horizontal">
-                    <div class="d-flex ">
-                        <i class="material-icons text-sm my-auto me-1">schedule</i>
-                        <p class="mb-0 text-sm"> updated 4 min ago </p>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -127,13 +124,9 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <hr class="dark horizontal">
                     <h6 class="mb-0 "> Eladott termék havi bontásban </h6>
                     <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
-                    <hr class="dark horizontal">
-                    <div class="d-flex ">
-                        <i class="material-icons text-sm my-auto me-1">schedule</i>
-                        <p class="mb-0 text-sm"> updated 4 min ago </p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -148,13 +141,9 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <hr class="dark horizontal">
                     <h6 class="mb-0 "> Bevétel napi bontásban </h6>
                     <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
-                    <hr class="dark horizontal">
-                    <div class="d-flex ">
-                        <i class="material-icons text-sm my-auto me-1">schedule</i>
-                        <p class="mb-0 text-sm"> updated 4 min ago </p>
-                    </div>
                 </div>
             </div>
         </div>

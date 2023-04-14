@@ -14,6 +14,33 @@ use Mail;
 
 class PageController extends Controller
 {
+    public function kuponshow()
+    {
+
+        return view('admin.cupon');
+    }
+    public function productshow(Request $request)
+    {
+        $tep = explode(" ", $request->input('keres'));
+        $temp = 0;
+        $keres = "";
+        for ($i = 0; $i < count($tep); $i++) {
+            if ($temp == 0) {
+                $keres .= "tags like '%" . $tep[$i] . "%'";
+                $temp = 1;
+            } else {
+                $keres .= "and tags like '%" . $tep[$i] . "%'";
+            }
+        }
+        $beszur = "round(price + ((price / 100) * vat)) as price, round(actionprice + ((actionprice / 100) * vat)) as actionprice";
+        $sql = DB::table('products')
+        ->select('name', 'quantity', 'file', 'active','price as pi','link')
+        ->selectraw($beszur)
+        ->whereraw($keres)
+        ->orderBy('name','asc')
+        ->paginate(20, ['*'], 'oldal');
+        return view('admin.product',compact('sql'));
+    }
 
     public function adminpage()
     {
@@ -200,7 +227,7 @@ class PageController extends Controller
             $update = Order::find($request->id);
             $update->statesid = 3;
             $update->update();
-            return redirect("/admin/rendelesek");
+            return redirect("/admin/csomagolas");
         }
         return back();
     }

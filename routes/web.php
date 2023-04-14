@@ -35,11 +35,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post("/admin/ujtermek/addcateglekeres1", [PageController::class, 'categ2'])->name("addcategory2");
     Route::post("/admin/ujtermek/addcateglekeres2", [PageController::class, 'categ3'])->name("addcategory3");
     Route::post("/admin/ujtermek/addcateglekeres3", [PageController::class, 'categ4'])->name("addcategory4");
-    Route::get("/admin/rendelesek", [PageController::class, 'order'])->name("adminorder");
-    Route::get("/admin/rendelesek/{id}", [PageController::class, 'ordershow']);
+    Route::get("/admin/csomagolas", [PageController::class, 'order'])->name("adminorder");
+    Route::get("/admin/csomagolas/{id}", [PageController::class, 'ordershow']);
+    Route::get("/admin/termekek/{id}", [PageController::class, 'productshow']);
+    Route::get("/admin/kuponok", [PageController::class, 'kuponshow']);
     Route::get("/admin/blog", [BlogController::class, 'blog']);
     Route::post("/admin/blog", [BlogController::class, 'save'])->name("blogsave");
-    Route::post("/admin/rendelesek/modsoitas", [PageController::class, 'ordershowsave'])->name("ordershowsave");
+    Route::post("/admin/csomagolas/modositas", [PageController::class, 'ordershowsave'])->name("ordershowsave");
 });
 
 
