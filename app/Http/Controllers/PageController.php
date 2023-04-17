@@ -14,12 +14,17 @@ use Mail;
 
 class PageController extends Controller
 {
-    public function kuponshow()
+    public function opinions()
     {
-
-        return view('admin.cupon');
+        $sql = DB::table('users')
+        ->select('evaluations.comment as comment', 'evaluations.created_at as date', 'users.firstname as firstname', 'users.lastname as lastname', 'evaluations.point as point', 'users.username as username', 'products.name as name', 'users.file as ufile', 'products.file as pfile')
+        ->join('evaluations','evaluations.userid','=','users.id')
+        ->join('products','evaluations.productid','=','products.id')
+        ->orderBy('evaluations.created_at','desc')
+        ->paginate(20, ['*'], 'oldal');
+        return view('admin.opinions', compact('sql'));
     }
-    public function productshow(Request $request)
+    public function few(Request $request)
     {
         $tep = explode(" ", $request->input('keres'));
         $temp = 0;
@@ -34,12 +39,46 @@ class PageController extends Controller
         }
         $beszur = "round(price + ((price / 100) * vat)) as price, round(actionprice + ((actionprice / 100) * vat)) as actionprice";
         $sql = DB::table('products')
-        ->select('name', 'quantity', 'file', 'active','price as pi','link')
-        ->selectraw($beszur)
-        ->whereraw($keres)
-        ->orderBy('name','asc')
-        ->paginate(20, ['*'], 'oldal');
-        return view('admin.product',compact('sql'));
+            ->select('name', 'quantity', 'file', 'active', 'price as pi', 'link')
+            ->selectraw($beszur)
+            ->whereraw($keres)
+            ->where('quantity','<','5')
+            ->orderBy('name', 'asc')
+            ->paginate(20, ['*'], 'oldal');
+        return view('admin.few', compact('sql'));
+    }
+    public function kuponshow()
+    {
+        $sql = DB::table('coupons')
+            ->select('species', 'start', 'end', 'couponcode', 'active')
+            ->join('couponspecies', 'couponspecies.id', '=', 'coupons.speciesid')
+            ->where('coupons.id', '>', 0)
+            ->orderBy('active', 'desc')
+            ->orderBy('end', 'desc')
+            ->paginate(20, ['*'], 'oldal');
+        return view('admin.cupon', compact('sql'));
+    }
+    public function product(Request $request)
+    {
+        $tep = explode(" ", $request->input('keres'));
+        $temp = 0;
+        $keres = "";
+        for ($i = 0; $i < count($tep); $i++) {
+            if ($temp == 0) {
+                $keres .= "tags like '%" . $tep[$i] . "%'";
+                $temp = 1;
+            } else {
+                $keres .= "and tags like '%" . $tep[$i] . "%'";
+            }
+        }
+        $beszur = "round(price + ((price / 100) * vat)) as price, round(actionprice + ((actionprice / 100) * vat)) as actionprice";
+        $sql = DB::table('products')
+            ->select('name', 'quantity', 'file', 'active', 'price as pi', 'link')
+            ->selectraw($beszur)
+            ->whereraw($keres)
+            ->orderBy('name', 'asc')
+            ->paginate(20, ['*'], 'oldal');
+        return view('admin.product', compact('sql'));
     }
 
     public function adminpage()
@@ -296,10 +335,40 @@ class PageController extends Controller
             ->join('users', 'users.id', '=', 'orders.userid')
             ->join('states', 'states.id', '=', 'orders.statesid')
             ->where('statesid', '<', 3)
-            ->get();
+            ->paginate(15, ['*'], 'oldal');
         return view("admin.order", compact('sql'));
     }
 
+    public function send()
+    {
+        $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+            ->join('users', 'users.id', '=', 'orders.userid')
+            ->join('states', 'states.id', '=', 'orders.statesid')
+            ->where('statesid', '=', 3)
+            ->paginate(15, ['*'], 'oldal');
+        return view("admin.send", compact('sql'));
+    }
+    public function successful()
+    {
+        $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+            ->join('users', 'users.id', '=', 'orders.userid')
+            ->join('states', 'states.id', '=', 'orders.statesid')
+            ->where('statesid', '=', 4)
+            ->paginate(15, ['*'], 'oldal');
+        return view("admin.successful", compact('sql'));
+    }
+    public function completed()
+    {
+        $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+            ->join('users', 'users.id', '=', 'orders.userid')
+            ->join('states', 'states.id', '=', 'orders.statesid')
+            ->where('statesid', '>', 4)
+            ->paginate(15, ['*'], 'oldal');
+        return view("admin.completed", compact('sql'));
+    }
     public function index()
     {
         $sql = "round(products.price + ((products.price / 100) * vat)) as price, COUNT(point) as db,round(actionprice + ((actionprice / 100) * vat)) as actionprice, round(AVG(evaluations.point)*20) as points";

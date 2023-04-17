@@ -5,7 +5,7 @@
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="text-dark bg-gradient-info shadow-primary border-radius-lg pt-4 pb-3">
-                        <h6 class="text-white text-capitalize ps-3">Csomagolásra váró:</h6>
+                        <h6 class="text-white text-capitalize ps-3">Feladásra váró:</h6>
                     </div>
                 </div>
                 <div class="card-body pt-4 p-3">
@@ -87,9 +87,9 @@
                                 </div>
                                 <div class="ms-auto text-end">
                                     <button type="button"
-                                        onclick="window.location.href='/admin/csomagolas/{{ $sor->id }}'"
+                                        onclick="window.location.href='/admin/feladas/{{ $sor->id }}'"
                                         class="btn btn-info btn-lg w-100" data-bs-toggle="modal">
-                                        Megrendelés csomagolása
+                                        Megrendelés feladása
                                     </button>
                                 </div>
                             </li>

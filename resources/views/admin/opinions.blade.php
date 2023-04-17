@@ -6,7 +6,7 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="text-dark bg-gradient-info shadow-primary border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">Kuponok</h6>
+                            <h6 class="text-white text-capitalize ps-3">Vélemények</h6>
                         </div>
                     </div>
                     <div class="card-body px-0 pb-2">
@@ -15,20 +15,19 @@
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Kupon neve
-                                        </th>
+                                            Felhasználó</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Kódja</th>
+                                            Termék</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Komment</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Aktív</th>
+                                            Értékelés</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Kezdete</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Vége</th>
+                                            Dátum</th>
                                         <th class="text-secondary opacity-7"></th>
                                     </tr>
                                 </thead>
@@ -36,33 +35,49 @@
                                     @foreach ($sql as $sor)
                                         <tr>
                                             <td>
-                                                {{ $sor->species }}
+                                                <div class="d-flex px-2 py-1">
+                                                    <div>
+                                                        <img src="{{ $sor->ufile }}"
+                                                            class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm">{{ $sor->lastname }} {{ $sor->firstname }}
+                                                        </h6>
+                                                        <p class="text-xs text-secondary mb-0">{{ $sor->username }}</p>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td>
-                                                {{ $sor->couponcode }}
+                                                <div class="d-flex px-2 py-1">
+                                                    <div>
+                                                        <img src="{{ $sor->pfile }}"
+                                                            class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center">
+                                                        <h6 class="mb-0 text-sm">{{ $sor->name }}</h6>
+                                                    </div>
+                                                </div>
                                             </td>
-                                            @if (strtotime($sor->end) > strtotime(date('Y-m-d H:i:s')) && $sor->active == 1)
-                                                <td class="align-middle text-center text-sm">
-                                                    <span class="badge badge-sm bg-gradient-success">Aktív</span>
-                                                </td>
-                                            @else
-                                                <td class="align-middle text-center text-sm">
-                                                    <span class="badge badge-sm bg-gradient-secondary">Inaktív</span>
-                                                </td>
-                                            @endif
-                                            <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ date('Y/m/d', strtotime($sor->start)) }}</span>
+                                            <td>
+                                                <span
+                                                    class="text-secondary text-xs font-weight-bold">{{ $sor->comment }}</span>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ date('Y/m/d', strtotime($sor->end)) }}</span>
+                                                <span>
+                                                    @for ($i = 0; $i < $sor->point; $i++)
+                                                        <i class="fas fa-star"></i>
+                                                    @endfor
+                                                </span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <span class="text-secondary text-xs font-weight-bold"><span class="text-secondary text-xs font-weight-bold">{{ date('Y/m/d', strtotime($sor->date)) }}</span></span>
                                             </td>
                                             <td class="align-middle">
                                                 <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
                                                     data-toggle="tooltip" data-original-title="Edit user">
-                                                    Módosítás
+                                                    Törlés
                                                 </a>
                                             </td>
-
                                         </tr>
                                     @endforeach
                                 </tbody>
