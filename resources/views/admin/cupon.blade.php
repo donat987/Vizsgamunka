@@ -6,6 +6,58 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="text-dark bg-gradient-info shadow-primary border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white text-capitalize ps-3">Kupon hozzáadása</h6>
+                        </div>
+                    </div>
+                    <div class="card-body pt-4 p-3">
+                        <form action="{{ route('cuponsave') }}" method="post">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-group input-group-static mb-4">
+                                        <label for="exampleFormControlSelect1" class="ms-0">Kupon fajta</label>
+                                        <select class="form-control" name="cuponcat" id="cuponcat">
+                                            <option>Válassz...</option>
+                                            @foreach ($cup as $sor)
+                                                <option value="{{ $sor->id }}">{{ $sor->species }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="form">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function(e) {
+                $("#cuponcat").change(function() {
+                    if ($('#cuponcat').val() != "") {
+                        var select1 = $('#cuponcat').val();
+                        var _token = $('input[name="_token"]').val();
+                        $.ajax({
+                            url: "{{ route('cuponcat') }}",
+                            type: "POST",
+                            data: {
+                                select1: select1,
+                                _token: _token
+                            },
+                            success: function(result) {
+                                $('#form').html(result);
+                            }
+                        })
+                    }
+                });
+            });
+        </script>
+        <div class="row">
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="text-dark bg-gradient-info shadow-primary border-radius-lg pt-4 pb-3">
                             <h6 class="text-white text-capitalize ps-3">Kuponok</h6>
                         </div>
                     </div>
@@ -51,10 +103,12 @@
                                                 </td>
                                             @endif
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ date('Y/m/d', strtotime($sor->start)) }}</span>
+                                                <span
+                                                    class="text-secondary text-xs font-weight-bold">{{ date('Y/m/d', strtotime($sor->start)) }}</span>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{ date('Y/m/d', strtotime($sor->end)) }}</span>
+                                                <span
+                                                    class="text-secondary text-xs font-weight-bold">{{ date('Y/m/d', strtotime($sor->end)) }}</span>
                                             </td>
                                             <td class="align-middle">
                                                 <a href="javascript:;" class="text-secondary font-weight-bold text-xs"

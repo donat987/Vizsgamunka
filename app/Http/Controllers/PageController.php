@@ -14,14 +14,63 @@ use Mail;
 
 class PageController extends Controller
 {
+    public function actionprices(Request $request)
+    {
+        if ($request->has("pro")) {
+            foreach ($request->input('pro') as $sor) {
+                DB::table('products')
+                    ->where('id', '=', $sor)
+                    ->update(['actionprice' => DB::raw('price * ' . (1 - ($request->input('szaz') / 100)))]);
+            }
+        }
+        if ($request->has("bra")) {
+            foreach ($request->input('bra') as $sor) {
+                DB::table('products')
+                    ->join('brands', 'brands.id', '=', 'products.brandid')
+                    ->where('brands.id', '=', $sor)
+                    ->update(['actionprice' => DB::raw('price * ' . (1 - ($request->input('szaz') / 100)))]);
+            }
+        }
+        if ($request->has("cat")) {
+            foreach ($request->input('cat') as $sor) {
+                DB::table('products')
+                    ->join('categories', 'categories.id', '=', 'products.categoryid')
+                    ->where('categories.id', '=', $sor)
+                    ->update(['actionprice' => DB::raw('price * ' . (1 - ($request->input('szaz') / 100)))]);
+            }
+        }
+        return back();
+    }
+    public function actiondelete()
+    {
+        DB::table('products')
+            ->update(['actionprice' => 0]);
+        return back();
+    }
+    public function action()
+    {
+        $pro = DB::table('products')
+            ->select('*')
+            ->orderBy('name', 'asc')
+            ->get();
+        $cat = DB::table('categories')
+            ->select('*')
+            ->orderBy('subcategory1', 'asc')
+            ->get();
+        $bra = DB::table('brands')
+            ->select('*')
+            ->orderBy('name', 'asc')
+            ->get();
+        return view('admin.action', compact('pro', 'cat', 'bra'));
+    }
     public function opinions()
     {
         $sql = DB::table('users')
-        ->select('evaluations.comment as comment', 'evaluations.created_at as date', 'users.firstname as firstname', 'users.lastname as lastname', 'evaluations.point as point', 'users.username as username', 'products.name as name', 'users.file as ufile', 'products.file as pfile')
-        ->join('evaluations','evaluations.userid','=','users.id')
-        ->join('products','evaluations.productid','=','products.id')
-        ->orderBy('evaluations.created_at','desc')
-        ->paginate(20, ['*'], 'oldal');
+            ->select('evaluations.comment as comment', 'evaluations.created_at as date', 'users.firstname as firstname', 'users.lastname as lastname', 'evaluations.point as point', 'users.username as username', 'products.name as name', 'users.file as ufile', 'products.file as pfile')
+            ->join('evaluations', 'evaluations.userid', '=', 'users.id')
+            ->join('products', 'evaluations.productid', '=', 'products.id')
+            ->orderBy('evaluations.created_at', 'desc')
+            ->paginate(20, ['*'], 'oldal');
         return view('admin.opinions', compact('sql'));
     }
     public function few(Request $request)
@@ -42,13 +91,57 @@ class PageController extends Controller
             ->select('name', 'quantity', 'file', 'active', 'price as pi', 'link')
             ->selectraw($beszur)
             ->whereraw($keres)
-            ->where('quantity','<','5')
+            ->where('quantity', '<', '5')
             ->orderBy('name', 'asc')
             ->paginate(20, ['*'], 'oldal');
         return view('admin.few', compact('sql'));
     }
+    public function couponcat(Request $request)
+    {
+        if ($request->select1 == 1) {
+            ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-static mb-4">
+                        <label>Mettől</label>
+                        <input type="date" name="tol" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-static mb-4">
+                        <label>Meddig</label>
+                        <input type="date" name="ig" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+        if ($request->select1 == 2) {
+            echo "alma";
+        }
+        if ($request->select1 == 3) {
+            echo "alma";
+        }
+        if ($request->select1 == 4) {
+            echo "alma";
+        }
+        if ($request->select1 == 5) {
+            echo "alma";
+        }
+        if ($request->select1 == 6) {
+            echo "alma";
+        }
+
+    }
+    public function cuponsave(Request $request)
+    {
+
+    }
     public function kuponshow()
     {
+        $cup = $sql = DB::table('couponspecies')
+            ->select('*')
+            ->get();
         $sql = DB::table('coupons')
             ->select('species', 'start', 'end', 'couponcode', 'active')
             ->join('couponspecies', 'couponspecies.id', '=', 'coupons.speciesid')
@@ -56,7 +149,7 @@ class PageController extends Controller
             ->orderBy('active', 'desc')
             ->orderBy('end', 'desc')
             ->paginate(20, ['*'], 'oldal');
-        return view('admin.cupon', compact('sql'));
+        return view('admin.cupon', compact('sql', 'cup'));
     }
     public function product(Request $request)
     {

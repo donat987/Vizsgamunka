@@ -41,10 +41,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get("/admin/hamarosanelfogy", [PageController::class, 'few']);
     Route::get("/admin/velemenyek", [PageController::class, 'opinions']);
     Route::get("/admin/kuponok", [PageController::class, 'kuponshow']);
+    Route::post("/admin/kuponok/cat", [PageController::class, 'couponcat'])->name("cuponcat");
+    Route::post("/admin/kuponok/mentes", [PageController::class, 'cuponsave'])->name("cuponsave");
     Route::get("/admin/feladas", [PageController::class, 'send']);
     Route::get("/admin/teljesitett", [PageController::class, 'successful']);
     Route::get("/admin/teljesitve", [PageController::class, 'completed']);
     Route::get("/admin/blog", [BlogController::class, 'blog']);
+    Route::get("/admin/akcio", [PageController::class, 'action']);
+    Route::get("/admin/akcio/osszestorlese", [PageController::class, 'actiondelete']);
+    Route::post("/admin/akcio/mentes", [PageController::class, 'actionprices'])->name('actionprices');
     Route::post("/admin/blog", [BlogController::class, 'save'])->name("blogsave");
     Route::post("/admin/csomagolas/modositas", [PageController::class, 'ordershowsave'])->name("ordershowsave");
 });
@@ -83,6 +88,7 @@ Route::get('/kosar/betolt', [CartController::class, 'cart'])->name("cartt");
 Route::get('/kosartorles', [CartController::class, 'delet']);
 Route::get('/blog', [BlogController::class, 'blogs']);
 Route::get('/blog/{blog}', [BlogController::class, 'show']);
+Route::post("/blog/komment", [BlogController::class,'blogcomment'])->name("blogcomment");
 Route::get('/kosar/veglegesites', [CartController::class, 'checkout'])->name("checkout");
 Route::post('/kosar/veglegesites/rendeles', [CartController::class, 'order'])->name("order");
 

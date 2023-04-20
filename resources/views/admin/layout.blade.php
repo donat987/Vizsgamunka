@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/emoji/ui/trumbowyg.emoji.min.css') }}">
     <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/giphy/ui/trumbowyg.giphy.min.css') }}">
     <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/table/ui/trumbowyg.table.min.css') }}">
+    
 </head>
 
 <body class="g-sidenav-show bg-gray-200">

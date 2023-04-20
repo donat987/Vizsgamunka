@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Comment;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,14 +13,35 @@ use Intervention\Image\Facades\Image;
 
 class BlogController extends Controller
 {
+
+    public function blogcomment(Request $request)
+    {
+        if (isset(Auth::user()->username)) {
+            $evolutionsave = new Comment();
+            $evolutionsave->userid = Auth::user()->id;
+            $evolutionsave->blogid = $request->blogid;
+            $evolutionsave->comment = $request->comment;
+            $evolutionsave->save();
+            return back();
+        } else {
+            return back()->with('error', 'Kérjük előbb jelentkezzen be!');
+        }
+    }
     public function show($link)
     {
         $sql = DB::table('blogs')
-        ->select('*')
+        ->select('blogs.news as news', 'blogs.id as id', 'blogs.name as name', 'blogs.summary as summary','users.file as file','users.firstname as firstname', 'users.lastname as lastname','blogs.created_at as date')
+        ->join('users','users.id','=','blogs.userid')
         ->where('link','=',$link)
-        ->get();
+        ->first();
         $layout = Product::layout();
-        return view("user.blog",compact('layout', 'sql'));
+        $comment = DB::table('comments')
+        ->select('users.username as username', 'comments.created_at as date', 'users.file as file', 'comments.comment as comment')
+        ->join('blogs','blogs.id','=','comments.blogid')
+        ->join('users','users.id','=','blogs.userid')
+        ->where('blogs.id','=',$sql->id)
+        ->get();
+        return view("user.blog",compact('layout', 'sql', 'comment'));
     }
     public function blogs()
     {
