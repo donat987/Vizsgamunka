@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="ms-auto text-end">
                                     <button type="button"
-                                        onclick="window.location.href='/admin/feladas/{{ $sor->id }}'"
+                                        onclick="window.location.href='/admin/teljesitett/{{ $sor->id }}'"
                                         class="btn btn-info btn-lg w-100" data-bs-toggle="modal">
                                         Rendelés lezárása
                                     </button>

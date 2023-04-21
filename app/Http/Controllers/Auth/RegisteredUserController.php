@@ -41,10 +41,11 @@ class RegisteredUserController extends Controller
             return redirect()->back()->withInput()->with('error', 'Hehe!');
         }
         $request->validate([
+            'birthday' => ['required', 'before:18 years ago'],
             'username' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'firstname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -53,7 +54,7 @@ class RegisteredUserController extends Controller
         for ($i = 0; $i < 60; $i++) {
             $random .= $characters[rand(0, strlen($characters) - 1)];
         }
-	$u = "";
+        $u = "/storage/users/profile.jpg";
         $user = User::create([
             'username' => $request->username,
             'lastname' => $request->lastname,

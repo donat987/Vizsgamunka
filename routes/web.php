@@ -25,6 +25,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get("/admin", [PageController::class, 'adminpage']);
     Route::get("/admin/ujtermek", [PageController::class, 'create']);
     Route::post("/admin/ujtermek/mentes", [ProductController::class,'store'])->name("productsave");
+    Route::post("/admin/termek/frissites", [ProductController::class,'update'])->name("productupdate");
     Route::post("/admin/ujtermek/kategoriamentes", [CategoryController::class, 'store'])->name("categorysave");
     Route::post("/admin/ujtermek/markamentes", [BrandController::class, 'store'])->name("brandsave");
     Route::post("/admin/ujtermek/categlekeres", [PageController::class, 'categ1'])->name("category1");
@@ -43,10 +44,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get("/admin/kuponok", [PageController::class, 'kuponshow']);
     Route::post("/admin/kuponok/cat", [PageController::class, 'couponcat'])->name("cuponcat");
     Route::post("/admin/kuponok/mentes", [PageController::class, 'cuponsave'])->name("cuponsave");
+    Route::get("/admin/kupon/torles/{id}", [PageController::class, 'cupondelete']);
+    Route::get("/admin/komment/torles/{id}", [BlogController::class, 'commentdelete']);
     Route::get("/admin/feladas", [PageController::class, 'send']);
+    Route::get("/admin/termekek/modositas/{link}", [ProductController::class, 'editproduct']);
+    Route::get("/admin/feladas/{id}", [PageController::class, 'sendsave']);
+    Route::get("/admin/teljesitett/{id}", [PageController::class, 'successfulsave']);
+    Route::get("/admin/velemenyek/torles/{id}", [PageController::class, 'commentdelete']);
+    Route::post("/admin/feladas/mentes", [PageController::class, 'shippingcode'])->name('shippingcode');
     Route::get("/admin/teljesitett", [PageController::class, 'successful']);
     Route::get("/admin/teljesitve", [PageController::class, 'completed']);
     Route::get("/admin/blog", [BlogController::class, 'blog']);
+    Route::get("/admin/blogok", [BlogController::class, 'blogshow']);
+    Route::get("/admin/blog/modositas/{link}", [BlogController::class, 'blogedite']);
+    Route::get("/admin/kommentek", [BlogController::class, 'comment']);
+    Route::post("/admin/blog/modositas/mentes", [BlogController::class, 'blogupdate'])->name('blogupdate');
     Route::get("/admin/akcio", [PageController::class, 'action']);
     Route::get("/admin/akcio/osszestorlese", [PageController::class, 'actiondelete']);
     Route::post("/admin/akcio/mentes", [PageController::class, 'actionprices'])->name('actionprices');
@@ -68,13 +80,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profil/rendelesek', [UserController::class, 'profilorder'])->name("orders");
     Route::get('/profil/teljesitettrendelesek', [UserController::class, 'profiloldorder']);
     Route::get('/profil/rendeleslemondas', [CartController::class, 'endorder']);
-    /*Route::patch('/profile', [UserController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy')*/;
 });
 
 Route::get('/termekek', [ProductController::class, 'search']);
 Route::get('/termekek/{termek}', [ProductController::class, 'productshow']);
-
 Route::get('/akcios-termekek', [ProductController::class, 'action']);
 Route::get('/osszes-termekek', [ProductController::class, 'all']);
 Route::get('/termekek/{termek}', [ProductController::class, 'productshow']);
@@ -91,8 +100,6 @@ Route::get('/blog/{blog}', [BlogController::class, 'show']);
 Route::post("/blog/komment", [BlogController::class,'blogcomment'])->name("blogcomment");
 Route::get('/kosar/veglegesites', [CartController::class, 'checkout'])->name("checkout");
 Route::post('/kosar/veglegesites/rendeles', [CartController::class, 'order'])->name("order");
-
-
 Route::get('/email', [UserController::class, 'hiteles']);
 
 

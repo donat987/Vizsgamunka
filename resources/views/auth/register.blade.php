@@ -38,6 +38,12 @@
                                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
                             </div>
                             <div class="form-floating mb-3">
+                                <x-input-label for="birthday" :value="__('Születési idő')" />
+                                <x-text-input id="birthday" class="form-control" type="date" name="birthday"
+                                    :value="old('birthday')" required autofocus />
+                                <x-input-error :messages="$errors->get('birthday')" class="mt-2" />
+                            </div>
+                            <div class="form-floating mb-3">
                                 <x-input-label for="password" :value="__('Jelszó')" />
                                 <x-text-input id="password" class="form-control" type="password" name="password"
                                     :value="old('password')" required autofocus placeholder="Jelszó" />
@@ -49,6 +55,12 @@
                                     name="password_confirmation" :value="old('password_confirmation')" required autofocus
                                     placeholder="Jelszó" />
                                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                            </div>
+                            <div class="form-floating mb-3">
+                                <x-input-label for="emailselect" :value="__('Kérek reklám emaileket.')" />
+                                <input type="checkbox" id="emailselect"
+                                    name="emailselect" checked>
+                                <x-input-error :messages="$errors->get('emailselect')" class="mt-2" />
                             </div>
                             <hr>
                             <button class="btn btn-primary btn-lg btn-block" type="submit">Regisztáció</button>

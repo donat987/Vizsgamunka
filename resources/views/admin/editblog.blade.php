@@ -1,7 +1,8 @@
 @extends('admin.layout')
 @section('admincontent')
-    <form action="{{ route('blogsave') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('blogupdate') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        <input type="hidden" name="id" value="{{ $sql->id }}">
         <div class="row">
             <div class="col-12">
                 <div class="card my-4">
@@ -16,7 +17,7 @@
                             <div class="col-md-12">
                                 <div class="input-group input-group-static mb-4">
                                     <label>Címe</label>
-                                    <input type="text" value="" name="name" class="form-control">
+                                    <input type="text" value="{{ $sql->name }}" name="name" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -30,27 +31,31 @@
                             <div class="col-md-2">
                                 <div class="form-check">
                                     <label class="custom-control-label" for="customCheck1">Elérhető:</label>
-                                    <input class="form-check-info" name="active" type="checkbox" id="fcustomCheck1"
-                                        checked="">
+                                    @if ($sql->active == 1)
+                                        <input class="form-check-info" name="active" type="checkbox" id="fcustomCheck1"
+                                            checked>
+                                    @else
+                                        <input class="form-check-info" name="active" type="checkbox" id="fcustomCheck1">
+                                    @endif
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-group input-group-static mb-4">
                                 <label for="exampleFormControlTextarea1" class="ms-0">Rövid leírás</label>
-                                <textarea class="form-control" name="minicontent" rows="3"></textarea>
+                                <textarea class="form-control" name="minicontent" rows="3">{{ $sql->summary }}</textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-group input-group-static mb-4">
                                 <label for="exampleFormControlTextarea1" class="ms-0">Fő hír</label>
-                                <textarea id="editor" name="content"></textarea>
+                                <textarea id="editor" name="content">{{ $sql->news }}</textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3"></div>
                             <div class="col-md-6">
-                                <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal"> Mentés
+                                <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal"> Frissítés
                                 </button>
                             </div>
                             <div class="col-md-3"></div>

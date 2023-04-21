@@ -1,28 +1,29 @@
 @extends('admin.layout')
 @section('admincontent')
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-        <form action="{{ route('productsave') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('productupdate') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" name="id" value="{{$sql->id}}">
             <div class="container-fluid py-4">
                 <div class="row">
                     <div class="col-12">
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="text-dark bg-gradient-info shadow-primary border-radius-lg pt-4 pb-3">
-                                    <h6 class="text-white text-capitalize ps-3">Új termék felvétele</h6>
+                                    <h6 class="text-white text-capitalize ps-3">Termék módosítása</h6>
                                 </div>
                             </div>
                             <div class="p-4">
                                 <div class="input-group input-group-static mb-4">
                                     <label>Termék neve</label>
-                                    <input type="text" name="name" class="form-control">
+                                    <input type="text" required value="{{ $sql->pname }}" name="name" class="form-control">
                                 </div>
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label for="exampleFormControlSelect1" class="ms-0">Fő kategoria</label>
                                             <select class="form-control" name="categoryselect1" id="categoryselect1">
-                                                <option value="">Válassz</option>
+                                                <option value="{{ $sql->sub }}">{{ $sql->sub }}</option>
                                                 @foreach ($category as $i)
                                                     <option value="{{ $i->subcategory }}">{{ $i->subcategory }}</option>
                                                 @endforeach
@@ -33,7 +34,7 @@
                                         <div class="input-group input-group-static mb-4" id="catselect1">
                                             <label for="exampleFormControlSelect1" class="ms-0">Származási ország</label>
                                             <select class="form-control" name="categoryselect2" id="categoryselect2">
-                                                <option value="">Válassz</option>
+                                                <option value="{{ $sql->sub1 }}">{{ $sql->sub1 }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -41,7 +42,7 @@
                                         <div class="input-group input-group-static mb-4" id="catselect2">
                                             <label for="exampleFormControlSelect1" class="ms-0">Ízesítés</label>
                                             <select class="form-control" name="categoryselect3" id="categoryselect3">
-                                                <option value="">Válassz</option>
+                                                <option value="{{ $sql->sub2 }}">{{ $sql->sub2 }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -49,7 +50,7 @@
                                         <div class="input-group input-group-static mb-4" id="catselect3">
                                             <label for="exampleFormControlSelect1" class="ms-0">Formátum</label>
                                             <select class="form-control" name="categoryselect4" id="categoryselect4">
-                                                <option value="">Válassz</option>
+                                                <option value="{{ $sql->sub3 }}">{{ $sql->sub3 }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -57,7 +58,7 @@
                                         <div class="input-group input-group-static mb-4" id="catselect4">
                                             <label for="exampleFormControlSelect1" class="ms-0">Alkategória 4</label>
                                             <select class="form-control" name="categoryselect5" id="categoryselect5">
-                                                <option value="">Válassz</option>
+                                                <option value="{{ $sql->sub4 }}">{{ $sql->sub4 }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -73,8 +74,8 @@
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label for="exampleFormControlSelect1" class="ms-0">Márka</label>
-                                            <select class="form-control" name="brandselect" id="brandselect">
-                                                <option value="">Válassz</option>
+                                            <select required class="form-control" name="brandselect" id="brandselect">
+                                                <option value="{{ $sql->brandid }}">{{ $sql->bname }}</option>
                                                 @foreach ($brand as $i)
                                                     <option value="{{ $i->id }}">{{ $i->name }}</option>
                                                 @endforeach
@@ -90,25 +91,29 @@
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label>Ára</label>
-                                            <input type="text" name="price" class="form-control">
+                                            <input type="text" required value="{{ $sql->price }}" name="price"
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label>Akciós ára</label>
-                                            <input type="text" name="actionprice" class="form-control">
+                                            <input type="text" value="{{ $sql->actionprice }}" name="actionprice"
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label>Barcode</label>
-                                            <input type="text" name="barcode" class="form-control">
+                                            <input type="text" required value="{{ $sql->barcode }}" name="barcode"
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label>Darabszám</label>
-                                            <input type="number" name="quantity" class="form-control">
+                                            <input type="number" required name="quantity" value="{{ $sql->quantity }}"
+                                                class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -116,50 +121,59 @@
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label>Űrtartalom</label>
-                                            <input type="text" name="liter" class="form-control">
+                                            <input type="text" name="liter" value="{{ $sql->capacity }}"
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label>Alkoholfok</label>
-                                            <input type="text" name="alcohol" class="form-control">
+                                            <input type="text" name="alcohol" value="{{ $sql->alcohol }}"
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="input-group input-group-static mb-4">
                                             <label>Egyéb jellemző pl.(évjárat, szín)</label>
-                                            <input type="text" name="other" class="form-control">
+                                            <input type="text" name="other" value="{{ $sql->other }}"
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="input-group input-group-static mb-4">
                                             <label>Áfa</label>
-                                            <input type="text" name="vat" class="form-control">
+                                            <input type="text" name="vat" required value="{{ $sql->vat }}"
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-check">
                                             <label class="custom-control-label" for="customCheck1">Elérhető:</label>
-                                            <input class="form-check-info" name="active" type="checkbox"
-                                                id="fcustomCheck1" checked="">
+                                            @if ($sql->active == 1)
+                                                <input class="form-check-info" name="active" type="checkbox"
+                                                    id="fcustomCheck1" checked>
+                                            @else
+                                                <input class="form-check-info" name="active" type="checkbox"
+                                                    id="fcustomCheck1">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                                 <div class="input-group input-group-static mb-4">
                                     <label for="exampleFormControlTextarea1" class="ms-0">Leírás</label>
-                                    <textarea name="description" id="editor"></textarea>
+                                    <textarea name="description" id="editor">{{ $sql->description }}</textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-10">
                                         <div class="input-group input-group-static mb-4">
                                             <label>Termék képe</label>
-                                            <input type="file" name="file" id="chooseFile" class="form-control">
+                                            <input type="file" value="{{ $sql->file }}" name="file"
+                                                id="chooseFile" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="submit" class="btn btn-info btn-lg w-100"
-                                            data-bs-toggle="modal">
-                                            Termék felvétele
+                                        <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal">
+                                            Termék frissítése
                                         </button>
                                     </div>
                                 </div>
@@ -267,62 +281,62 @@
             </div>
         </div>
 
-    <script src="{{ asset('trumbowyg/trumbowyg.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/base64/trumbowyg.base64.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/colors/trumbowyg.colors.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/emoji/trumbowyg.emoji.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/fontfamily/trumbowyg.fontfamily.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/fontsize/trumbowyg.fontsize.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/giphy/trumbowyg.giphy.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/history/trumbowyg.history.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/indent/trumbowyg.indent.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/lineheight/trumbowyg.lineheight.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/noembed/trumbowyg.noembed.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/pasteimage/trumbowyg.pasteimage.min.js') }}"></script>
-    <script src="//rawcdn.githack.com/RickStrahl/jquery-resizable/0.35/dist/jquery-resizable.min.js"></script>
-    <script src="{{ asset('trumbowyg/plugins/resizimg/trumbowyg.resizimg.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/table/trumbowyg.table.min.js') }}"></script>
-    <script src="{{ asset('trumbowyg/plugins/pasteembed/trumbowyg.pasteembed.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/trumbowyg.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/base64/trumbowyg.base64.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/colors/trumbowyg.colors.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/emoji/trumbowyg.emoji.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/fontfamily/trumbowyg.fontfamily.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/fontsize/trumbowyg.fontsize.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/giphy/trumbowyg.giphy.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/history/trumbowyg.history.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/indent/trumbowyg.indent.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/lineheight/trumbowyg.lineheight.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/noembed/trumbowyg.noembed.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/pasteimage/trumbowyg.pasteimage.min.js') }}"></script>
+        <script src="//rawcdn.githack.com/RickStrahl/jquery-resizable/0.35/dist/jquery-resizable.min.js"></script>
+        <script src="{{ asset('trumbowyg/plugins/resizimg/trumbowyg.resizimg.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/table/trumbowyg.table.min.js') }}"></script>
+        <script src="{{ asset('trumbowyg/plugins/pasteembed/trumbowyg.pasteembed.min.js') }}"></script>
 
 
-    <script>
-        $('#editor')
-            .trumbowyg({
-                btnsDef: {
-                    image: {
-                        dropdown: ['base64'],
-                        ico: 'insertImage'
+        <script>
+            $('#editor')
+                .trumbowyg({
+                    btnsDef: {
+                        image: {
+                            dropdown: ['base64'],
+                            ico: 'insertImage'
+                        }
+                    },
+                    btns: [
+                        ['historyUndo', 'historyRedo'],
+                        ['indent', 'outdent'],
+                        ['strong', 'em', 'del'],
+                        ['superscript', 'subscript'],
+                        ['foreColor', 'backColor'],
+                        ['link'],
+                        ['lineheight'],
+                        ['fontsize'],
+                        ['emoji'],
+                        ['fontfamily'],
+                        ['image'], // Our fresh created dropdown
+                        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+                        ['unorderedList', 'orderedList'],
+                        ['horizontalRule'],
+                        ['removeformat'],
+                        ['fullscreen'],
+                        ['table'],
+                        ['tableCellBackgroundColor', 'tableBorderColor'],
+                        ['giphy']
+
+                    ],
+                    plugins: {
+                        giphy: {
+                            apiKey: 'xxxxxxxxxxxx'
+                        }
                     }
-                },
-                btns: [
-                    ['historyUndo', 'historyRedo'],
-                    ['indent', 'outdent'],
-                    ['strong', 'em', 'del'],
-                    ['superscript', 'subscript'],
-                    ['foreColor', 'backColor'],
-                    ['link'],
-                    ['lineheight'],
-                    ['fontsize'],
-                    ['emoji'],
-                    ['fontfamily'],
-                    ['image'], // Our fresh created dropdown
-                    ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-                    ['unorderedList', 'orderedList'],
-                    ['horizontalRule'],
-                    ['removeformat'],
-                    ['fullscreen'],
-                    ['table'],
-                    ['tableCellBackgroundColor', 'tableBorderColor'],
-                    ['giphy']
-
-                ],
-                plugins: {
-                    giphy: {
-                        apiKey: 'xxxxxxxxxxxx'
-                    }
-                }
-            });
-            </script>
+                });
+        </script>
         <script>
             function addcategoryselect1() {
                 if ($('#subcategory').val() != "") {
@@ -491,14 +505,14 @@
             });
         </script>
         @if ($message = Session::get('success'))
-        <div class="position-fixed bottom-1 end-1 z-index-2">
-            <div class="toast fade hide p-2 bg-white" role="alert" aria-live="assertive" id="successToast"
-              aria-atomic="true">
-              <div class="toast-header border-0">
-                <i class="material-icons text-success me-2">
-                  check
-                </i>
-                        <span class="me-auto font-weight-bold">{{$message}} </span>
+            <div class="position-fixed bottom-1 end-1 z-index-2">
+                <div class="toast fade hide p-2 bg-white" role="alert" aria-live="assertive" id="successToast"
+                    aria-atomic="true">
+                    <div class="toast-header border-0">
+                        <i class="material-icons text-success me-2">
+                            check
+                        </i>
+                        <span class="me-auto font-weight-bold">{{ $message }} </span>
                         <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast"
                             aria-label="Close"></i>
                     </div>
@@ -506,44 +520,6 @@
                 </div>
             </div>
         @endif
-        <footer class="footer py-4  ">
-            <div class="container-fluid">
-                <div class="row align-items-center justify-content-lg-between">
-                    <div class="col-lg-6 mb-lg-0 mb-4">
-                        <div class="copyright text-center text-sm text-muted text-lg-start">
-                            ©
-                            <script>
-                                document.write(new Date().getFullYear())
-                            </script>,
-                            made with <i class="fa fa-heart"></i> by
-                            <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative
-                                Tim</a>
-                            for a better web.
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com" class="nav-link text-muted"
-                                    target="_blank">Creative Tim</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted"
-                                    target="_blank">About Us</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com/blog" class="nav-link text-muted"
-                                    target="_blank">Blog</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted"
-                                    target="_blank">License</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </footer>
         </div>
     </main>
 @endsection

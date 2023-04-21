@@ -111,9 +111,10 @@
                                                     class="text-secondary text-xs font-weight-bold">{{ date('Y/m/d', strtotime($sor->end)) }}</span>
                                             </td>
                                             <td class="align-middle">
-                                                <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
-                                                    data-toggle="tooltip" data-original-title="Edit user">
-                                                    Módosítás
+                                                <a href="/admin/kupon/torles/{{ $sor->id }}"
+                                                    class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                                    data-original-title="Edit user">
+                                                    Inaktiválás
                                                 </a>
                                             </td>
 

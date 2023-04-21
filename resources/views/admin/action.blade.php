@@ -50,11 +50,13 @@
                                 <div class="col-md-10">
                                     <div class="input-group input-group-static mb-4">
                                         <label>Kedvezmény százalékosan</label>
-                                        <input type="number" name="szaz" class="form-control">
+                                        <input type="number" name="szaz" required class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal"> Mentés
+                                    <button type="button" onclick="window.location.href='/admin/akcio/osszestorlese'"
+                                        class="btn btn-info btn-lg w-100" data-bs-toggle="modal"> Összes
+                                        akció törlése
                                     </button>
                                 </div>
                             </div>
@@ -62,9 +64,7 @@
                         <div class="row">
                             <div class="col-md-3"></div>
                             <div class="col-md-6">
-                                <button type="button" onclick="window.location.href='/admin/akcio/osszestorlese'"
-                                    class="btn btn-info btn-lg w-100" data-bs-toggle="modal"> Összes
-                                    akció törlése
+                                <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal"> Mentés
                                 </button>
                             </div>
                             <div class="col-md-3"></div>

@@ -18,13 +18,10 @@
                                             Felhasználó</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Termék</th>
+                                            Hír</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Komment</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Értékelés</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Dátum</th>
@@ -49,10 +46,6 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="{{ $sor->pfile }}"
-                                                            class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
-                                                    </div>
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm">{{ $sor->name }}</h6>
                                                     </div>
@@ -63,17 +56,10 @@
                                                     class="text-secondary text-xs font-weight-bold">{{ $sor->comment }}</span>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <span>
-                                                    @for ($i = 0; $i < $sor->point; $i++)
-                                                        <i class="fas fa-star"></i>
-                                                    @endfor
-                                                </span>
-                                            </td>
-                                            <td class="align-middle text-center">
                                                 <span class="text-secondary text-xs font-weight-bold"><span class="text-secondary text-xs font-weight-bold">{{ date('Y/m/d', strtotime($sor->date)) }}</span></span>
                                             </td>
                                             <td class="align-middle">
-                                                <a href="/admin/velemenyek/torles/{{$sor->id}}" class="text-secondary font-weight-bold text-xs"
+                                                <a href="/admin/komment/torles/{{$sor->id}}" class="text-secondary font-weight-bold text-xs"
                                                     data-toggle="tooltip">
                                                     Törlés
                                                 </a>

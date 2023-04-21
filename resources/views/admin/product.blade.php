@@ -36,7 +36,7 @@
             <div class="card-body">
                 <div class="d-flex mt-n6">
                     <div class="mx-auto ">
-                        <button class="btn btn-link text-info me-auto border-0" data-bs-toggle="tooltip"
+                        <button class="btn btn-link text-info me-auto border-0" data-bs-toggle="tooltip"  onclick="window.location.href='/admin/termekek/modositas/{{ $sor->link }}'"
                             data-bs-placement="bottom" title="Módosítás">
                             <i class="material-icons text-lg">edit</i>
                         </button>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\Picking_upMail;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Ordered_product;
 use App\Models\Product;
@@ -14,6 +15,26 @@ use Mail;
 
 class PageController extends Controller
 {
+    public function commentdelete($id)
+    {
+        DB::table('evaluations')->where('id', $id)->delete();
+        return back();
+    }
+    public function successfulsave($id)
+    {
+        DB::table('orders')
+            ->where('id', '=', $id)
+            ->update(['statesid' => 5]);
+        return redirect("/admin/teljesitett");
+    }
+    public function cupondelete($id)
+    {
+        DB::table('coupons')
+            ->where('id', '=', $id)
+            ->update(['active' => 0]);
+        return back();
+
+    }
     public function actionprices(Request $request)
     {
         if ($request->has("pro")) {
@@ -41,6 +62,16 @@ class PageController extends Controller
         }
         return back();
     }
+    public function shippingcode(Request $request)
+    {
+        DB::table('orders')
+            ->where('id', '=', $request->id)
+            ->update(['box_number' => $request->code]);
+        DB::table('orders')
+            ->where('id', '=', $request->id)
+            ->update(['statesid' => 4]);
+        return redirect("/admin/feladas");
+    }
     public function actiondelete()
     {
         DB::table('products')
@@ -66,7 +97,7 @@ class PageController extends Controller
     public function opinions()
     {
         $sql = DB::table('users')
-            ->select('evaluations.comment as comment', 'evaluations.created_at as date', 'users.firstname as firstname', 'users.lastname as lastname', 'evaluations.point as point', 'users.username as username', 'products.name as name', 'users.file as ufile', 'products.file as pfile')
+            ->select('evaluations.comment as comment','evaluations.id as id', 'evaluations.created_at as date', 'users.firstname as firstname', 'users.lastname as lastname', 'evaluations.point as point', 'users.username as username', 'products.name as name', 'users.file as ufile', 'products.file as pfile')
             ->join('evaluations', 'evaluations.userid', '=', 'users.id')
             ->join('products', 'evaluations.productid', '=', 'products.id')
             ->orderBy('evaluations.created_at', 'desc')
@@ -98,44 +129,386 @@ class PageController extends Controller
     }
     public function couponcat(Request $request)
     {
-        if ($request->select1 == 1) {
+        if ($request->select1 == 1 || $request->select1 == 2 || $request->select1 == 3) {
             ?>
             <div class="row">
                 <div class="col-md-6">
                     <div class="input-group input-group-static mb-4">
                         <label>Mettől</label>
-                        <input type="date" name="tol" class="form-control">
+                        <input type="date" id="tol" name="tol" required class="form-control">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group input-group-static mb-4">
                         <label>Meddig</label>
-                        <input type="date" name="ig" class="form-control">
+                        <input type="date" id="ig" name="ig" required class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-static mb-4">
+                        <label>Kuponkód</label>
+                        <input type="text" required name="code" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group input-group-static mb-4">
+                        <label>Kedvezmény összege százalékban</label>
+                        <input type="number" required id="percent" name="percent" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group input-group-static mb-4">
+                        <label>Kedvezmény összege forintban</label>
+                        <input type="number" required id="amount" name="amount" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group input-group-static mb-4">
+                        <label>Hányszor használható fel? (0 korlátlan szám)</label>
+                        <input type="number" required name="db" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal">
+                        Kupon felvétele
+                    </button>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <script>
+                const tol = document.getElementById("tol");
+                const ig = document.getElementById("ig");
+
+                tol.addEventListener("input", function () {
+                    if (this.value > ig.value && ig.value) {
+                        ig.value = this.value;
+                    }
+                });
+
+                ig.addEventListener("input", function () {
+                    if (this.value < tol.value && tol.value) {
+                        tol.value = this.value;
+                    }
+                });
+                const percent = document.getElementById("percent");
+                const amount = document.getElementById("amount");
+
+                percent.addEventListener("input", function () {
+                    if (this.value) {
+                        amount.disabled = true;
+                        amount.value = "";
+                    } else {
+                        amount.disabled = false;
+                    }
+                });
+
+                amount.addEventListener("input", function () {
+                    if (this.value) {
+                        percent.disabled = true;
+                        percent.value = "";
+                    } else {
+                        percent.disabled = false;
+                    }
+                });
+            </script>
+            <?php
+        } elseif ($request->select1 == 4) {
+            ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-static mb-4">
+                        <label>Mettől</label>
+                        <input type="date" id="tol" required name="tol" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-static mb-4">
+                        <label>Meddig</label>
+                        <input type="date" id="ig" required name="ig" class="form-control">
                     </div>
                 </div>
             </div>
             <?php
-        }
-        if ($request->select1 == 2) {
-            echo "alma";
-        }
-        if ($request->select1 == 3) {
-            echo "alma";
-        }
-        if ($request->select1 == 4) {
-            echo "alma";
+            $sql = DB::table('brands')
+                ->select('id', 'name')
+                ->orderBy('name', 'asc')
+                ->get();
+            ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group input-group-static mb-4">
+                        <label for="exampleFormControlSelect1" class="ms-0">Márka kiválasztása</label>
+                        <select size="10" multiple="" required class="form-control pb-4" name="bra[]">
+                            <?php foreach ($sql as $sor) { ?>
+                                <option value="<?php echo $sor->id ?>"><?php echo $sor->name ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="input-group input-group-static mb-4">
+                            <label>Kuponkód</label>
+                            <input type="text" name="code" required class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group input-group-static mb-4">
+                            <label>Kedvezmény összege százalékban</label>
+                            <input type="number" name="percent" required class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group input-group-static mb-4">
+                            <label>Hányszor használható fel? (0 korlátlan szám)</label>
+                            <input type="number" name="db" required class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal">
+                            Kupon felvétele
+                        </button>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <script>
+                    const tol = document.getElementById("tol");
+                    const ig = document.getElementById("ig");
+
+                    tol.addEventListener("input", function () {
+                        if (this.value > ig.value && ig.value) {
+                            ig.value = this.value;
+                        }
+                    });
+
+                    ig.addEventListener("input", function () {
+                        if (this.value < tol.value && tol.value) {
+                            tol.value = this.value;
+                        }
+                    });
+                </script>
+                <?php
+
         }
         if ($request->select1 == 5) {
-            echo "alma";
+            ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group input-group-static mb-4">
+                            <label>Mettől</label>
+                            <input type="date" id="tol" required name="tol" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group input-group-static mb-4">
+                            <label>Meddig</label>
+                            <input type="date" id="ig" required name="ig" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <?php
+                $sql = DB::table('products')
+                    ->select('id', 'name')
+                    ->orderBy('name', 'asc')
+                    ->get();
+                ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-group input-group-static mb-4">
+                            <label for="exampleFormControlSelect1" class="ms-0">Termékek kiválasztása</label>
+                            <select size="10" multiple="" required class="form-control pb-4" name="pro[]">
+                                <?php foreach ($sql as $sor) { ?>
+                                    <option value="<?php echo $sor->id ?>"><?php echo $sor->name ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="input-group input-group-static mb-4">
+                                <label>Kuponkód</label>
+                                <input type="text" name="code" required class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group input-group-static mb-4">
+                                <label>Kedvezmény összege százalékban</label>
+                                <input type="number" name="percent" required class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group input-group-static mb-4">
+                                <label>Hányszor használható fel? (0 korlátlan szám)</label>
+                                <input type="number" name="db" required class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal">
+                                Kupon felvétele
+                            </button>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <script>
+                        const tol = document.getElementById("tol");
+                        const ig = document.getElementById("ig");
+
+                        tol.addEventListener("input", function () {
+                            if (this.value > ig.value && ig.value) {
+                                ig.value = this.value;
+                            }
+                        });
+
+                        ig.addEventListener("input", function () {
+                            if (this.value < tol.value && tol.value) {
+                                tol.value = this.value;
+                            }
+                        });
+                    </script>
+                    <?php
         }
         if ($request->select1 == 6) {
-            echo "alma";
+            ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group input-group-static mb-4">
+                                <label>Mettől</label>
+                                <input type="date" id="tol" required name="tol" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group input-group-static mb-4">
+                                <label>Meddig</label>
+                                <input type="date" id="ig" required name="ig" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    $sql = DB::table('categories')
+                        ->select('*')
+                        ->orderBy('subcategory1', 'asc')
+                        ->get();
+                    ?>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-group input-group-static mb-4">
+                                <label for="exampleFormControlSelect1" class="ms-0">Kategória kiválasztása</label>
+                                <select size="10" multiple="" required class="form-control pb-4" name="cat[]">
+                                    <?php foreach ($sql as $sor) { ?>
+                                        <option value="<?php echo $sor->id ?>"><?php echo $sor->subcategory ?>-<?php echo $sor->subcategory1 ?>-<?php echo $sor->subcategory2 ?>-<?php echo $sor->subcategory3 ?>-<?php echo $sor->subcategory4 ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group input-group-static mb-4">
+                                    <label>Kuponkód</label>
+                                    <input type="text" name="code" required class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group input-group-static mb-4">
+                                    <label>Kedvezmény összege százalékban</label>
+                                    <input type="number" name="percent" required class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group input-group-static mb-4">
+                                    <label>Hányszor használható fel? (0 korlátlan szám)</label>
+                                    <input type="number" name="db" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal">
+                                    Kupon felvétele
+                                </button>
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
+                        <script>
+                            const tol = document.getElementById("tol");
+                            const ig = document.getElementById("ig");
+
+                            tol.addEventListener("input", function () {
+                                if (this.value > ig.value && ig.value) {
+                                    ig.value = this.value;
+                                }
+                            });
+
+                            ig.addEventListener("input", function () {
+                                if (this.value < tol.value && tol.value) {
+                                    tol.value = this.value;
+                                }
+                            });
+                        </script>
+                        <?php
         }
 
     }
     public function cuponsave(Request $request)
     {
-
+        $save = new Coupon;
+        $save->start = $request->tol;
+        $save->end = $request->ig;
+        $save->active = 1;
+        $save->speciesid = $request->cuponcat;
+        $save->couponcode = $request->code;
+        $save->piece = $request->db;
+        if (isset($request->percent)) {
+            $save->discount_amount = 0;
+            $save->discount_percentage = $request->percent;
+        }
+        if (isset($request->amount)) {
+            $save->discount_amount = $request->amount;
+            $save->discount_percentage = 0;
+        }
+        $save->save();
+        if ($request->cuponcat == 4) {
+            foreach ($request->input('bra') as $sor) {
+                DB::table('coupon_brand')->insert([
+                    'couponid' => $save->id,
+                    'brandid' => $sor,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+        }
+        if ($request->cuponcat == 5) {
+            foreach ($request->input('pro') as $sor) {
+                DB::table('coupon_products')->insert([
+                    'couponid' => $save->id,
+                    'productid' => $sor,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+        }
+        if ($request->cuponcat == 6) {
+            foreach ($request->input('cat') as $sor) {
+                DB::table('coupon_category')->insert([
+                    'couponid' => $save->id,
+                    'categoryid' => $sor,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+        }
+        return back();
     }
     public function kuponshow()
     {
@@ -143,7 +516,7 @@ class PageController extends Controller
             ->select('*')
             ->get();
         $sql = DB::table('coupons')
-            ->select('species', 'start', 'end', 'couponcode', 'active')
+            ->select('species', 'start', 'end', 'couponcode', 'active', 'coupons.id')
             ->join('couponspecies', 'couponspecies.id', '=', 'coupons.speciesid')
             ->where('coupons.id', '>', 0)
             ->orderBy('active', 'desc')
@@ -432,6 +805,21 @@ class PageController extends Controller
         return view("admin.order", compact('sql'));
     }
 
+    public function sendsave($id)
+    {
+        $product = DB::table('ordered_products')
+            ->select('*')
+            ->join('products', 'products.id', '=', 'ordered_products.productsid')
+            ->where('ordered_products.ordersid', '=', $id)
+            ->get();
+        $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name', 'city', 'orders.email as email', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+            ->join('users', 'users.id', '=', 'orders.userid')
+            ->join('states', 'states.id', '=', 'orders.statesid')
+            ->where('orders.id', '=', $id)
+            ->get();
+        return view('admin.sendshow', compact('product', 'sql'));
+    }
     public function send()
     {
         $sql = DB::table('orders')
@@ -509,11 +897,6 @@ class PageController extends Controller
         $layout = Product::layout();
         return view('user.welcome', compact('layout', 'negyrandom', 'negyrandomwiskey', 'negyrandombor'));
     }
-
-    /* public function index()
-    {
-    return view("welcome");
-    }*/
 
     public function addcateg1(Request $request)
     {

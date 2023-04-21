@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/emoji/ui/trumbowyg.emoji.min.css') }}">
     <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/giphy/ui/trumbowyg.giphy.min.css') }}">
     <link rel="stylesheet" href="{{ asset('trumbowyg/plugins/table/ui/trumbowyg.table.min.css') }}">
-    
+
 </head>
 
 <body class="g-sidenav-show bg-gray-200">
@@ -155,6 +155,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="{{ Request::path() === 'admin/blogok' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
+                        href="/admin/blogok">
+                        <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
+                            <i class="material-icons opacity-10">table_view</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Hírek megtekintése</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="{{ Request::path() === 'admin/kommentek' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/kommentek">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
@@ -184,20 +193,12 @@
         <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 border-radius-xl shadow-none position-sticky blur shadow-blur mt-4 left-auto top-1 z-index-sticky"
             id="navbarBlur" data-scroll="true" navbar-scroll="true">
             <div class="container-fluid py-1 px-3">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-                        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark"
-                                href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm active text-dark" aria-current="page">Dashboard</li>
-                    </ol>
-                    <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-                </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center"></div>
                     <ul class="navbar-nav  justify-content-end">
 
                         <li class="nav-item d-flex align-items-center">
-                            <a href="../pages/sign-in.html" class="nav-link font-weight-bold px-0 text-body">
+                            <a href="{{ url('/logout') }}" class="nav-link font-weight-bold px-0 text-body">
                                 <i class="fa fa-user me-sm-1" aria-hidden="true"></i>
                                 <span class="d-sm-inline d-none">Kijelentkezés</span>
                             </a>
