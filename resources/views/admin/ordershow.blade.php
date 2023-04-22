@@ -105,6 +105,25 @@
                         </div>
                         <div class="card-body px-0 pb-2">
                             <div class="row">
+                                <form action="{{ route('adminolderdelete') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $sql[0]->id }}">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <div class="input-group input-group-static mb-4">
+                                                <label>Email</label>
+                                                <input type="text" name="text" required class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-danger btn-lg w-100" data-bs-toggle="modal">
+                                                Rendelés törlése
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="row">
                                 <form action="{{ route('ordershowsave') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $sql[0]->id }}">

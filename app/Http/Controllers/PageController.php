@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewsMail;
 use App\Mail\Picking_upMail;
 use App\Models\Coupon;
 use App\Models\Order;
@@ -15,17 +16,77 @@ use Mail;
 
 class PageController extends Controller
 {
+    public function newssend(Request $request)
+    {
+        $sql = DB::table('emails')
+        ->select('*')
+        ->get();
+        foreach($sql as $sor){
+            $mailData = [
+                'token' => $sor->token,
+                'text' => $request->content
+            ];
+            Mail::to($sor->email)->send(new NewsMail($mailData));
+        }
+        return redirect('/admin/hirlevel');
+    }
+    public function news()
+    {
+        return view("admin.news");
+    }
+    public function olderdelete(Request $request)
+    {
+        DB::table('orders')
+            ->where('id', '=', $request->id)
+            ->update(['statesid' => 6]);
+        $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name', 'city', 'orders.email as email', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+            ->join('users', 'users.id', '=', 'orders.userid')
+            ->join('states', 'states.id', '=', 'orders.statesid')
+            ->where('orders.id', '=', $request->id)
+            ->get();
+        $orders = DB::table('ordered_products')->select('name', 'piece', 'gross_amount', 'file')->join('products', 'products.id', '=', 'ordered_products.productsid')->where('ordersid', '=', $request->id)->get();
+        $netto = 0;
+        $brutto = 0;
+        foreach (DB::table('ordered_products')->select('*')->where('ordersid', '=', $request->id)->get() as $sor) {
+            $brutto += round($sor->gross_amount);
+            $netto += round($sor->clear_amount);
+        }
+        $freight_price = 1500;
+        $final = $brutto + $freight_price;
+        $mailData = [
+            'name' => $sql[0]->name,
+            'productid' => $request->id,
+            'date' => $sql[0]->date,
+            'mobil' => $sql[0]->mobile_number,
+            'boxcode' => $request->code,
+            'house_number' => $sql[0]->house_number,
+            'comment' => $sql[0]->other,
+            'zipcode' => $sql[0]->zipcode,
+            'city' => $sql[0]->city,
+            'street' => $sql[0]->street,
+            'tax_number' => $sql[0]->tax_number,
+            'company_name' => $sql[0]->company_name,
+            'company_zipcode' => $sql[0]->company_zipcode,
+            'company_city' => $sql[0]->company_city,
+            'company_street' => $sql[0]->company_street,
+            'company_house_number' => $sql[0]->company_house_number,
+            'taxprice' => $brutto,
+            'price' => $netto,
+            'finalprice' => $final,
+            'freight_price' => $freight_price,
+            'status' => "Rendelése lemondásra került",
+            'order' => $orders,
+            'text' =>$request->text,
+        ];
+        Mail::to($sql[0]->email)->send(new Picking_upMail($mailData));
+
+        return redirect("/admin/csomagolas");
+    }
     public function commentdelete($id)
     {
         DB::table('evaluations')->where('id', $id)->delete();
         return back();
-    }
-    public function successfulsave($id)
-    {
-        DB::table('orders')
-            ->where('id', '=', $id)
-            ->update(['statesid' => 5]);
-        return redirect("/admin/teljesitett");
     }
     public function cupondelete($id)
     {
@@ -62,6 +123,53 @@ class PageController extends Controller
         }
         return back();
     }
+    public function successfulsave($id)
+    {
+        DB::table('orders')
+            ->where('id', '=', $id)
+            ->update(['statesid' => 5]);
+            $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name','orders.box_number as box_number', 'city', 'orders.email as email', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+            ->join('users', 'users.id', '=', 'orders.userid')
+            ->join('states', 'states.id', '=', 'orders.statesid')
+            ->where('orders.id', '=', $id)
+            ->get();
+        $orders = DB::table('ordered_products')->select('name', 'piece', 'gross_amount', 'file')->join('products', 'products.id', '=', 'ordered_products.productsid')->where('ordersid', '=', $id)->get();
+        $netto = 0;
+        $brutto = 0;
+        foreach (DB::table('ordered_products')->select('*')->where('ordersid', '=', $id)->get() as $sor) {
+            $brutto += round($sor->gross_amount);
+            $netto += round($sor->clear_amount);
+        }
+        $freight_price = 1500;
+        $final = $brutto + $freight_price;
+        $mailData = [
+            'name' => $sql[0]->name,
+            'productid' => $id,
+            'date' => $sql[0]->date,
+            'mobil' => $sql[0]->mobile_number,
+            'boxcode' => $sql[0]->box_number,
+            'house_number' => $sql[0]->house_number,
+            'comment' => $sql[0]->other,
+            'zipcode' => $sql[0]->zipcode,
+            'city' => $sql[0]->city,
+            'street' => $sql[0]->street,
+            'tax_number' => $sql[0]->tax_number,
+            'company_name' => $sql[0]->company_name,
+            'company_zipcode' => $sql[0]->company_zipcode,
+            'company_city' => $sql[0]->company_city,
+            'company_street' => $sql[0]->company_street,
+            'company_house_number' => $sql[0]->company_house_number,
+            'taxprice' => $brutto,
+            'price' => $netto,
+            'finalprice' => $final,
+            'freight_price' => $freight_price,
+            'status' => "Teljesített rendelés",
+            'order' => $orders,
+        ];
+        Mail::to($sql[0]->email)->send(new Picking_upMail($mailData));
+        return redirect("/admin/teljesitett");
+    }
     public function shippingcode(Request $request)
     {
         DB::table('orders')
@@ -70,6 +178,47 @@ class PageController extends Controller
         DB::table('orders')
             ->where('id', '=', $request->id)
             ->update(['statesid' => 4]);
+        $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name', 'city', 'orders.email as email', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+            ->join('users', 'users.id', '=', 'orders.userid')
+            ->join('states', 'states.id', '=', 'orders.statesid')
+            ->where('orders.id', '=', $request->id)
+            ->get();
+        $orders = DB::table('ordered_products')->select('name', 'piece', 'gross_amount', 'file')->join('products', 'products.id', '=', 'ordered_products.productsid')->where('ordersid', '=', $request)->get();
+        $netto = 0;
+        $brutto = 0;
+        foreach (DB::table('ordered_products')->select('*')->where('ordersid', '=', $request->id)->get() as $sor) {
+            $brutto += round($sor->gross_amount);
+            $netto += round($sor->clear_amount);
+        }
+        $freight_price = 1500;
+        $final = $brutto + $freight_price;
+        $mailData = [
+            'name' => $sql[0]->name,
+            'productid' => $request->id,
+            'date' => $sql[0]->date,
+            'mobil' => $sql[0]->mobile_number,
+            'boxcode' => $request->code,
+            'house_number' => $sql[0]->house_number,
+            'comment' => $sql[0]->other,
+            'zipcode' => $sql[0]->zipcode,
+            'city' => $sql[0]->city,
+            'street' => $sql[0]->street,
+            'tax_number' => $sql[0]->tax_number,
+            'company_name' => $sql[0]->company_name,
+            'company_zipcode' => $sql[0]->company_zipcode,
+            'company_city' => $sql[0]->company_city,
+            'company_street' => $sql[0]->company_street,
+            'company_house_number' => $sql[0]->company_house_number,
+            'taxprice' => $brutto,
+            'price' => $netto,
+            'finalprice' => $final,
+            'freight_price' => $freight_price,
+            'status' => "Furárszolgálatnak átadva",
+            'order' => $orders,
+        ];
+        Mail::to($sql[0]->email)->send(new Picking_upMail($mailData));
+
         return redirect("/admin/feladas");
     }
     public function actiondelete()
@@ -97,7 +246,7 @@ class PageController extends Controller
     public function opinions()
     {
         $sql = DB::table('users')
-            ->select('evaluations.comment as comment','evaluations.id as id', 'evaluations.created_at as date', 'users.firstname as firstname', 'users.lastname as lastname', 'evaluations.point as point', 'users.username as username', 'products.name as name', 'users.file as ufile', 'products.file as pfile')
+            ->select('evaluations.comment as comment', 'evaluations.id as id', 'evaluations.created_at as date', 'users.firstname as firstname', 'users.lastname as lastname', 'evaluations.point as point', 'users.username as username', 'products.name as name', 'users.file as ufile', 'products.file as pfile')
             ->join('evaluations', 'evaluations.userid', '=', 'users.id')
             ->join('products', 'evaluations.productid', '=', 'products.id')
             ->orderBy('evaluations.created_at', 'desc')

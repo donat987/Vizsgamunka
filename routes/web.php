@@ -36,6 +36,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post("/admin/ujtermek/addcateglekeres1", [PageController::class, 'categ2'])->name("addcategory2");
     Route::post("/admin/ujtermek/addcateglekeres2", [PageController::class, 'categ3'])->name("addcategory3");
     Route::post("/admin/ujtermek/addcateglekeres3", [PageController::class, 'categ4'])->name("addcategory4");
+    Route::post("/admin/rendeles/torles", [PageController::class, 'olderdelete'])->name("adminolderdelete");
     Route::get("/admin/csomagolas", [PageController::class, 'order'])->name("adminorder");
     Route::get("/admin/csomagolas/{id}", [PageController::class, 'ordershow']);
     Route::get("/admin/termekek", [PageController::class, 'product']);
@@ -47,6 +48,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get("/admin/kupon/torles/{id}", [PageController::class, 'cupondelete']);
     Route::get("/admin/komment/torles/{id}", [BlogController::class, 'commentdelete']);
     Route::get("/admin/feladas", [PageController::class, 'send']);
+    Route::get("/admin/hirlevel", [PageController::class, 'news']);
+    Route::post("/admin/hirlevel/kuldes", [PageController::class, 'newssend'])->name('newssend');
     Route::get("/admin/termekek/modositas/{link}", [ProductController::class, 'editproduct']);
     Route::get("/admin/feladas/{id}", [PageController::class, 'sendsave']);
     Route::get("/admin/teljesitett/{id}", [PageController::class, 'successfulsave']);
@@ -69,6 +72,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/profil', [UserController::class, 'show'])->name('profil');
+    Route::get('/profil/emailregisztacio', [UserController::class, 'email']);
     Route::get('/profil/modositas', [UserController::class, 'profilupdate'])->name('profilupdate');
     Route::get('/profil/cimek', [UserController::class, 'profiltitles'])->name('profiltitles');
     Route::get('/profil/cimek/hozzaad', [UserController::class, 'addtitles'])->name('addtitles');
@@ -78,11 +82,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/profil/cimek/hozzaad/mentes', [UserController::class, 'addtitlessave'])->name('addtitlessave');
     Route::post('/profil/modositas/mentes', [UserController::class, 'profilupdatesave']);
     Route::get('/profil/rendelesek', [UserController::class, 'profilorder'])->name("orders");
+    Route::post('/profil/rendelesek/lemondas', [CartController::class, 'olderdelete'])->name("olderdelete");
     Route::get('/profil/teljesitettrendelesek', [UserController::class, 'profiloldorder']);
-    Route::get('/profil/rendeleslemondas', [CartController::class, 'endorder']);
 });
 
 Route::get('/termekek', [ProductController::class, 'search']);
+Route::get('/elfelejtettjelszo', [UserController::class, 'passreset']);
+Route::get('/ujjelszo', [UserController::class, 'passresetshow']);
+Route::post('/elfelejtettjelszo/kuldes', [UserController::class, 'passworsend'])->name('passworsend');
+Route::post('/ujjelszo/mentes', [UserController::class, 'newpassword'])->name('newpassword');
 Route::get('/termekek/{termek}', [ProductController::class, 'productshow']);
 Route::get('/akcios-termekek', [ProductController::class, 'action']);
 Route::get('/osszes-termekek', [ProductController::class, 'all']);

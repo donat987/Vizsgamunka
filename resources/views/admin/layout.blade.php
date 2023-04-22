@@ -59,7 +59,7 @@
                     <a class="{{ Request::path() === 'admin/kuponok' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/kuponok">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">dashboard</i>
+                            <i class="material-icons opacity-10">confirmation_number</i>
                         </div>
                         <span class="nav-link-text ms-1">Kuponok</span>
                     </a>
@@ -68,7 +68,7 @@
                     <a class="{{ Request::path() === 'admin/akcio' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/akcio">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">dashboard</i>
+                            <i class="material-icons opacity-10">attach_money</i>
                         </div>
                         <span class="nav-link-text ms-1">Csoportos akció</span>
                     </a>
@@ -77,7 +77,7 @@
                     <a class="{{ Request::path() === 'admin/csomagolas' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/csomagolas">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">dashboard</i>
+                            <i class="material-icons opacity-10">archive</i>
                         </div>
                         <span class="nav-link-text ms-1">Csomagolni váró</span>
                     </a>
@@ -86,7 +86,7 @@
                     <a class="{{ Request::path() === 'admin/feladas' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/feladas">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">dashboard</i>
+                            <i class="material-icons opacity-10">local_shipping</i>
                         </div>
                         <span class="nav-link-text ms-1">Feladásra váró</span>
                     </a>
@@ -95,7 +95,7 @@
                     <a class="{{ Request::path() === 'admin/teljesitett' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/teljesitett">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">dashboard</i>
+                            <i class="material-icons opacity-10">download_done</i>
                         </div>
                         <span class="nav-link-text ms-1">Teljesítésre váró</span>
                     </a>
@@ -104,7 +104,7 @@
                     <a class="{{ Request::path() === 'admin/teljesitve' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/teljesitve">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">dashboard</i>
+                            <i class="material-icons opacity-10">check</i>
                         </div>
                         <span class="nav-link-text ms-1">Teljesítve</span>
                     </a>
@@ -113,7 +113,7 @@
                     <a class="{{ Request::path() === 'admin/ujtermek' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/ujtermek">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">table_view</i>
+                            <i class="material-icons opacity-10">edit</i>
                         </div>
                         <span class="nav-link-text ms-1">Új Termék felvétele</span>
                     </a>
@@ -122,7 +122,7 @@
                     <a class="{{ Request::path() === 'admin/termekek' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/termekek">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">table_view</i>
+                            <i class="material-icons opacity-10">manage_search</i>
                         </div>
                         <span class="nav-link-text ms-1">Termékek megtekintése</span>
                     </a>
@@ -131,7 +131,7 @@
                     <a class="{{ Request::path() === 'admin/hamarosanelfogy' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/hamarosanelfogy">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">table_view</i>
+                            <i class="material-icons opacity-10">low_priority</i>
                         </div>
                         <span class="nav-link-text ms-1">Hamarosan elfogy</span>
                     </a>
@@ -140,7 +140,7 @@
                     <a class="{{ Request::path() === 'admin/velemenyek' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/velemenyek">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">table_view</i>
+                            <i class="material-icons opacity-10">forum</i>
                         </div>
                         <span class="nav-link-text ms-1">Vélemények</span>
                     </a>
@@ -149,7 +149,7 @@
                     <a class="{{ Request::path() === 'admin/blog' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/blog">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">table_view</i>
+                            <i class="material-icons opacity-10">newspaper</i>
                         </div>
                         <span class="nav-link-text ms-1">Új hír felvétele</span>
                     </a>
@@ -158,7 +158,7 @@
                     <a class="{{ Request::path() === 'admin/blogok' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/blogok">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">table_view</i>
+                            <i class="material-icons opacity-10">newspaper</i>
                         </div>
                         <span class="nav-link-text ms-1">Hírek megtekintése</span>
                     </a>
@@ -167,12 +167,20 @@
                     <a class="{{ Request::path() === 'admin/kommentek' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
                         href="/admin/kommentek">
                         <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
-                            <i class="material-icons opacity-10">table_view</i>
+                            <i class="material-icons opacity-10">comment</i>
                         </div>
                         <span class="nav-link-text ms-1">Kommentek</span>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="{{ Request::path() === 'admin/hirlevel' ? 'nav-link active text-dark bg-gradient-info' : 'nav-link text-dark ' }}"
+                        href="/admin/hirlevel">
+                        <div class="text-center me-2 d-flex align-items-center justify-content-center text-dark">
+                            <i class="material-icons opacity-10">mail</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Hírlevél</span>
+                    </a>
+                </li>
             </ul>
             <div class="ps__rail-x" style="width: 250px; left: 0px; bottom: 0px;">
                 <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 214px;"></div>
@@ -220,44 +228,7 @@
         <div class="container-fluid py-4">
             @yield('admincontent')
 
-            <footer class="footer py-4  ">
-                <div class="container-fluid">
-                    <div class="row align-items-center justify-content-lg-between">
-                        <div class="col-lg-6 mb-lg-0 mb-4">
-                            <div class="copyright text-center text-sm text-muted text-lg-start">
-                                ©
-                                <script>
-                                    document.write(new Date().getFullYear())
-                                </script>2023,
-                                made with <i class="fa fa-heart" aria-hidden="true"></i> by
-                                <a href="https://www.creative-tim.com" class="font-weight-bold"
-                                    target="_blank">Creative Tim</a>
-                                for a better web.
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com" class="nav-link text-muted"
-                                        target="_blank">Creative Tim</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted"
-                                        target="_blank">About Us</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/blog" class="nav-link text-muted"
-                                        target="_blank">Blog</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted"
-                                        target="_blank">License</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+
         </div>
         <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
             <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>

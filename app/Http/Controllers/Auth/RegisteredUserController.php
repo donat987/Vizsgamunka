@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Email;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -60,20 +61,29 @@ class RegisteredUserController extends Controller
             'lastname' => $request->lastname,
             'firstname' => $request->firstname,
             'token' => $random,
+            'date_of_birth' => $request->birthday,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'file' => $u,
-
-            'advertising' => 0,
-
+            'file' => $u
         ]);
+        event(new Registered($user));
+        if (request("emailselect") == "on") {
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+            $random1 = '';
+            for ($i = 0; $i < 60; $i++) {
+                $random1 .= $characters[rand(0, strlen($characters) - 1)];
+            }
+            $email = Email::create([
+                'userid' => $user->id,
+                'email' => $request->email,
+                'token' => $random1
+            ]);
+        }
         $mailData = [
             'activator' => $random,
             'name' => $request->firstname
         ];
         Mail::to($request->email)->send(new RegMail($mailData));
-
-        event(new Registered($user));
         Auth::login($user);
         return redirect(RouteServiceProvider::HOME);
     }

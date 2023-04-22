@@ -56,8 +56,13 @@
                 <div class="form-group">
                     <label for="advertising">Hírdetésre feliratkozott?</label>
                     <select class="form-control" id="advertising" name="advertising">
-                        <option value="1">igen</option>
+                        @if($sql == 1)
+                        <option value="1" selected>igen</option>
                         <option value="0">nem</option>
+                        @else
+                        <option value="1" >igen</option>
+                        <option value="0" selected>nem</option>
+                        @endif
                     </select>
                 </div>
             </li>

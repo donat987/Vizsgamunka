@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PassMail;
+use App\Mail\RegMail;
+use App\Models\Email;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\User_adresses;
@@ -10,9 +13,92 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Hash;
+use Mail;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
+    public function newpassword(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ]);
+        if ($request->password != $request->password_confirmation) {
+            return redirect()->back()->withInput()->with('error', 'A jelszavak nem egyeznek!');
+        } else {
+            DB::table('users')
+                ->where('id', $request->id)
+                ->where('email', $request->email)
+                ->where('token', $request->token)
+                ->update(['password' => Hash::make($request->password)]);
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+            $random = '';
+            for ($i = 0; $i < 60; $i++) {
+                $random .= $characters[rand(0, strlen($characters) - 1)];
+            }
+            DB::table('users')
+                ->where('id', $request->id)
+                ->where('email', $request->email)
+                ->where('token', $request->token)
+                ->update(['token' => $random]);
+            return redirect('/bejelentkezes');
+        }
+
+    }
+    public function passresetshow(Request $request)
+    {
+        $sql = DB::table('users')
+            ->select('*')
+            ->where('email', '=', $request->input('email'))
+            ->where('id', '=', $request->input('id'))
+            ->where('token', '=', $request->input('token'))
+            ->count();
+        $token = $request->input('token');
+        $email = $request->input('email');
+        $id = $request->input('id');
+        if ($sql == 1) {
+            $layout = Product::layout();
+            return view('auth.reset-password', compact('layout', 'id', 'email', 'token'));
+        } else {
+            return redirect("/");
+        }
+    }
+    public function passworsend(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'string', 'email', 'max:255']
+        ]);
+        $sql = DB::table('users')
+            ->select('*')
+            ->where('email', '=', $request->email)
+            ->first();
+        $link = "https://dalosdonat.hu/ujjelszo?id=" . $sql->id . "&email=" . $sql->email . "&token=" . $sql->token;
+        $mailData = [
+            'link' => $link,
+            'name' => $sql->firstname
+        ];
+        Mail::to($sql->email)->send(new PassMail($mailData));
+        return redirect("/bejelentkezes");
+    }
+    public function passreset()
+    {
+        $layout = Product::layout();
+        return view('auth.forgot-password', compact('layout'));
+    }
+    public function email()
+    {
+        $sql = DB::table('users')
+            ->select('firstname', 'email', 'token')
+            ->where('id', '=', Auth::user()->id)
+            ->first();
+        $mailData = [
+            'activator' => $sql->token,
+            'name' => $sql->firstname
+        ];
+        Mail::to($sql->email)->send(new RegMail($mailData));
+        return back();
+    }
     public function titlesdelete($id)
     {
         $sql = DB::table('user_adresses')
@@ -131,7 +217,8 @@ class UserController extends Controller
             $save->company_name = "";
         } else {
             $save->company_name = $request->cégnév;
-        }if (!$request->cég_irányítószám) {
+        }
+        if (!$request->cég_irányítószám) {
             $save->company_zipcode = "";
         } else {
             $save->company_zipcode = $request->cég_irányítószám;
@@ -193,7 +280,9 @@ class UserController extends Controller
             $image = $valid['file'];
             $filename = uniqid() . '.' . $image->getClientOriginalExtension();
             $explode = explode('/', Auth::user()->file);
-            //Storage::delete('/public/users/' . $explode[3]);
+            if (Auth::user()->file != "/storage/users/profile.jpg") {
+                Storage::delete('/public/users/' . $explode[3]);
+            }
             $path = '/public/users/' . $filename;
             $file = '/storage/users/' . $filename;
             $img = Image::make($image);
@@ -211,25 +300,49 @@ class UserController extends Controller
             'email' => 'required|email',
         ]);
         if (strtotime($request->születési_dátum . ' + 18 years') <= time()) {
-            $sql = DB::table('users')
+            $sql1 = DB::table('users')
                 ->select(DB::raw("count(username) as name"))
                 ->where('username', '=', $request->felhasználónév)
                 ->get();
-            if ($sql[0]->name == 0 || $request->felhasználónév == Auth::user()->username) {
-                $sql = DB::table('users')
+            if ($sql1[0]->name == 0 || $request->felhasználónév == Auth::user()->username) {
+                $sql1 = DB::table('users')
                     ->select(DB::raw("count(email) as email"))
                     ->where('email', '=', $request->email)
                     ->get();
-                if ($sql[0]->email == 0 || $request->email == Auth::user()->email) {
-                    $update->firstname = $request->vezetéknév;
-                    $update->lastname = $request->keresztnév;
+                if ($sql1[0]->email == 0 || $request->email == Auth::user()->email) {
+                    $update->firstname = $request->keresztnév;
+                    $update->lastname = $request->vezetéknév;
                     $update->date_of_birth = $request->születési_dátum;
                     $update->username = $request->felhasználónév;
                     $update->email = $request->email;
-                    $update->advertising = $request->advertising;
                     $update->update();
-                    $layout = Product::layout();
-                    return view('user.profil', compact('layout'));
+                    if ($request->advertising == 1) {
+                        $count = DB::table('emails')
+                            ->select('*')
+                            ->where('userid', '=', Auth::user()->id)
+                            ->count();
+                        if ($count == 0) {
+                            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-';
+                            $random1 = '';
+                            for ($i = 0; $i < 60; $i++) {
+                                $random1 .= $characters[rand(0, strlen($characters) - 1)];
+                            }
+                            $email = Email::create([
+                                'userid' => Auth::user()->id,
+                                'email' => $request->email,
+                                'token' => $random1
+                            ]);
+                        }
+                    } elseif ($request->advertising == 0) {
+                        $count = DB::table('emails')
+                            ->select('*')
+                            ->where('userid', '=', Auth::user()->id)
+                            ->count();
+                        if ($count == 1) {
+                            DB::table('emails')->where('userid', Auth::user()->id)->delete();
+                        }
+                    }
+                    return redirect("/profil");
                 } else {
                     return redirect()->back()->with('error', 'Ez az emalcím foglalt!');
                 }
@@ -243,9 +356,12 @@ class UserController extends Controller
     }
     public function profilupdate()
     {
-
+        $sql = DB::table('emails')
+            ->select('*')
+            ->where('userid', '=', Auth::user()->id)
+            ->count();
         $layout = Product::layout();
-        return view('user.edituser', compact('layout'));
+        return view('user.edituser', compact('layout', 'sql'));
     }
 
     public function profiloldorder()
@@ -268,7 +384,7 @@ class UserController extends Controller
                 ->where('orders.id', '=', $sor->id)
                 ->get();
             foreach ($sql as $a) {
-                $alorder[] = ['zipcode' => $a->zipcode, 'city' => $a->city, 'street' => $a->street, 'house_number' => $a->house_number, 'other' => $a->other, 'name' => $a->name, 'mobile_number' => $a->mobile_number, 'tax_number' => $a->tax_number, 'company_name' => $a->company_name, 'company_zipcode' => $a->company_zipcode, 'company_city' => $a->company_city, 'company_street' => $a->company_street, 'company_house_number' => $a->company_house_number, 'box_number' => $a->box_number, 'statesid' => $a->statesid, 'states' => $a->states, 'date' => $a->date, 'price' => $a->price, 'gross_amount' => $a->gross_amount, 'shippingprice' => $a->shippingprice, 'ordersid' => $a->ordersid, 'file' => $a->file , 'products_name'=>$a->products_name];
+                $alorder[] = ['zipcode' => $a->zipcode, 'city' => $a->city, 'street' => $a->street, 'house_number' => $a->house_number, 'other' => $a->other, 'name' => $a->name, 'mobile_number' => $a->mobile_number, 'tax_number' => $a->tax_number, 'company_name' => $a->company_name, 'company_zipcode' => $a->company_zipcode, 'company_city' => $a->company_city, 'company_street' => $a->company_street, 'company_house_number' => $a->company_house_number, 'box_number' => $a->box_number, 'statesid' => $a->statesid, 'states' => $a->states, 'date' => $a->date, 'price' => $a->price, 'gross_amount' => $a->gross_amount, 'shippingprice' => $a->shippingprice, 'ordersid' => $a->ordersid, 'file' => $a->file, 'products_name' => $a->products_name];
             }
             $orders[] = $alorder;
         }
@@ -296,7 +412,7 @@ class UserController extends Controller
                 ->where('orders.id', '=', $sor->id)
                 ->get();
             foreach ($sql as $a) {
-                $alorder[] = ['zipcode' => $a->zipcode, 'city' => $a->city, 'street' => $a->street, 'house_number' => $a->house_number, 'other' => $a->other, 'name' => $a->name, 'mobile_number' => $a->mobile_number, 'tax_number' => $a->tax_number, 'company_name' => $a->company_name, 'company_zipcode' => $a->company_zipcode, 'company_city' => $a->company_city, 'company_street' => $a->company_street, 'company_house_number' => $a->company_house_number, 'box_number' => $a->box_number, 'statesid' => $a->statesid, 'states' => $a->states, 'date' => $a->date, 'price' => $a->price, 'gross_amount' => $a->gross_amount, 'shippingprice' => $a->shippingprice, 'ordersid' => $a->ordersid, 'file' => $a->file , 'products_name'=>$a->products_name];
+                $alorder[] = ['zipcode' => $a->zipcode, 'city' => $a->city, 'street' => $a->street, 'house_number' => $a->house_number, 'other' => $a->other, 'name' => $a->name, 'mobile_number' => $a->mobile_number, 'tax_number' => $a->tax_number, 'company_name' => $a->company_name, 'company_zipcode' => $a->company_zipcode, 'company_city' => $a->company_city, 'company_street' => $a->company_street, 'company_house_number' => $a->company_house_number, 'box_number' => $a->box_number, 'statesid' => $a->statesid, 'states' => $a->states, 'date' => $a->date, 'price' => $a->price, 'gross_amount' => $a->gross_amount, 'shippingprice' => $a->shippingprice, 'ordersid' => $a->ordersid, 'file' => $a->file, 'products_name' => $a->products_name];
             }
             $orders[] = $alorder;
         }
@@ -306,8 +422,12 @@ class UserController extends Controller
     }
     public function show()
     {
+        $sql = DB::table('emails')
+            ->select('*')
+            ->where('userid', '=', Auth::user()->id)
+            ->count();
         $layout = Product::layout();
-        return view('user.profil', compact('layout'));
+        return view('user.profil', compact('layout', 'sql'));
     }
     public function hiteles(Request $request)
     {

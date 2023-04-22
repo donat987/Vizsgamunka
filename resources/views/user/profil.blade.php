@@ -3,6 +3,18 @@
     <div class="col-lg-12">
         <div class="card mb-4">
             <div class="card-body p-5">
+                @if(Auth::user()->email_verified_at == "")
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h2 class="text-danger">Kérjük aktiválja fiókját!</h2>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-primary"
+                            onclick="window.location.href='/profil/emailregisztacio'">Email újra küldése</button>
+                    </div>
+                </div>
+                <hr>
+                @endif
                 <div class="row">
                     <div class="col-sm-3">
                         <p class="mb-0">Teljes név</p>
@@ -44,7 +56,7 @@
                         <p class="mb-0">Hírlevélre feliratkozott?</p>
                     </div>
                     <div class="col-sm-9">
-                        @if (Auth::user()->advertising == 1)
+                        @if ($sql == 1)
                             <p class="text-muted mb-0">Igen</p>
                         @else
                             <p class="text-muted mb-0">Nem</p>

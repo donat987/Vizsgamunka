@@ -621,6 +621,18 @@ a {text-decoration: none;}
                                                                     </p>
                                                                 </td>
                                                             </tr>
+                                                            @if(isset($mailData['boxcode']))
+                                                            <tr>
+                                                                <td align="left" class="es-m-txt-c"
+                                                                    style="padding:0;Margin:0">
+                                                                    <p
+                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#38761d;font-size:14px">
+                                                                        Csomagszám:&nbsp;<span
+                                                                            class="p_order">{{ $mailData['boxcode'] }}</span>
+                                                                    </p>
+                                                                </td>
+                                                            </tr>
+                                                            @endif
                                                             <tr>
                                                                 <td align="left" class="es-m-txt-c"
                                                                     style="padding:0;Margin:0">
@@ -629,6 +641,18 @@ a {text-decoration: none;}
                                                                         Állapot: {{ $mailData['status'] }}<br></p>
                                                                 </td>
                                                             </tr>
+                                                            @if(isset($mailData['text']))
+                                                            <tr>
+                                                                <td align="left" class="es-m-txt-c"
+                                                                    style="padding:0;Margin:0">
+                                                                    <p
+                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#38761d;font-size:14px">
+                                                                        Indoklás:&nbsp;<span
+                                                                            class="p_order">{{ $mailData['text'] }}</span>
+                                                                    </p>
+                                                                </td>
+                                                            </tr>
+                                                            @endif
                                                             <tr>
                                                                 <td align="left" class="es-m-txt-c"
                                                                     style="padding:0;Margin:0">
