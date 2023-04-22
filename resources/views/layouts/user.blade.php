@@ -203,7 +203,7 @@
                         <h6 class="title">Segíthetek?</h6>
                         <ul class="list-unstyled">
                             <li> <a href="#">Gyakori kérdések</a></li>
-                            <li> <a href="#">Áfsz</a></li>
+                            <li> <a href="#">Ászf</a></li>
                             <li> <a href="#">Szállítás</a></li>
                         </ul>
                     </aside>
