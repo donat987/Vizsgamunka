@@ -189,7 +189,7 @@
                             @foreach ($se as $sor)
                                 <div class="col-md-4">
                                     <div href="/termekek/{{ $sor->link }}" class="card card-product-grid">
-                                        <a href="/termekek/{{ $sor->link }}" class="img-wrap"> <img
+                                        <a href="/termekek/{{ $sor->link }}" class="img-wrap mt-3"> <img
                                                 src="{{ $sor->file }}"> </a>
                                         <figcaption class="info-wrap">
                                             <a href="/termekek/{{ $sor->link }}"

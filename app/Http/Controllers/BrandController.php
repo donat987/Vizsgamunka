@@ -20,9 +20,8 @@ class BrandController extends Controller
             $save->picturename = $renames;
             $save->file = "/storage/" . $picture;
             $save->save();
-            return back()
-                ->with('success', 'Sikeres mentés')
-                ->with('file', $picture);
+            $request->session()->flash('alert-type', 'success');
+            return redirect()->back();
         }
     }
 }

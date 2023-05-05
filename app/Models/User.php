@@ -28,7 +28,8 @@ class User extends Authenticatable
         'email',
         'password',
         'date_of_birth',
-'advertising'
+        'advertising',
+        'remember_token'
     ];
 
     /**

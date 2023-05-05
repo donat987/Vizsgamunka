@@ -36,43 +36,43 @@ class ProductController extends Controller
             $save->file = $file;
         }
         $save->name = request("name");
-            $save->brandid = request("brandselect");
-            $cat1 = $request->categoryselect1;
-            $cat2 = $request->categoryselect2;
-            $cat3 = $request->categoryselect3;
-            $cat4 = $request->categoryselect4;
-            $cat5 = $request->categoryselect5;
-            $other = request("other");
-            $description = request("description");
-            if (request("description") == null) {
-                $description = "";
-            }
-            if (request("other") == null) {
-                $other = "";
-            }
-            if ($request->categoryselect1 == null) {
-                $cat1 = "";
-            }
-            if ($request->categoryselect2 == null) {
-                $cat2 = "";
-            }
-            if ($request->categoryselect3 == null) {
-                $cat3 = "";
-            }
-            if ($request->categoryselect4 == null) {
-                $cat4 = "";
-            }
-            if ($request->categoryselect5 == null) {
-                $cat5 = "";
-            }
-            $catid = DB::table('categories')
-                ->select('id')
-                ->where('subcategory', 'like', $cat1)
-                ->where('subcategory1', 'like', $cat2)
-                ->where('subcategory2', 'like', $cat3)
-                ->where('subcategory3', 'like', $cat4)
-                ->where('subcategory4', 'like', $cat5)
-                ->get();
+        $save->brandid = request("brandselect");
+        $cat1 = $request->categoryselect1;
+        $cat2 = $request->categoryselect2;
+        $cat3 = $request->categoryselect3;
+        $cat4 = $request->categoryselect4;
+        $cat5 = $request->categoryselect5;
+        $other = request("other");
+        $description = request("description");
+        if (request("description") == null) {
+            $description = "";
+        }
+        if (request("other") == null) {
+            $other = "";
+        }
+        if ($request->categoryselect1 == null) {
+            $cat1 = "";
+        }
+        if ($request->categoryselect2 == null) {
+            $cat2 = "";
+        }
+        if ($request->categoryselect3 == null) {
+            $cat3 = "";
+        }
+        if ($request->categoryselect4 == null) {
+            $cat4 = "";
+        }
+        if ($request->categoryselect5 == null) {
+            $cat5 = "";
+        }
+        $catid = DB::table('categories')
+            ->select('id')
+            ->where('subcategory', 'like', $cat1)
+            ->where('subcategory1', 'like', $cat2)
+            ->where('subcategory2', 'like', $cat3)
+            ->where('subcategory3', 'like', $cat4)
+            ->where('subcategory4', 'like', $cat5)
+            ->get();
 
 
 
@@ -151,6 +151,7 @@ class ProductController extends Controller
             }
         }
         DB::update('update products set link = "' . $link . '" where id = "' . $save->id . '"');
+        $request->session()->flash('alert-type', 'success');
         return redirect("/admin/termekek");
     }
     public function editproduct($link)
@@ -415,8 +416,6 @@ class ProductController extends Controller
             ]);
             $image = $valid['file'];
             $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-            /*$explode = explode('/', Auth::user()->file);
-            Storage::delete('/public/product/' . $explode[3]);*/
             $path = '/public/product/' . $filename;
             $file = '/storage/product/' . $filename;
             $img = Image::make($image);
@@ -527,15 +526,8 @@ class ProductController extends Controller
             $save->description = $description;
             $save->userid = Auth::user()->id;
             $save->link = "";
-
             $save->save();
-
-            $productid = DB::table('products')
-                ->select('id')
-                ->orderBy('products.id', 'desc')
-                ->limit(1)
-                ->get();
-            $link = $productid[0]->id . "_";
+            $link = $save->id . "_";
             $darabol = explode(" ", request("name"));
             $db = 0;
             foreach ($darabol as $i) {
@@ -546,9 +538,9 @@ class ProductController extends Controller
                     $link .= "_" . $i;
                 }
             }
-            $ok = DB::update('update products set link = "' . $link . '" where id = "' . $productid[0]->id . '"');
-            return back()
-                ->with('success', 'Sikeres mentés');
+            $ok = DB::update('update products set link = "' . $link . '" where id = "' . $save->id . '"');
+            $request->session()->flash('alert-type', 'success');
+            return redirect()->back();
         }
     }
 }

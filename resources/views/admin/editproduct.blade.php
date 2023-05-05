@@ -211,7 +211,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn bg-gradient-secondary"
                                 data-bs-dismiss="modal">Bezárás</button>
-                            <button type="submit" class="btn bg-gradient-primary">Mentés</button>
+                            <button type="submit" class="btn bg-gradient-info">Mentés</button>
                         </div>
                     </form>
                 </div>
@@ -274,7 +274,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn bg-gradient-secondary"
                                 data-bs-dismiss="modal">Bezárás</button>
-                            <button type="submit" class="btn bg-gradient-primary">Mentés</button>
+                            <button type="submit" class="btn bg-gradient-info">Mentés</button>
                         </div>
                     </form>
                 </div>
@@ -326,8 +326,7 @@
                         ['removeformat'],
                         ['fullscreen'],
                         ['table'],
-                        ['tableCellBackgroundColor', 'tableBorderColor'],
-                        ['giphy']
+                        ['tableCellBackgroundColor', 'tableBorderColor']
 
                     ],
                     plugins: {

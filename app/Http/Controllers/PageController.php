@@ -13,21 +13,23 @@ use Cookie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mail;
+use Illuminate\Support\Facades\Session;
 
 class PageController extends Controller
 {
     public function newssend(Request $request)
     {
         $sql = DB::table('emails')
-        ->select('*')
-        ->get();
-        foreach($sql as $sor){
+            ->select('*')
+            ->get();
+        foreach ($sql as $sor) {
             $mailData = [
                 'token' => $sor->token,
                 'text' => $request->content
             ];
             Mail::to($sor->email)->send(new NewsMail($mailData));
         }
+        $request->session()->flash('alert-type', 'success');
         return redirect('/admin/hirlevel');
     }
     public function news()
@@ -77,15 +79,16 @@ class PageController extends Controller
             'freight_price' => $freight_price,
             'status' => "Rendelése lemondásra került",
             'order' => $orders,
-            'text' =>$request->text,
+            'text' => $request->text,
         ];
         Mail::to($sql[0]->email)->send(new Picking_upMail($mailData));
-
+        $request->session()->flash('alert-type', 'success');
         return redirect("/admin/csomagolas");
     }
     public function commentdelete($id)
     {
         DB::table('evaluations')->where('id', $id)->delete();
+        Session::flash('alert-type', 'success');
         return back();
     }
     public function cupondelete($id)
@@ -93,6 +96,7 @@ class PageController extends Controller
         DB::table('coupons')
             ->where('id', '=', $id)
             ->update(['active' => 0]);
+        Session::flash('alert-type', 'success');
         return back();
 
     }
@@ -121,6 +125,7 @@ class PageController extends Controller
                     ->update(['actionprice' => DB::raw('price * ' . (1 - ($request->input('szaz') / 100)))]);
             }
         }
+        $request->session()->flash('alert-type', 'success');
         return back();
     }
     public function successfulsave($id)
@@ -128,8 +133,8 @@ class PageController extends Controller
         DB::table('orders')
             ->where('id', '=', $id)
             ->update(['statesid' => 5]);
-            $sql = DB::table('orders')
-            ->select('orders.id as id', 'orders.name','orders.box_number as box_number', 'city', 'orders.email as email', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+        $sql = DB::table('orders')
+            ->select('orders.id as id', 'orders.name', 'orders.box_number as box_number', 'city', 'orders.email as email', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
             ->join('users', 'users.id', '=', 'orders.userid')
             ->join('states', 'states.id', '=', 'orders.statesid')
             ->where('orders.id', '=', $id)
@@ -168,6 +173,8 @@ class PageController extends Controller
             'order' => $orders,
         ];
         Mail::to($sql[0]->email)->send(new Picking_upMail($mailData));
+        Session::flash('alert-type', 'success');
+
         return redirect("/admin/teljesitett");
     }
     public function shippingcode(Request $request)
@@ -218,14 +225,15 @@ class PageController extends Controller
             'order' => $orders,
         ];
         Mail::to($sql[0]->email)->send(new Picking_upMail($mailData));
-
+        $request->session()->flash('alert-type', 'success');
         return redirect("/admin/feladas");
     }
-    public function actiondelete()
+    public function actiondelete(Request $request)
     {
         DB::table('products')
             ->update(['actionprice' => 0]);
-        return back();
+        $request->session()->flash('alert-type', 'success');
+        return redirect()->back();
     }
     public function action()
     {
@@ -657,6 +665,7 @@ class PageController extends Controller
                 ]);
             }
         }
+        $request->session()->flash('alert-type', 'success');
         return back();
     }
     public function kuponshow()
@@ -883,6 +892,7 @@ class PageController extends Controller
             $update->update();
             return redirect("/admin/csomagolas");
         }
+        $request->session()->flash('alert-type', 'success');
         return back();
     }
     public function ordershow($request)
@@ -940,17 +950,38 @@ class PageController extends Controller
             $update->statesid = 2;
             $update->update();
         }
+        $request->session()->flash('alert-type', 'success');
         return view("admin.ordershow", compact('sql', 'product'));
     }
-    public function order()
+    public function order(Request $request)
     {
+        if ($request->input('keres') != NULL) {
+            if (is_numeric($request->input('keres'))) {
+                $sql = DB::table('orders')
+                    ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                    ->join('users', 'users.id', '=', 'orders.userid')
+                    ->join('states', 'states.id', '=', 'orders.statesid')
+                    ->where('statesid', '<', 3)
+                    ->where('orders.id', '=', $request->input('keres'))
+                    ->paginate(15, ['*'], 'oldal');
+            } else {
+                $sql = DB::table('orders')
+                    ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                    ->join('users', 'users.id', '=', 'orders.userid')
+                    ->join('states', 'states.id', '=', 'orders.statesid')
+                    ->where('statesid', '<', 3)
+                    ->where('orders.name', 'like', '%'.$request->input('keres').'%')
+                    ->paginate(15, ['*'], 'oldal');
+            }
+        } else {
+            $sql = DB::table('orders')
+                ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                ->join('users', 'users.id', '=', 'orders.userid')
+                ->join('states', 'states.id', '=', 'orders.statesid')
+                ->where('statesid', '<', 3)
+                ->paginate(15, ['*'], 'oldal');
+        }
         Cookie::queue(Cookie::forget('orders'));
-        $sql = DB::table('orders')
-            ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
-            ->join('users', 'users.id', '=', 'orders.userid')
-            ->join('states', 'states.id', '=', 'orders.statesid')
-            ->where('statesid', '<', 3)
-            ->paginate(15, ['*'], 'oldal');
         return view("admin.order", compact('sql'));
     }
 
@@ -969,34 +1000,94 @@ class PageController extends Controller
             ->get();
         return view('admin.sendshow', compact('product', 'sql'));
     }
-    public function send()
+    public function send(Request $request)
     {
-        $sql = DB::table('orders')
-            ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
-            ->join('users', 'users.id', '=', 'orders.userid')
-            ->join('states', 'states.id', '=', 'orders.statesid')
-            ->where('statesid', '=', 3)
-            ->paginate(15, ['*'], 'oldal');
+        if ($request->input('keres') != NULL) {
+            if (is_numeric($request->input('keres'))) {
+                $sql = DB::table('orders')
+                    ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                    ->join('users', 'users.id', '=', 'orders.userid')
+                    ->join('states', 'states.id', '=', 'orders.statesid')
+                    ->where('statesid', '=', 3)
+                    ->where('orders.id', '=', $request->input('keres'))
+                    ->paginate(15, ['*'], 'oldal');
+            } else {
+                $sql = DB::table('orders')
+                    ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                    ->join('users', 'users.id', '=', 'orders.userid')
+                    ->join('states', 'states.id', '=', 'orders.statesid')
+                    ->where('statesid', '=', 3)
+                    ->where('orders.name', 'like', '%'.$request->input('keres').'%')
+                    ->paginate(15, ['*'], 'oldal');
+            }
+        } else {
+            $sql = DB::table('orders')
+                ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                ->join('users', 'users.id', '=', 'orders.userid')
+                ->join('states', 'states.id', '=', 'orders.statesid')
+                ->where('statesid', '=', 3)
+                ->paginate(15, ['*'], 'oldal');
+        }
         return view("admin.send", compact('sql'));
     }
-    public function successful()
+    public function successful(Request $request)
     {
-        $sql = DB::table('orders')
-            ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
-            ->join('users', 'users.id', '=', 'orders.userid')
-            ->join('states', 'states.id', '=', 'orders.statesid')
-            ->where('statesid', '=', 4)
-            ->paginate(15, ['*'], 'oldal');
+        if ($request->input('keres') != NULL) {
+            if (is_numeric($request->input('keres'))) {
+                $sql = DB::table('orders')
+                    ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                    ->join('users', 'users.id', '=', 'orders.userid')
+                    ->join('states', 'states.id', '=', 'orders.statesid')
+                    ->where('statesid', '=', 4)
+                    ->where('orders.id', '=', $request->input('keres'))
+                    ->paginate(15, ['*'], 'oldal');
+            } else {
+                $sql = DB::table('orders')
+                    ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                    ->join('users', 'users.id', '=', 'orders.userid')
+                    ->join('states', 'states.id', '=', 'orders.statesid')
+                    ->where('statesid', '=', 4)
+                    ->where('orders.name', 'like', '%'.$request->input('keres').'%')
+                    ->paginate(15, ['*'], 'oldal');
+            }
+        } else {
+            $sql = DB::table('orders')
+                ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                ->join('users', 'users.id', '=', 'orders.userid')
+                ->join('states', 'states.id', '=', 'orders.statesid')
+                ->where('statesid', '=', 4)
+                ->paginate(15, ['*'], 'oldal');
+        }
         return view("admin.successful", compact('sql'));
     }
-    public function completed()
+    public function completed(Request $request)
     {
-        $sql = DB::table('orders')
-            ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
-            ->join('users', 'users.id', '=', 'orders.userid')
-            ->join('states', 'states.id', '=', 'orders.statesid')
-            ->where('statesid', '>', 4)
-            ->paginate(15, ['*'], 'oldal');
+        if ($request->input('keres') != NULL) {
+            if (is_numeric($request->input('keres'))) {
+                $sql = DB::table('orders')
+                    ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                    ->join('users', 'users.id', '=', 'orders.userid')
+                    ->join('states', 'states.id', '=', 'orders.statesid')
+                    ->where('statesid', '>', 4)
+                    ->where('orders.id', '=', $request->input('keres'))
+                    ->paginate(15, ['*'], 'oldal');
+            } else {
+                $sql = DB::table('orders')
+                    ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                    ->join('users', 'users.id', '=', 'orders.userid')
+                    ->join('states', 'states.id', '=', 'orders.statesid')
+                    ->where('statesid', '>', 4)
+                    ->where('orders.name', 'like', '%'.$request->input('keres').'%')
+                    ->paginate(15, ['*'], 'oldal');
+            }
+        } else {
+            $sql = DB::table('orders')
+                ->select('orders.id as id', 'orders.name', 'city', 'street', 'house_number', 'zipcode', 'other', 'mobile_number', 'statesid', 'states.status as status', 'states.id as statusid', 'orders.created_at as date', 'tax_number', 'company_name', 'company_zipcode', 'company_city', 'company_street', 'company_house_number')
+                ->join('users', 'users.id', '=', 'orders.userid')
+                ->join('states', 'states.id', '=', 'orders.statesid')
+                ->where('statesid', '>', 4)
+                ->paginate(15, ['*'], 'oldal');
+        }
         return view("admin.completed", compact('sql'));
     }
     public function index()

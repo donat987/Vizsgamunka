@@ -39,8 +39,7 @@
             <i class="fas fa-times p-3 cursor-pointer opacity-5 position-absolute end-0 top-0 d-none d-xl-none text-dark"
                 aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href="/admin">
-                <img src="{{ asset('assets/images/logo.png')}}"
-                    class="navbar-brand-img h-100" alt="main_logo">
+                <img src="{{ asset('assets/images/logo.png') }}" class="navbar-brand-img h-100" alt="main_logo">
             </a>
         </div>
         <hr class="horizontal light mt-0 mb-2">
@@ -213,13 +212,13 @@
                         </li>
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link p-0 text-body" id="iconNavbarSidenav">
-                              <div class="sidenav-toggler-inner">
-                                <i class="sidenav-toggler-line"></i>
-                                <i class="sidenav-toggler-line"></i>
-                                <i class="sidenav-toggler-line"></i>
-                              </div>
+                                <div class="sidenav-toggler-inner">
+                                    <i class="sidenav-toggler-line"></i>
+                                    <i class="sidenav-toggler-line"></i>
+                                    <i class="sidenav-toggler-line"></i>
+                                </div>
                             </a>
-                          </li>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -227,8 +226,25 @@
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             @yield('admincontent')
-
-
+            @if (session('alert-type') == 'success')
+                <div class="position-fixed bottom-1 end-1 z-index-2">
+                    <div class="toast fade p-2 bg-white show" role="alert" aria-live="assertive" id="successToast"
+                        aria-atomic="true">
+                        <div class="toast-header border-0">
+                            <i class="material-icons text-success me-2">
+                                check
+                            </i>
+                            <span class="me-auto font-weight-bold">Értesítés </span>
+                            <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast"
+                                aria-label="Close" aria-hidden="true"></i>
+                        </div>
+                        <hr class="horizontal dark m-0">
+                        <div class="toast-body">
+                            Sikeres művelet!
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
         <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
             <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
@@ -238,11 +254,11 @@
         </div>
     </main>
     <!--   Core JS Files   -->
-    <script src="{{ asset('js/core/popper.min.js')}}"></script>
-    <script src="{{ asset('js/core/bootstrap.min.js')}}"></script>
-    <script src="{{ asset('js/plugins/perfect-scrollbar.min.js')}}"></script>
-    <script src="{{ asset('js/plugins/smooth-scrollbar.min.js')}}"></script>
-    <script src="{{ asset('js/plugins/chartjs.min.js')}}"></script>
+    <script src="{{ asset('js/core/popper.min.js') }}"></script>
+    <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/smooth-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/chartjs.min.js') }}"></script>
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -255,7 +271,7 @@
     <!-- Github buttons -->
     <script async="" defer="" src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="{{ asset('js/material-dashboard.min.js')}}"></script>
+    <script src="{{ asset('js/material-dashboard.min.js') }}"></script>
 
 
 </body>

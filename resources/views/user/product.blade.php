@@ -65,11 +65,11 @@
         </div>
     @endif
     @if (count($comment))
-        <div class="container my-5">
+        <div class="container  my-5">
 
-            <h2 class="text-center">Eddigi értékelések:</h2>
+            <h2 class="text-center ">Eddigi értékelések:</h2>
             @foreach ($comment as $s)
-                <div class="card">
+                <div class="card mt-3">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <img width="50px" src="{{ $s->file }}" class="rounded-circle mr-3">

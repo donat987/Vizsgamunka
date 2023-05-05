@@ -57,9 +57,9 @@
                                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                             </div>
                             <div class="form-floating mb-3">
-                                <x-input-label for="emailselect" :value="__('Kérek reklám emaileket.')" />
+                                <x-input-label for="emailselect" :value="__('Kérek hírleveleket.')" />
                                 <input type="checkbox" id="emailselect"
-                                    name="emailselect" checked>
+                                    name="emailselect">
                                 <x-input-error :messages="$errors->get('emailselect')" class="mt-2" />
                             </div>
                             <hr>

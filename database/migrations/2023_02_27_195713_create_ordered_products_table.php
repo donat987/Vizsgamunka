@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer("gross_amount");
             $table->integer("gross_amount");
             $table->integer("piece");
+            $table->boolean("packed");
             $table->timestamps();
             $table->foreign('ordersid')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('productsid')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');

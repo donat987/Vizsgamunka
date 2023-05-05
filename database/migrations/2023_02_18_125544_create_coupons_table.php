@@ -22,6 +22,9 @@ return new class extends Migration
             $table->dateTime('end');
             $table->boolean('active');
             $table->timestamps();
+            $table->unsignedBigInteger('speciesid');
+            $table->integer('piece');
+            $table->foreign('speciesid')->references('id')->on('couponspecies')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

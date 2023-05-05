@@ -23,7 +23,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('file');
+            $table->date('date_of_birth');
             $table->string('token');
+            $table->string('remember_token');
             $table->timestamps();
         });
     }

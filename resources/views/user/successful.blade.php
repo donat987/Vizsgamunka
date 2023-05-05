@@ -14,7 +14,7 @@
             @foreach ($negyrandom as $sor)
                 <div class="col-md-3">
                     <div href="/termekek/{{ $sor->link }}" class="card card-product-grid">
-                        <a href="/termekek/{{ $sor->link }}" class="img-wrap"> <img src="{{ $sor->file }}"> </a>
+                        <a href="/termekek/{{ $sor->link }}" class="img-wrap mt-3"> <img src="{{ $sor->file }}"> </a>
                         <figcaption class="info-wrap">
                             <a href="/termekek/{{ $sor->link }}" class="title">{{ $sor->name }}</a>
 

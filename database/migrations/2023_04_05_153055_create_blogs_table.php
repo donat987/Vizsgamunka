@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('summary');
             $table->string('file');
             $table->string('link');
+            $table->boolean("active");
             $table->unsignedBigInteger('userid');
             $table->timestamps();
             $table->foreign('userid')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

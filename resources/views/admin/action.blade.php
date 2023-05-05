@@ -60,15 +60,16 @@
                                     </button>
                                 </div>
                             </div>
-                        </form>
-                        <div class="row">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal"> Mentés
-                                </button>
+
+                            <div class="row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-info btn-lg w-100" data-bs-toggle="modal"> Mentés
+                                    </button>
+                                </div>
+                                <div class="col-md-3"></div>
                             </div>
-                            <div class="col-md-3"></div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -1,11 +1,32 @@
 @extends('admin.layout')
 @section('admincontent')
+    <div class="mb-2">
+        <div class="card card-frame">
+            <form action="">
+                <div class="row mx-1">
+                    <div class="col-md-10">
+                        <div class="input-group input-group-outline my-3">
+                            <label class="form-label">Azonosító vagy név keresése</label>
+                            <input type="text" class="form-control" name="keres">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="input-group input-group-outline mt-3">
+                            <button type="submit" class="btn btn-info  w-100" data-bs-toggle="modal">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="text-dark bg-gradient-info shadow-primary border-radius-lg pt-4 pb-3">
-                        <h6 class="text-white text-capitalize ps-3">Teljesítésre váró:</h6>
+                        <h6 class="text-white text-capitalize ps-3">Teljesítve:</h6>
                     </div>
                 </div>
                 <div class="card-body pt-4 p-3">
@@ -93,41 +114,41 @@
         </div>
     </div>
     @if ($sql->hasPages())
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center  mt-4">
-            <li class="page-item">
-                <a class="page-link" href="{{ $sql->appends(Request::except('oldal'))->url(1) }}">
-                    << </a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="{{ $sql->appends(Request::except('oldal'))->previousPageUrl() }}">
-                    < </a>
-            </li>
-            @php
-                $currentPage = $sql->currentPage();
-                $lastPage = $sql->lastPage();
-                $b = max($currentPage - 3, 1);
-                $c = min($currentPage + 3, $lastPage);
-                if ($currentPage <= 3 && $lastPage > 7) {
-                    $c = 7;
-                } elseif ($currentPage >= $lastPage - 3 && $lastPage > 7) {
-                    $b = $lastPage - 6;
-                }
-            @endphp
-            @for ($x = $b; $x <= $c; $x++)
-                <li class="page-item {{ $x == $sql->currentPage() ? 'active' : '' }}">
-                    <a class="page-link"
-                        href="{{ $sql->appends(Request::except('oldal'))->url($x) }}">{{ $x }}
-                        <span class="sr-only"></span></a>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center  mt-4">
+                <li class="page-item">
+                    <a class="page-link" href="{{ $sql->appends(Request::except('oldal'))->url(1) }}">
+                        << </a>
                 </li>
-            @endfor
-            <li class="page-item">
-                <a class="page-link" href="{{ $sql->appends(Request::except('oldal'))->nextPageUrl() }}">></a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="{{ $sql->appends(Request::except('oldal'))->url($sql->lastPage()) }}">>></a>
-            </li>
-        </ul>
-    </nav>
-@endif
+                <li class="page-item">
+                    <a class="page-link" href="{{ $sql->appends(Request::except('oldal'))->previousPageUrl() }}">
+                        < </a>
+                </li>
+                @php
+                    $currentPage = $sql->currentPage();
+                    $lastPage = $sql->lastPage();
+                    $b = max($currentPage - 3, 1);
+                    $c = min($currentPage + 3, $lastPage);
+                    if ($currentPage <= 3 && $lastPage > 7) {
+                        $c = 7;
+                    } elseif ($currentPage >= $lastPage - 3 && $lastPage > 7) {
+                        $b = $lastPage - 6;
+                    }
+                @endphp
+                @for ($x = $b; $x <= $c; $x++)
+                    <li class="page-item {{ $x == $sql->currentPage() ? 'active' : '' }}">
+                        <a class="page-link"
+                            href="{{ $sql->appends(Request::except('oldal'))->url($x) }}">{{ $x }}
+                            <span class="sr-only"></span></a>
+                    </li>
+                @endfor
+                <li class="page-item">
+                    <a class="page-link" href="{{ $sql->appends(Request::except('oldal'))->nextPageUrl() }}">></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="{{ $sql->appends(Request::except('oldal'))->url($sql->lastPage()) }}">>></a>
+                </li>
+            </ul>
+        </nav>
+    @endif
 @endsection

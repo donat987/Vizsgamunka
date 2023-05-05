@@ -197,7 +197,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn bg-gradient-secondary"
                                 data-bs-dismiss="modal">Bezárás</button>
-                            <button type="submit" class="btn bg-gradient-primary">Mentés</button>
+                            <button type="submit" class="btn bg-gradient-info">Mentés</button>
                         </div>
                     </form>
                 </div>
@@ -260,7 +260,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn bg-gradient-secondary"
                                 data-bs-dismiss="modal">Bezárás</button>
-                            <button type="submit" class="btn bg-gradient-primary">Mentés</button>
+                            <button type="submit" class="btn bg-gradient-info">Mentés</button>
                         </div>
                     </form>
                 </div>
@@ -312,8 +312,7 @@
                     ['removeformat'],
                     ['fullscreen'],
                     ['table'],
-                    ['tableCellBackgroundColor', 'tableBorderColor'],
-                    ['giphy']
+                    ['tableCellBackgroundColor', 'tableBorderColor']
 
                 ],
                 plugins: {
@@ -490,60 +489,9 @@
                 });
             });
         </script>
-        @if ($message = Session::get('success'))
-        <div class="position-fixed bottom-1 end-1 z-index-2">
-            <div class="toast fade hide p-2 bg-white" role="alert" aria-live="assertive" id="successToast"
-              aria-atomic="true">
-              <div class="toast-header border-0">
-                <i class="material-icons text-success me-2">
-                  check
-                </i>
-                        <span class="me-auto font-weight-bold">{{$message}} </span>
-                        <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast"
-                            aria-label="Close"></i>
-                    </div>
-                    <hr class="horizontal dark m-0">
-                </div>
-            </div>
-        @endif
-        <footer class="footer py-4  ">
-            <div class="container-fluid">
-                <div class="row align-items-center justify-content-lg-between">
-                    <div class="col-lg-6 mb-lg-0 mb-4">
-                        <div class="copyright text-center text-sm text-muted text-lg-start">
-                            ©
-                            <script>
-                                document.write(new Date().getFullYear())
-                            </script>,
-                            made with <i class="fa fa-heart"></i> by
-                            <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative
-                                Tim</a>
-                            for a better web.
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com" class="nav-link text-muted"
-                                    target="_blank">Creative Tim</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted"
-                                    target="_blank">About Us</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com/blog" class="nav-link text-muted"
-                                    target="_blank">Blog</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted"
-                                    target="_blank">License</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <div class="col-lg-3 col-sm-6 col-12">
+            <button class="btn bg-gradient-success w-100 mb-0 toast-btn" type="button" data-target="successToast">Success</button>
+          </div>
         </div>
     </main>
 @endsection

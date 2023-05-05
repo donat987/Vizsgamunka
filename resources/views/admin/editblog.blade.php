@@ -113,8 +113,7 @@
                     ['removeformat'],
                     ['fullscreen'],
                     ['table'],
-                    ['tableCellBackgroundColor', 'tableBorderColor'],
-                    ['giphy']
+                    ['tableCellBackgroundColor', 'tableBorderColor']
 
                 ],
                 plugins: {

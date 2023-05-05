@@ -64,7 +64,8 @@ class RegisteredUserController extends Controller
             'date_of_birth' => $request->birthday,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'file' => $u
+            'file' => $u,
+            'remember_token' => ""
         ]);
         event(new Registered($user));
         if (request("emailselect") == "on") {

@@ -913,7 +913,8 @@ class CartController extends Controller
             Cookie::queue('kedvezmenykosar', json_encode($cartupdatecuppon), 60);
         }
         if (null !== Cookie::get('cart')) {
-            if (count($cart)) {
+            if
+             (count($cart)) {
                 $ok = 0;
                 foreach ($cart as $item) {
                     if ($item["id"] == $productId) {
