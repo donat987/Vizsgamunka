@@ -219,7 +219,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="input-group input-group-static mb-4">
-                                <label class="form-label">kategória neve</label>
+                                <label class="form-label">Kategória neve</label>
                                 <input class="form-control" list="addcategoryselect1" id="subcategory"
                                     name="subcategory" oninput='addcategoryselect1()'>
                                 <datalist id="addcategoryselect1">
@@ -229,28 +229,28 @@
                                 </datalist>
                             </div>
                             <div class="input-group input-group-static mb-4">
-                                <label class="form-label">alkategória neve</label>
+                                <label class="form-label">Származási ország</label>
                                 <input class="form-control" list="addcategoryselect2" id="subcategory1"
                                     name="subcategory1" oninput='addcategoryselect2()'>
                                 <datalist id="addcategoryselect2">
                                 </datalist>
                             </div>
                             <div class="input-group input-group-static mb-4">
-                                <label class="form-label">alkategória neve</label>
+                                <label class="form-label">Ízesítés</label>
                                 <input class="form-control" list="addcategoryselect3" id="subcategory2"
                                     name="subcategory2" oninput='addcategoryselect3()'>
                                 <datalist id="addcategoryselect3">
                                 </datalist>
                             </div>
                             <div class="input-group input-group-static mb-4">
-                                <label class="form-label">alkategória neve</label>
+                                <label class="form-label">Formátum</label>
                                 <input class="form-control" list="addcategoryselect4" id="subcategory3"
                                     name="subcategory3" oninput='addcategoryselect4()'>
                                 <datalist id="addcategoryselect4">
                                 </datalist>
                             </div>
                             <div class="input-group input-group-static mb-4">
-                                <label class="form-label">alkategória neve</label>
+                                <label class="form-label">Egyéb</label>
                                 <input class="form-control" list="addcategoryselect5" id="subcategory4"
                                     name="subcategory4">
                                 <datalist id="addcategoryselect5">
